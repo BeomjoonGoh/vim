@@ -20,11 +20,12 @@ set nocompatible
 filetype off
 set runtimepath+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
-
-Plugin 'VundleVim/Vundle.vim'
-Plugin 'file:///Users/bjgoh1990/.vim/bundle/desertBJ.vim'
-Plugin 'gerw/vim-latex-suite'
-
+  Plugin 'VundleVim/Vundle.vim'
+  Plugin 'file:///Users/bjgoh1990/.vim/bundle/desertBJ.vim' " colorscheme
+  Plugin 'gerw/vim-latex-suite' " latex-suite
+  Plugin 'othree/vim-autocomplpop' " acp requires L9 library
+  Plugin 'L9' " utility functions / commands library
+  Plugin 'file:///Users/bjgoh1990/.vim/bundle/cppman.vim' " cppman within vim
 call vundle#end()
 filetype plugin on
 filetype indent on
@@ -186,6 +187,11 @@ set spellsuggest=best,3        " 'z=' shows 3 best suggestions
 "--- Color column
 let s:nomore120 = 0
 
+"--- Insert mode completion & AutoComplPop settings
+set completeopt+=menuone,noinsert
+let g:acp_enableAtStartup=1
+let s:acpState=1                " ACP at start up: 1->enable, 0->disable (Both)
+
 "--- About the split
 set splitbelow
 set splitright
@@ -221,6 +227,18 @@ function! MouseOnOff()
   else
     set mouse=""
     echo "Mouse Off"
+  endif
+endfunction
+" Toggle AutoComplPop
+function! ToggleACP()
+  if s:acpState
+    AcpDisable
+    echo "AutoComplPop disabled"
+    let s:acpState = 0
+  else
+    AcpEnable
+    echo "AutoComplPop enabled"
+    let s:acpState = 1
   endif
 endfunction
 " Toggle paste safe mode
@@ -291,6 +309,13 @@ function! Tilde4nonAlpha() " {{{
   endif
 endfunction
 " }}}
+function CppmanLapack()
+  let s:word = expand("<cword>")
+  if s:word[strlen(s:word)-1] == "_"
+    let s:word = s:word[:-2]
+  endif
+  execute "Man " . s:word
+endfunction
 " Remove every trailing spaces
 function RemoveTrailingSpaces()
   %s/\s\+$//e
@@ -327,6 +352,34 @@ if !exists('user_filetypes')
     let g:Tex_FoldedEnvironments=''
     let g:tex_indent_brace=0
 
+    "--- terminal
+    if has('terminal')
+      autocmd TerminalOpen terminal set winfixheight | set winfixwidth
+    endif
+
+    "--- .c, .cpp files
+    let g:cpp_class_scope_highlight = 1
+    let g:cpp_class_decl_highlight = 1
+    autocmd BufRead,BufNewFile *.c,*.cpp,*.h
+    \ setlocal cindent |
+    \ let g:acp_completeOption='.,w,b,u,t,i,d' |
+    \ if !exists('pathset') |
+    \   let pathset=1 |
+    \   set path+=~/work/lib,~/work/lib/specialfunctions,~/work/projectEuler/Library, |
+    \ endif |
+    \ setlocal formatoptions-=o |
+    \ nnoremap <F2> :call CppmanLapack()<CR>
+
+    "--- .f90 files
+    autocmd BufRead,BufNewFile *.f90
+    \ if !exists('matchParens') |
+    \   let matchParens=1 |
+    \   syntax match mParens "(\|)\|{\|}\|\[\|\]\|" |
+    \ endif |
+    \ set filetype=fortran
+
+    autocmd FileType vim nnoremap <buffer> K :execute "tab help " . expand("<cword>")<CR>
+    autocmd FileType sh,man nnoremap <buffer> K :execute "Man " . expand("<cword>")<CR>
 
   augroup END
 endif
@@ -378,6 +431,10 @@ nnoremap <silent> ~ :call Tilde4nonAlpha()<cr>
 nnoremap <F4> :call ToggleNoMore120()<CR>
 inoremap <F4> <Esc>:call ToggleNoMore120()<CR>a
 
+" Toggle AutoComplPop
+nnoremap <F5> :call ToggleACP()<CR>
+inoremap <F5> <Esc>:call ToggleACP()<CR>a
+
 " Toggle paste safe mode
 nnoremap <F6> :call TogglePasteSafe()<CR>
 inoremap <F6> <Esc>:call TogglePasteSafe()<CR>a
@@ -400,6 +457,10 @@ inoremap <C-\> <Esc>:Lexplore<CR>a
 
 " Reset searches
 nmap <silent> <Leader>r :nohlsearch<CR>
+
+" Enter works in normal mode
+nmap <CR> :call ToggleACP()<CR>i<C-m><Esc>:call ToggleACP()<CR>:echo<CR>
+
 " To the previous buffer
 nnoremap <Leader><Leader><Leader> <C-^>
 
