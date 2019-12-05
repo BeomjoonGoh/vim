@@ -1,0 +1,154 @@
+# This is a personal word list file by bjgoh1990
+#
+# You can add freely new words that are correct but not recognized by Vim, one
+# word per line.  After adding words, you need to regenerate the binary .spl
+# file for Vim to recognize the new words.
+#   :mkspell! {thisfile}
+# You can add and compile a word under cursor directly while in Vim by typing
+#   zg
+# Or one can do
+#   :spell {word}
+# to add {word} to this file and compile at the same time.
+# For more details,
+#   :help spell
+#
+# If you want to sort words in the list, use the sort utility.  For example,
+#   :50,70sort iu
+#   :50,$sort iu
+
+### Personal Informations {{{
+bjgoh1990/=
+Beomjoon
+Goh
+POSTECH
+# }}}
+### Word List {{{
+a
+abelian
+anharmonic 
+anharmonicity
+Antiferromagnet
+antiferromagnetic
+antiferromagnetism
+antimonide
+b
+Baym
+bose
+bosonic
+Bravais
+c
+Cayley
+columnwisely
+coset
+cosets
+Coulombic
+ctqmc
+cumulant
+d
+dat
+Debye
+delocalization
+DF
+DFT
+diagonalization
+diamagnetism
+dipolar
+divergency
+dmft
+DMRG
+Dulong
+Dyson
+e
+Eq
+exitons
+f
+fermi
+fermionic
+ferroelectricity
+ferromagnetism
+ferromagnets
+Fock
+fugacity
+g
+Ginzburg
+Grassman
+Grassmann
+Grueneisen
+h
+Hartree
+Haule
+Hund
+i
+inp
+IPT
+isometries
+isometry
+j
+k
+Kadanoff
+Keldysh
+Kohn
+Kondo
+Kotliar
+Kramers
+Kronig
+l
+Larmor
+Luttinger
+m
+magneton
+magnetoresistance
+Matsubara
+mdpc1
+mdpc2
+Meissner
+metropolise
+mol
+monatomic
+n
+NCA
+nematicity
+nondegenerate
+nonequilibrium
+nonperturbative
+o
+OCA
+p
+perturbative
+perturbatively
+phonons
+photoemission
+physico
+plugin
+pnictide
+pnictides
+Pohang
+polarizability
+polarons
+pseudogap
+pseudoparticle
+pseudoparticles
+pyroelectricity
+q
+qmc
+r
+renormalizations
+RG
+RKKY
+RPA
+s
+Salpeter
+semiclassical
+spinor
+supercurrent
+superexchange
+t
+u
+Unklapp
+v
+w
+Wb
+Wiedemann
+x
+y
+z
