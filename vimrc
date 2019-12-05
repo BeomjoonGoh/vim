@@ -23,6 +23,7 @@ call vundle#begin()
 
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'file:///Users/bjgoh1990/.vim/bundle/desertBJ.vim'
+Plugin 'gerw/vim-latex-suite'
 
 call vundle#end()
 filetype plugin on
@@ -306,6 +307,30 @@ highlight link texRefZone     String
 highlight link texSuperscript texMath
 highlight link texSubscript   texMath
 highlight link texMath        Number
+" }}}
+"===== >    FILETYPE SPECIFIC  ===== {{{
+if !exists('user_filetypes')
+  let user_filetypes = 1
+  augroup UserFileType
+    autocmd!
+    "--- .tex files
+    " Enables snipMate for .tex. Default:.latex
+    autocmd BufRead,BufNewFile *.tex
+    \ set textwidth=120 |
+    \ set filetype=tex  |
+    \ set foldlevel=99
+    "set grepprg=grep\ -nH $*
+    let g:Tex_PromptedCommands=''
+    let g:tex_flavor='latex'
+    let g:Tex_DefaultTargetFormat='pdf'
+    let g:Tex_ViewRule_pdf = 'open -a Preview'
+    let g:Tex_FoldedEnvironments=''
+    let g:tex_indent_brace=0
+
+
+  augroup END
+endif
+
 " }}}
 "===== >    FOLDING            ===== {{{
 set foldenable                  " enable folding
