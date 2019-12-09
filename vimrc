@@ -21,11 +21,13 @@ filetype off
 set runtimepath+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
   Plugin 'VundleVim/Vundle.vim'
-  Plugin 'file:///Users/bjgoh1990/.vim/bundle/desertBJ.vim' " colorscheme
   Plugin 'gerw/vim-latex-suite' " latex-suite
   Plugin 'othree/vim-autocomplpop' " acp requires L9 library
   Plugin 'L9' " utility functions / commands library
+  Plugin 'file:///Users/bjgoh1990/.vim/bundle/desertBJ.vim' " colorscheme
   Plugin 'file:///Users/bjgoh1990/.vim/bundle/cppman.vim' " cppman within vim
+  Plugin 'file:///Users/bjgoh1990/.vim/bundle/taglist.vim' " source code navigation
+  " snipMate!
 call vundle#end()
 filetype plugin on
 filetype indent on
@@ -195,6 +197,13 @@ let s:acpState=1                " ACP at start up: 1->enable, 0->disable (Both)
 "--- About the split
 set splitbelow
 set splitright
+
+"--- TagList settings
+let Tlist_Exit_OnlyWindow=1     " Quit when TagList is the last open window
+let Tlist_WinWidth=30           " Set the width
+let Tlist_Use_Right_Window=1    " show TagList window on the right
+let Tlist_Compact_Format=1
+let Tlist_Enable_Fold_Column=0
 
 "--- netrw
 let g:netrw_winsize=25        " window size
@@ -369,6 +378,20 @@ if !exists('user_filetypes')
     \ endif |
     \ setlocal formatoptions-=o |
     \ nnoremap <F2> :call CppmanLapack()<CR>
+    autocmd BufWritePost *.c,*.cpp,*.h, :TlistUpdate
+
+    "--- .py files
+    "autocmd BufRead,BufNewFile *.py
+    "\ if !exists('matchParens') |
+    "\   let matchParens=1 |
+    "\   syntax match mParens "(\|)\|{\|}\|\[\|\]\|" |
+    "\ endif |
+    "\ if !exists('matchOper') |
+    "\   let matchOper=1 |
+    "\   syntax match mOper "+\|-\|\*\|%\|=\|<\|>\|&\||\|!\|\~\|/" |
+    "\ endif
+    let python_highlight_all = 1
+    autocmd BufWritePost *.py :TlistUpdate
 
     "--- .f90 files
     autocmd BufRead,BufNewFile *.f90
@@ -426,6 +449,9 @@ augroup END
 
 " Mapping of Tilde4nonAlpha to ~
 nnoremap <silent> ~ :call Tilde4nonAlpha()<cr>
+
+" Open the TagList plugin
+nnoremap <F3> :TlistToggle<CR>
 
 " Call NoMore120
 nnoremap <F4> :call ToggleNoMore120()<CR>
