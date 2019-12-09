@@ -22,12 +22,15 @@ set runtimepath+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
   Plugin 'VundleVim/Vundle.vim'
   Plugin 'gerw/vim-latex-suite' " latex-suite
-  Plugin 'othree/vim-autocomplpop' " acp requires L9 library
-  Plugin 'L9' " utility functions / commands library
+  Plugin 'othree/vim-autocomplpop' " requires L9 library
+    Plugin 'L9' " utility functions / commands library
+  Plugin 'garbas/vim-snipmate' " requires vim-addon-mw-utils, tlib_vim
+    Plugin 'MarcWeber/vim-addon-mw-utils'
+    Plugin 'tomtom/tlib_vim'
+  Plugin 'octol/vim-cpp-enhanced-highlight'
   Plugin 'file:///Users/bjgoh1990/.vim/bundle/desertBJ.vim' " colorscheme
   Plugin 'file:///Users/bjgoh1990/.vim/bundle/cppman.vim' " cppman within vim
   Plugin 'file:///Users/bjgoh1990/.vim/bundle/taglist.vim' " source code navigation
-  " snipMate!
 call vundle#end()
 filetype plugin on
 filetype indent on
@@ -205,6 +208,10 @@ let Tlist_Use_Right_Window=1    " show TagList window on the right
 let Tlist_Compact_Format=1
 let Tlist_Enable_Fold_Column=0
 
+"--- SnipMate settings
+let g:snipMate = {}
+let g:snipMate.no_default_aliases = 1
+
 "--- netrw
 let g:netrw_winsize=25        " window size
 let g:netrw_liststyle=3       " tree style
@@ -369,6 +376,7 @@ if !exists('user_filetypes')
     "--- .c, .cpp files
     let g:cpp_class_scope_highlight = 1
     let g:cpp_class_decl_highlight = 1
+    let g:cpp_member_variable_highlight = 1
     autocmd BufRead,BufNewFile *.c,*.cpp,*.h
     \ setlocal cindent |
     \ let g:acp_completeOption='.,w,b,u,t,i,d' |
