@@ -16,6 +16,10 @@
 "                                               "
 """""""""""""""""""""""""""""""""""""""""""""""""
 
+"===== >    GENERAL            ===== {{{
+if v:lang =~ "utf8$" || v:lang =~ "UTF-8$"
+   set fileencodings=ucs-bom,utf-8,latin1
+endif
 set nocompatible
 filetype off
 set runtimepath+=~/.vim/bundle/Vundle.vim
@@ -31,14 +35,11 @@ call vundle#begin()
   Plugin 'file:///Users/bjgoh1990/.vim/bundle/desertBJ.vim' " colorscheme
   Plugin 'file:///Users/bjgoh1990/.vim/bundle/cppman.vim' " cppman within vim
   Plugin 'file:///Users/bjgoh1990/.vim/bundle/taglist.vim' " source code navigation
+  Plugin 'file:///Users/bjgoh1990/.vim/bundle/txt.vim'
 call vundle#end()
 filetype plugin on
 filetype indent on
 
-"===== >    GENERAL            ===== {{{
-if v:lang =~ "utf8$" || v:lang =~ "UTF-8$"
-   set fileencodings=ucs-bom,utf-8,latin1
-endif
 set history=100
 set viminfo='20,\"50,n~/.vim/viminfo " read/write a .viminfo file, don't store more
 set backspace=indent,eol,start  " backspacing over everything in insert mode
@@ -386,7 +387,7 @@ if !exists('user_filetypes')
     \ endif |
     \ setlocal formatoptions-=o |
     \ nnoremap <F2> :call CppmanLapack()<CR>
-    autocmd BufWritePost *.c,*.cpp,*.h, :TlistUpdate
+    autocmd BufWritePost *.c,*.cpp,*.h :TlistUpdate
 
     "--- .py files
     "autocmd BufRead,BufNewFile *.py
@@ -408,6 +409,11 @@ if !exists('user_filetypes')
     \   syntax match mParens "(\|)\|{\|}\|\[\|\]\|" |
     \ endif |
     \ set filetype=fortran
+
+    "--- quickfix
+    autocmd BufReadPost quickfix
+    \   syntax match QuickFixError " [Ee]rror: " |
+    \   syntax match QuickFixWarning " [Ww]arning: \| [Nn]ote: \|\s\+\~*\^\~*\n\|\[-W.*]\n"
 
     autocmd FileType vim nnoremap <buffer> K :execute "tab help " . expand("<cword>")<CR>
     autocmd FileType sh,man nnoremap <buffer> K :execute "Man " . expand("<cword>")<CR>
