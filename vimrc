@@ -3,7 +3,7 @@
 """""""""""""""""""""""""""""""""""""""""""""""""
 "                                               "
 " Maintainer:   Beomjoon Goh (bjgoh1990)        "
-" LastChange:   14 Apr 2019 02:33:08 -0400      "
+" Last Change:  10 Dec 2019 15:04:13 +0900      "
 "                                               "
 " Contents:                                     "
 "     > General                                 "
@@ -25,17 +25,20 @@ filetype off
 set runtimepath+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
   Plugin 'VundleVim/Vundle.vim'
-  Plugin 'gerw/vim-latex-suite' " latex-suite
-  Plugin 'othree/vim-autocomplpop' " requires L9 library
-    Plugin 'L9' " utility functions / commands library
-  Plugin 'garbas/vim-snipmate' " requires vim-addon-mw-utils, tlib_vim
+  Plugin 'othree/vim-autocomplpop'          " requires L9 library
+    Plugin 'L9'                             " utility functions / commands library
+  Plugin 'BeomjoonGoh/vim-taglist'          " source code navigation
+  Plugin 'garbas/vim-snipmate'              " requires vim-addon-mw-utils, tlib_vim
     Plugin 'MarcWeber/vim-addon-mw-utils'
     Plugin 'tomtom/tlib_vim'
-  Plugin 'octol/vim-cpp-enhanced-highlight'
-  Plugin 'file:///Users/bjgoh1990/.vim/bundle/desertBJ.vim' " colorscheme
-  Plugin 'file:///Users/bjgoh1990/.vim/bundle/cppman.vim' " cppman within vim
-  Plugin 'file:///Users/bjgoh1990/.vim/bundle/taglist.vim' " source code navigation
-  Plugin 'file:///Users/bjgoh1990/.vim/bundle/txt.vim'
+  Plugin 'BeomjoonGoh/vim-cppman'           " cppman within vim on a new tab
+  Plugin 'gerw/vim-latex-suite'             " latex-suite
+  " Colorscheme
+  Plugin 'BeomjoonGoh/vim-desertBJ'
+  " Syntax
+  Plugin 'BeomjoonGoh/vim-txt'
+  Plugin 'BeomjoonGoh/vim-aftersyntax'      " requires vim-cpp-enhanced-highlight
+    Plugin 'octol/vim-cpp-enhanced-highlight'
 call vundle#end()
 filetype plugin on
 filetype indent on
@@ -218,6 +221,7 @@ let g:netrw_winsize=25        " window size
 let g:netrw_liststyle=3       " tree style
 let g:netrw_banner=0          " no banner
 let g:netrw_browse_split=2    " <CR> :vsp 'selected file'
+let g:netrw_special_syntax=1  " file type syntax
 " }}}
 "===== >    FUNCTIONS          ===== {{{
 " Toggle highlight characters over 120 columns
@@ -335,20 +339,12 @@ function CppmanLapack()
 endfunction
 " Remove every trailing spaces
 function RemoveTrailingSpaces()
-  %s/\s\+$//e
+  normal! %s/\s\+$//e
 endfunction
 " }}}
 "===== >    COLOR              ===== {{{
 set t_Co=256                    " Default: 8
-colorscheme desertBJ            " Default: bclear?
-highlight mParens ctermfg=246 cterm=BOLD
-highlight mOper   ctermfg=180 cterm=BOLD
-
-highlight link texMathSymbol  Function
-highlight link texRefZone     String
-highlight link texSuperscript texMath
-highlight link texSubscript   texMath
-highlight link texMath        Number
+colorscheme desertBJ
 " }}}
 "===== >    FILETYPE SPECIFIC  ===== {{{
 if !exists('user_filetypes')
@@ -378,6 +374,7 @@ if !exists('user_filetypes')
     let g:cpp_class_scope_highlight = 1
     let g:cpp_class_decl_highlight = 1
     let g:cpp_member_variable_highlight = 1
+    let g:cpp_no_function_highlight = 1
     autocmd BufRead,BufNewFile *.c,*.cpp,*.h
     \ setlocal cindent |
     \ let g:acp_completeOption='.,w,b,u,t,i,d' |
@@ -390,37 +387,13 @@ if !exists('user_filetypes')
     autocmd BufWritePost *.c,*.cpp,*.h :TlistUpdate
 
     "--- .py files
-    "autocmd BufRead,BufNewFile *.py
-    "\ if !exists('matchParens') |
-    "\   let matchParens=1 |
-    "\   syntax match mParens "(\|)\|{\|}\|\[\|\]\|" |
-    "\ endif |
-    "\ if !exists('matchOper') |
-    "\   let matchOper=1 |
-    "\   syntax match mOper "+\|-\|\*\|%\|=\|<\|>\|&\||\|!\|\~\|/" |
-    "\ endif
     let python_highlight_all = 1
     autocmd BufWritePost *.py :TlistUpdate
 
-    "--- .f90 files
-    autocmd BufRead,BufNewFile *.f90
-    \ if !exists('matchParens') |
-    \   let matchParens=1 |
-    \   syntax match mParens "(\|)\|{\|}\|\[\|\]\|" |
-    \ endif |
-    \ set filetype=fortran
-
-    "--- quickfix
-    autocmd BufReadPost quickfix
-    \   syntax match QuickFixError " [Ee]rror: " |
-    \   syntax match QuickFixWarning " [Ww]arning: \| [Nn]ote: \|\s\+\~*\^\~*\n\|\[-W.*]\n"
-
     autocmd FileType vim nnoremap <buffer> K :execute "tab help " . expand("<cword>")<CR>
     autocmd FileType sh,man nnoremap <buffer> K :execute "Man " . expand("<cword>")<CR>
-
   augroup END
 endif
-
 " }}}
 "===== >    FOLDING            ===== {{{
 set foldenable                  " enable folding
@@ -596,5 +569,9 @@ nnoremap <Tab>4 4gt
 nnoremap <Tab>5 5gt
 nnoremap <Tab>6 6gt
 
-"nnoremap <F4> mryi":let @/ = @"<CR>`r
+" Yank to and paste from clipboard
+vnoremap <C-y> "*y
+nnoremap <C-p> "*p
+
+nnoremap <F4> mryi":let @/ = @"<CR>`r
 " }}}
