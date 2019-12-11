@@ -45,7 +45,7 @@ filetype plugin on
 filetype indent on
 
 set history=100
-set viminfo='20,\"50,n~/.vim/viminfo " read/write a .viminfo file, don't store more
+set viminfo='20,\"50,n~/.vim/.viminfo " read/write a .viminfo file, don't store more
 set backspace=indent,eol,start  " backspacing over everything in insert mode
 set scrolloff=3
 set clipboard=exclude:.*        " Fixes slow startup with ssh!! Same as $ vim -X
