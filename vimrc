@@ -381,7 +381,7 @@ if !exists('user_filetypes')
     \ let g:acp_completeOption='.,w,b,u,t,i,d' |
     \ if !exists('pathset') |
     \   let pathset=1 |
-    \   set path+=~/work/lib,~/work/lib/specialfunctions,~/work/projectEuler/Library, |
+    \   set path+=~/work/lib,~/work/lib/specialfunctions,~/work/projectEuler/Library |
     \ endif |
     \ setlocal formatoptions-=o |
     \ nnoremap <F2> :call CppmanLapack()<CR>
