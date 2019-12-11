@@ -25,6 +25,7 @@ filetype off
 set runtimepath+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
   Plugin 'VundleVim/Vundle.vim'
+
   Plugin 'othree/vim-autocomplpop'          " requires L9 library
     Plugin 'L9'                             " utility functions / commands library
   Plugin 'BeomjoonGoh/vim-taglist'          " source code navigation
@@ -33,9 +34,9 @@ call vundle#begin()
     Plugin 'tomtom/tlib_vim'
   Plugin 'BeomjoonGoh/vim-cppman'           " cppman within vim on a new tab
   Plugin 'gerw/vim-latex-suite'             " latex-suite
-  " Colorscheme
+
+  " Colorscheme & Syntax
   Plugin 'BeomjoonGoh/vim-desertBJ'
-  " Syntax
   Plugin 'BeomjoonGoh/vim-txt'
   Plugin 'BeomjoonGoh/vim-aftersyntax'      " requires vim-cpp-enhanced-highlight
     Plugin 'octol/vim-cpp-enhanced-highlight'
