@@ -574,5 +574,5 @@ nnoremap <Tab>6 6gt
 vnoremap <C-y> "*y
 nnoremap <C-p> "*p
 
-nnoremap <F4> mryi":let @/ = @"<CR>`r
+"nnoremap <F4> mryi":let @/ = @"<CR>`r
 " }}}
