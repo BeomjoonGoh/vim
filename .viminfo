@@ -11,22 +11,34 @@
 # hlsearch on (H) or off (h):
 ~H
 # Last Search Pattern:
-~MSle0~/file
+~MSle0~/sessions
 
 # Last Substitute String:
 $
 
 # Command Line History (newest to oldest):
-:q
-|2,0,1576049906,,"q"
 :wq
-|2,0,1576049879,,"wq"
+|2,0,1576118255,,"wq"
+:q
+|2,0,1576118251,,"q"
+:Q
+|2,0,1576118123,,"Q"
+:w
+|2,0,1576052049,,"w"
 :qa
-|2,0,1576049858,,"qa"
+|2,0,1576052041,,"qa"
+:cp
+|2,0,1576051227,,"cp"
+:cwd
+|2,0,1576051225,,"cwd"
+:pwd
+|2,0,1576051221,,"pwd"
+:;q
+|2,0,1576051133,,";q"
+:wqa
+|2,0,1576050857,,"wqa"
 :q!
 |2,0,1576048138,,"q!"
-:Q
-|2,0,1576048137,,"Q"
 :term
 |2,0,1576034039,,"term"
 :Term
@@ -57,8 +69,6 @@ $
 |2,0,1576033588,,"call term_getstatus()"
 :help Terminal
 |2,0,1576033478,,"help Terminal"
-:w
-|2,0,1576033438,,"w"
 :'<,'>sort
 |2,0,1576032776,,"'<,'>sort"
 :hi Normal
@@ -71,8 +81,6 @@ $
 |2,0,1576032672,,"hi clear normal"
 :hi clear Normal
 |2,0,1576032668,,"hi clear Normal"
-:wqa
-|2,0,1576032661,,"wqa"
 :vsp ~/.vim/bundle/vim-desertBJ/colors/desertBJ.vim
 |2,0,1576032442,,"vsp ~/.vim/bundle/vim-desertBJ/colors/desertBJ.vim"
 :hi Text
@@ -173,8 +181,6 @@ $
 |2,0,1576029263,,"echo &mou"
 :echo &spell
 |2,0,1576029259,,"echo &spell"
-:pwd
-|2,0,1576029189,,"pwd"
 :Cd
 |2,0,1576029187,,"Cd"
 :let
@@ -211,14 +217,38 @@ $
 |2,0,1575972965,,"sp ../../../vim-cpp-enhanced-highlight/after/syntax/cpp.vim"
 :sp c.vim
 |2,0,1575972893,,"sp c.vim"
-:vsp cpp.vim
-|2,0,1575972828,,"vsp cpp.vim"
-:hi asdfasdf ctermfg=red
-|2,0,1575975765,,"hi asdfasdf ctermfg=red"
-:syn match asdfasdf "\<\*\s*\h\w*\>\s*)\(\s\|\n\)*("
-|2,0,1575975755,,"syn match asdfasdf \"\\<\\*\\s*\\h\\w*\\>\\s*)\\(\\s\\|\\n\\)*(\""
 
 # Search String History (newest to oldest):
+?/sessions
+|2,1,1576118152,47,"sessions"
+?/tree
+|2,1,1576052046,47,"tree"
+?/[[
+|2,1,1576051945,47,"[["
+? \<ls\>
+|2,1,1576051854,,"\\<ls\\>"
+?/asdfasdf
+|2,1,1576051848,47,"asdfasdf"
+?/cd
+|2,1,1576051509,47,"cd"
+? \<dir\>
+|2,1,1576051321,,"\\<dir\\>"
+?/%
+|2,1,1576051214,47,"%"
+? \<callTree\>
+|2,1,1576051151,,"\\<callTree\\>"
+?/less
+|2,1,1576050829,47,"less"
+?/asdf
+|2,1,1576050789,47,"asdf"
+? \Vif\%#
+|2,1,1576050602,,"\\Vif\\%#"
+?/R
+|2,1,1576050197,47,"R"
+?/vi\>
+|2,1,1576050003,47,"vi\\>"
+?/rsync
+|2,1,1576049993,47,"rsync"
 ? @$
 |2,1,1576049628,,"@$"
 ?/file
@@ -259,8 +289,6 @@ $
 |2,1,1576033305,47,"colors"
 ?/Term
 |2,1,1576032847,47,"Term"
-?/asdfasdf
-|2,1,1576032447,47,"asdfasdf"
 ?/clear
 |2,1,1576031708,47,"clear"
 ?/cleared
@@ -317,8 +345,6 @@ $
 |2,1,1575972780,47,"member"
 ?/asdfasdfasdf
 |2,1,1575976021,47,"asdfasdfasdf"
-?/asdf
-|2,1,1575975791,47,"asdf"
 ?/asdfasdfasdfasdf
 |2,1,1575975530,47,"asdfasdfasdfasdf"
 ?/Function
@@ -343,8 +369,6 @@ $
 |2,1,1575971095,,"\\<needs_cppstructure_match\\>"
 ? \<cCustomScope\>
 |2,1,1575970206,,"\\<cCustomScope\\>"
-? \Vif\%#
-|2,1,1575971151,,"\\Vif\\%#"
 ?/cpp_
 |2,1,1575971110,47,"cpp_"
 ?/103
@@ -395,30 +419,6 @@ $
 |2,1,1575966466,,"\\<pythonEscape\\>"
 ? \<pythonComment\>
 |2,1,1575966457,,"\\<pythonComment\\>"
-? \<pythonOperator\>
-|2,1,1575966316,,"\\<pythonOperator\\>"
-?/Operator
-|2,1,1575966303,47,"Operator"
-?/114
-|2,1,1575965700,47,"114"
-? \<210\>
-|2,1,1575965645,,"\\<210\\>"
-? \<QuickFixLine\>
-|2,1,1575965613,,"\\<QuickFixLine\\>"
-?/Qu
-|2,1,1575965610,47,"Qu"
-? \<215\>
-|2,1,1575965520,,"\\<215\\>"
-?/Type
-|2,1,1575965519,47,"Type"
-?/netrw
-|2,1,1575965339,47,"netrw"
-? \<netrw_special_syntax\>
-|2,1,1575965327,,"\\<netrw_special_syntax\\>"
-?/newt
-|2,1,1575965322,47,"newt"
-? \<QuickFixWarning\>
-|2,1,1575965224,,"\\<QuickFixWarning\\>"
 
 # Expression History (newest to oldest):
 =acp#onPopupPost()
@@ -437,36 +437,43 @@ $
 # Debug Line History (newest to oldest):
 
 # Registers:
-""0	CHAR	0
+"0	CHAR	0
 	M
-|3,1,0,0,1,0,1576049628,"M"
-"1	LINE	0
-	
-|3,0,1,1,1,0,1576049628,""
+|3,0,0,0,1,0,1576049628,"M"
+""1	LINE	0
+	#alias tree="callTree"
+|3,1,1,1,1,0,1576052048,"#alias tree=\"callTree\""
 "2	LINE	0
-	
-|3,0,2,1,1,0,1576049628,""
+	    echo "its 0"
+|3,0,2,1,1,0,1576051846,"    echo \"its 0\""
 "3	LINE	0
-	
-|3,0,3,1,1,0,1576035123,""
+	  #local dir="$*"
+	  #if [[ ${#dir} == 0 ]]; then
+	  #  \cd ~
+	  #else
+	  #  \cd "${dir}"
+	  #fi
+|3,0,3,1,6,0,1576051714,"  #local dir=\"$*\"","  #if [[ ${#dir} == 0 ]]; then","  #  \\cd ~","  #else","  #  \\cd \"${dir}\"","  #fi"
 "4	LINE	0
 	
-|3,0,4,1,1,0,1576035020,""
+|3,0,4,1,1,0,1576051211,""
 "5	LINE	0
-	highlight CustomClass       ctermfg=103 cterm=BOLD
-|3,0,5,1,1,0,1576032780,"highlight CustomClass       ctermfg=103 cterm=BOLD"
+	#  fi
+|3,0,5,1,1,0,1576051072,"#  fi"
 "6	LINE	0
-	
-|3,0,6,1,1,0,1576032769,""
+	#  if [ $# -eq 0 ]; then
+	#    \tree -C | \less -R
+	#  else
+|3,0,6,1,3,0,1576051071,"#  if [ $# -eq 0 ]; then","#    \\tree -C | \\less -R","#  else"
 "7	LINE	0
-	highlight Normal ctermbg=red
-|3,0,7,1,1,0,1576032721,"highlight Normal ctermbg=red"
+	  tree -C "$1"# | less -R
+|3,0,7,1,1,0,1576050654,"  tree -C \"$1\"# | less -R"
 "8	LINE	0
-	highlight Number            ctermfg=180             cterm=NONE
-|3,0,8,1,1,0,1576031250,"highlight Number            ctermfg=180             cterm=NONE"
+	    #statements
+|3,0,8,1,1,0,1576050614,"    #statements"
 "9	LINE	0
-	highlight Number            ctermfg=180             cterm=NONE
-|3,0,9,1,1,0,1576031248,"highlight Number            ctermfg=180             cterm=NONE"
+	
+|3,0,9,1,1,0,1576050195,""
 "j	CHAR	0
 	jkkkkkkjjjjjjjjjjjjjjjjjjjjjjjj:€ku
 |3,0,19,0,1,0,1575881916,"jkkkkkkjjjjjjjjjjjjjjjjjjjjjjjj:€ku"
@@ -480,234 +487,367 @@ $
 	jklllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllljjj:qj/asdfkj
 |3,0,31,0,1,0,1575879436,"jklllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllljjj:qj/asdfkj"
 "-	CHAR	0
-	M
-|3,0,36,0,1,0,1576045201,"M"
+	]
+|3,0,36,0,1,0,1576051939,"]"
 
 # File marks:
-'0  48  0  ~/.vim/vimrc
-|4,48,48,0,1576049906,"~/.vim/vimrc"
-'1  48  29  ~/.vim/vimrc
-|4,49,48,29,1576049879,"~/.vim/vimrc"
-'2  1  0  ~/.viminfo
-|4,50,1,0,1576049858,"~/.viminfo"
-'3  102  1  ~/.viminfo
-|4,51,102,1,1576049839,"~/.viminfo"
-'4  102  1  ~/.viminfo
-|4,52,102,1,1576049839,"~/.viminfo"
-'5  25  0  ~/NetrwTreeListing
-|4,53,25,0,1576049635,"~/NetrwTreeListing"
-'6  149  23  ~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim
-|4,54,149,23,1576048476,"~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim"
-'7  311  11  ~/.vim/bundle/Vundle.vim/autoload/vundle/installer.vim
-|4,55,311,11,1576048375,"~/.vim/bundle/Vundle.vim/autoload/vundle/installer.vim"
-'8  36  3  ~/.vim/bundle/Vundle.vim/autoload/vundle/installer.vim
-|4,56,36,3,1576048176,"~/.vim/bundle/Vundle.vim/autoload/vundle/installer.vim"
-'9  36  3  ~/.vim/bundle/Vundle.vim/autoload/vundle/installer.vim
-|4,57,36,3,1576048176,"~/.vim/bundle/Vundle.vim/autoload/vundle/installer.vim"
+'0  3  0  ~/.vim/.gitignore
+|4,48,3,0,1576118255,"~/.vim/.gitignore"
+'1  1  0  /private/var/folders/tk/6s2nlp4d7b1g5n1vgb2hlqyw0000gn/T/q4fjpF_.viminfo
+|4,49,1,0,1576118251,"/private/var/folders/tk/6s2nlp4d7b1g5n1vgb2hlqyw0000gn/T/q4fjpF_.viminfo"
+'2  102  1  ~/.viminfo
+|4,50,102,1,1576118186,"~/.viminfo"
+'3  1  0  ~/.Xauthority
+|4,51,1,0,1576118178,"~/.Xauthority"
+'4  8  43  ~/.config/bashrc
+|4,52,8,43,1576118153,"~/.config/bashrc"
+'5  7  3  ~/.config/bashrc
+|4,53,7,3,1576118147,"~/.config/bashrc"
+'6  7  3  ~/.config/bashrc
+|4,54,7,3,1576118147,"~/.config/bashrc"
+'7  1  0  ~/.bash_sessions/_expiration_check_timestamp
+|4,55,1,0,1576118123,"~/.bash_sessions/_expiration_check_timestamp"
+'8  8  18  ~/.config/bashrc
+|4,56,8,18,1576118115,"~/.config/bashrc"
+'9  8  18  ~/.config/bashrc
+|4,57,8,18,1576118115,"~/.config/bashrc"
 
 # Jumplist (newest first):
--'  48  0  ~/.vim/vimrc
-|4,39,48,0,1576049906,"~/.vim/vimrc"
--'  48  29  ~/.vim/vimrc
-|4,39,48,29,1576049879,"~/.vim/vimrc"
--'  31  2  ~/.vim/vimrc
-|4,39,31,2,1576049869,"~/.vim/vimrc"
--'  31  2  ~/.vim/vimrc
-|4,39,31,2,1576049869,"~/.vim/vimrc"
--'  1  0  ~/.viminfo
-|4,39,1,0,1576049858,"~/.viminfo"
--'  1  0  ~/.viminfo
-|4,39,1,0,1576049858,"~/.viminfo"
--'  1  0  ~/.viminfo
-|4,39,1,0,1576049858,"~/.viminfo"
--'  1  0  ~/.viminfo
-|4,39,1,0,1576049858,"~/.viminfo"
+-'  3  0  ~/.vim/.gitignore
+|4,39,3,0,1576118255,"~/.vim/.gitignore"
+-'  1  0  ~/.vim/.gitignore
+|4,39,1,0,1576118253,"~/.vim/.gitignore"
+-'  1  0  /private/var/folders/tk/6s2nlp4d7b1g5n1vgb2hlqyw0000gn/T/q4fjpF_.viminfo
+|4,39,1,0,1576118251,"/private/var/folders/tk/6s2nlp4d7b1g5n1vgb2hlqyw0000gn/T/q4fjpF_.viminfo"
+-'  1  0  /private/var/folders/tk/6s2nlp4d7b1g5n1vgb2hlqyw0000gn/T/q4fjpF_.viminfo
+|4,39,1,0,1576118251,"/private/var/folders/tk/6s2nlp4d7b1g5n1vgb2hlqyw0000gn/T/q4fjpF_.viminfo"
 -'  102  1  ~/.viminfo
-|4,39,102,1,1576049848,"~/.viminfo"
--'  102  1  ~/.viminfo
-|4,39,102,1,1576049848,"~/.viminfo"
--'  102  1  ~/.viminfo
-|4,39,102,1,1576049848,"~/.viminfo"
--'  102  1  ~/.viminfo
-|4,39,102,1,1576049848,"~/.viminfo"
--'  102  1  ~/.viminfo
-|4,39,102,1,1576049839,"~/.viminfo"
--'  102  1  ~/.viminfo
-|4,39,102,1,1576049839,"~/.viminfo"
--'  102  1  ~/.viminfo
-|4,39,102,1,1576049839,"~/.viminfo"
--'  102  1  ~/.viminfo
-|4,39,102,1,1576049839,"~/.viminfo"
+|4,39,102,1,1576118186,"~/.viminfo"
 -'  1  0  ~/.viminfo
-|4,39,1,0,1576049838,"~/.viminfo"
+|4,39,1,0,1576118186,"~/.viminfo"
+-'  102  1  ~/.viminfo
+|4,39,102,1,1576118186,"~/.viminfo"
 -'  1  0  ~/.viminfo
-|4,39,1,0,1576049838,"~/.viminfo"
+|4,39,1,0,1576118186,"~/.viminfo"
+-'  102  1  ~/.viminfo
+|4,39,102,1,1576118186,"~/.viminfo"
 -'  1  0  ~/.viminfo
-|4,39,1,0,1576049838,"~/.viminfo"
+|4,39,1,0,1576118186,"~/.viminfo"
+-'  102  1  ~/.viminfo
+|4,39,102,1,1576118186,"~/.viminfo"
 -'  1  0  ~/.viminfo
-|4,39,1,0,1576049838,"~/.viminfo"
--'  25  0  ~/NetrwTreeListing
-|4,39,25,0,1576049635,"~/NetrwTreeListing"
--'  25  0  ~/NetrwTreeListing
-|4,39,25,0,1576049635,"~/NetrwTreeListing"
--'  25  0  ~/NetrwTreeListing
-|4,39,25,0,1576049635,"~/NetrwTreeListing"
--'  25  0  ~/NetrwTreeListing
-|4,39,25,0,1576049635,"~/NetrwTreeListing"
--'  25  0  ~/NetrwTreeListing
-|4,39,25,0,1576049635,"~/NetrwTreeListing"
--'  25  0  ~/NetrwTreeListing
-|4,39,25,0,1576049635,"~/NetrwTreeListing"
--'  25  0  ~/NetrwTreeListing
-|4,39,25,0,1576049635,"~/NetrwTreeListing"
--'  25  0  ~/NetrwTreeListing
-|4,39,25,0,1576049635,"~/NetrwTreeListing"
--'  25  0  ~/NetrwTreeListing
-|4,39,25,0,1576049635,"~/NetrwTreeListing"
--'  25  0  ~/NetrwTreeListing
-|4,39,25,0,1576049635,"~/NetrwTreeListing"
--'  25  0  ~/NetrwTreeListing
-|4,39,25,0,1576049635,"~/NetrwTreeListing"
--'  25  0  ~/NetrwTreeListing
-|4,39,25,0,1576049635,"~/NetrwTreeListing"
--'  25  0  ~/NetrwTreeListing
-|4,39,25,0,1576049635,"~/NetrwTreeListing"
--'  25  0  ~/NetrwTreeListing
-|4,39,25,0,1576049635,"~/NetrwTreeListing"
--'  25  0  ~/NetrwTreeListing
-|4,39,25,0,1576049635,"~/NetrwTreeListing"
--'  25  0  ~/NetrwTreeListing
-|4,39,25,0,1576049635,"~/NetrwTreeListing"
--'  1  0  ~/.vim_
-|4,39,1,0,1576049627,"~/.vim_"
--'  1  0  ~/.vim_
-|4,39,1,0,1576049627,"~/.vim_"
--'  1  0  ~/.vim_
-|4,39,1,0,1576049627,"~/.vim_"
--'  1  0  ~/.vim_
-|4,39,1,0,1576049627,"~/.vim_"
--'  1  0  ~/.vim_
-|4,39,1,0,1576049627,"~/.vim_"
--'  1  0  ~/.vim_
-|4,39,1,0,1576049627,"~/.vim_"
--'  1  0  ~/.vim_
-|4,39,1,0,1576049627,"~/.vim_"
--'  1  0  ~/.vim_
-|4,39,1,0,1576049627,"~/.vim_"
--'  1  0  ~/.vim_
-|4,39,1,0,1576049627,"~/.vim_"
--'  1  0  ~/.vim_
-|4,39,1,0,1576049627,"~/.vim_"
--'  1  0  ~/.vim_
-|4,39,1,0,1576049627,"~/.vim_"
--'  1  0  ~/.vim_
-|4,39,1,0,1576049627,"~/.vim_"
--'  1  0  ~/.vim_
-|4,39,1,0,1576049627,"~/.vim_"
--'  1  0  ~/.vim_
-|4,39,1,0,1576049627,"~/.vim_"
--'  1  0  ~/.vim_
-|4,39,1,0,1576049627,"~/.vim_"
--'  1  0  ~/.vim_
-|4,39,1,0,1576049627,"~/.vim_"
--'  149  23  ~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim
-|4,39,149,23,1576048476,"~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim"
--'  149  23  ~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim
-|4,39,149,23,1576048476,"~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim"
--'  149  23  ~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim
-|4,39,149,23,1576048476,"~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim"
--'  149  23  ~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim
-|4,39,149,23,1576048476,"~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim"
--'  149  23  ~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim
-|4,39,149,23,1576048476,"~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim"
--'  149  23  ~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim
-|4,39,149,23,1576048476,"~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim"
--'  149  23  ~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim
-|4,39,149,23,1576048476,"~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim"
--'  149  23  ~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim
-|4,39,149,23,1576048476,"~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim"
--'  149  23  ~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim
-|4,39,149,23,1576048476,"~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim"
--'  149  23  ~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim
-|4,39,149,23,1576048476,"~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim"
--'  149  23  ~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim
-|4,39,149,23,1576048476,"~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim"
--'  149  23  ~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim
-|4,39,149,23,1576048476,"~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim"
--'  149  23  ~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim
-|4,39,149,23,1576048476,"~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim"
--'  149  23  ~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim
-|4,39,149,23,1576048476,"~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim"
--'  149  23  ~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim
-|4,39,149,23,1576048476,"~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim"
--'  149  23  ~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim
-|4,39,149,23,1576048476,"~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim"
--'  149  23  ~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim
-|4,39,149,23,1576048476,"~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim"
--'  149  23  ~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim
-|4,39,149,23,1576048476,"~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim"
--'  149  23  ~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim
-|4,39,149,23,1576048476,"~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim"
--'  149  23  ~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim
-|4,39,149,23,1576048476,"~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim"
--'  149  23  ~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim
-|4,39,149,23,1576048476,"~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim"
--'  149  23  ~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim
-|4,39,149,23,1576048476,"~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim"
--'  149  23  ~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim
-|4,39,149,23,1576048476,"~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim"
--'  149  23  ~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim
-|4,39,149,23,1576048476,"~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim"
--'  149  23  ~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim
-|4,39,149,23,1576048476,"~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim"
--'  149  23  ~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim
-|4,39,149,23,1576048476,"~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim"
--'  149  23  ~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim
-|4,39,149,23,1576048476,"~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim"
--'  149  23  ~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim
-|4,39,149,23,1576048476,"~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim"
--'  149  23  ~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim
-|4,39,149,23,1576048476,"~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim"
--'  149  23  ~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim
-|4,39,149,23,1576048476,"~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim"
--'  149  23  ~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim
-|4,39,149,23,1576048476,"~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim"
--'  149  23  ~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim
-|4,39,149,23,1576048476,"~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim"
--'  104  2  ~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim
-|4,39,104,2,1576048383,"~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim"
--'  104  2  ~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim
-|4,39,104,2,1576048383,"~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim"
--'  104  2  ~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim
-|4,39,104,2,1576048383,"~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim"
--'  104  2  ~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim
-|4,39,104,2,1576048383,"~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim"
--'  104  2  ~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim
-|4,39,104,2,1576048383,"~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim"
--'  104  2  ~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim
-|4,39,104,2,1576048383,"~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim"
--'  104  2  ~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim
-|4,39,104,2,1576048383,"~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim"
--'  104  2  ~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim
-|4,39,104,2,1576048383,"~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim"
--'  104  2  ~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim
-|4,39,104,2,1576048383,"~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim"
--'  104  2  ~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim
-|4,39,104,2,1576048383,"~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim"
--'  104  2  ~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim
-|4,39,104,2,1576048383,"~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim"
--'  104  2  ~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim
-|4,39,104,2,1576048383,"~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim"
--'  104  2  ~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim
-|4,39,104,2,1576048383,"~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim"
--'  104  2  ~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim
-|4,39,104,2,1576048383,"~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim"
--'  104  2  ~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim
-|4,39,104,2,1576048383,"~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim"
--'  104  2  ~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim
-|4,39,104,2,1576048383,"~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim"
+|4,39,1,0,1576118186,"~/.viminfo"
+-'  1  0  ~/.Xauthority
+|4,39,1,0,1576118178,"~/.Xauthority"
+-'  1  0  ~/.Xauthority
+|4,39,1,0,1576118178,"~/.Xauthority"
+-'  1  0  ~/.Xauthority
+|4,39,1,0,1576118178,"~/.Xauthority"
+-'  1  0  ~/.Xauthority
+|4,39,1,0,1576118178,"~/.Xauthority"
+-'  1  0  ~/.Xauthority
+|4,39,1,0,1576118178,"~/.Xauthority"
+-'  1  0  ~/.Xauthority
+|4,39,1,0,1576118178,"~/.Xauthority"
+-'  1  0  ~/.Xauthority
+|4,39,1,0,1576118178,"~/.Xauthority"
+-'  1  0  ~/.Xauthority
+|4,39,1,0,1576118178,"~/.Xauthority"
+-'  8  43  ~/.config/bashrc
+|4,39,8,43,1576118153,"~/.config/bashrc"
+-'  8  43  ~/.config/bashrc
+|4,39,8,43,1576118153,"~/.config/bashrc"
+-'  8  43  ~/.config/bashrc
+|4,39,8,43,1576118153,"~/.config/bashrc"
+-'  8  43  ~/.config/bashrc
+|4,39,8,43,1576118153,"~/.config/bashrc"
+-'  8  43  ~/.config/bashrc
+|4,39,8,43,1576118153,"~/.config/bashrc"
+-'  8  43  ~/.config/bashrc
+|4,39,8,43,1576118153,"~/.config/bashrc"
+-'  8  43  ~/.config/bashrc
+|4,39,8,43,1576118153,"~/.config/bashrc"
+-'  8  43  ~/.config/bashrc
+|4,39,8,43,1576118153,"~/.config/bashrc"
+-'  8  43  ~/.config/bashrc
+|4,39,8,43,1576118153,"~/.config/bashrc"
+-'  8  43  ~/.config/bashrc
+|4,39,8,43,1576118153,"~/.config/bashrc"
+-'  8  43  ~/.config/bashrc
+|4,39,8,43,1576118153,"~/.config/bashrc"
+-'  8  43  ~/.config/bashrc
+|4,39,8,43,1576118153,"~/.config/bashrc"
+-'  8  43  ~/.config/bashrc
+|4,39,8,43,1576118153,"~/.config/bashrc"
+-'  8  43  ~/.config/bashrc
+|4,39,8,43,1576118153,"~/.config/bashrc"
+-'  8  43  ~/.config/bashrc
+|4,39,8,43,1576118153,"~/.config/bashrc"
+-'  8  43  ~/.config/bashrc
+|4,39,8,43,1576118153,"~/.config/bashrc"
+-'  7  0  ~/.config/bashrc
+|4,39,7,0,1576118152,"~/.config/bashrc"
+-'  7  0  ~/.config/bashrc
+|4,39,7,0,1576118152,"~/.config/bashrc"
+-'  7  0  ~/.config/bashrc
+|4,39,7,0,1576118152,"~/.config/bashrc"
+-'  7  0  ~/.config/bashrc
+|4,39,7,0,1576118152,"~/.config/bashrc"
+-'  7  0  ~/.config/bashrc
+|4,39,7,0,1576118152,"~/.config/bashrc"
+-'  7  0  ~/.config/bashrc
+|4,39,7,0,1576118152,"~/.config/bashrc"
+-'  7  0  ~/.config/bashrc
+|4,39,7,0,1576118152,"~/.config/bashrc"
+-'  7  0  ~/.config/bashrc
+|4,39,7,0,1576118152,"~/.config/bashrc"
+-'  7  0  ~/.config/bashrc
+|4,39,7,0,1576118152,"~/.config/bashrc"
+-'  7  0  ~/.config/bashrc
+|4,39,7,0,1576118152,"~/.config/bashrc"
+-'  7  0  ~/.config/bashrc
+|4,39,7,0,1576118152,"~/.config/bashrc"
+-'  7  0  ~/.config/bashrc
+|4,39,7,0,1576118152,"~/.config/bashrc"
+-'  7  0  ~/.config/bashrc
+|4,39,7,0,1576118152,"~/.config/bashrc"
+-'  7  0  ~/.config/bashrc
+|4,39,7,0,1576118152,"~/.config/bashrc"
+-'  7  0  ~/.config/bashrc
+|4,39,7,0,1576118152,"~/.config/bashrc"
+-'  7  0  ~/.config/bashrc
+|4,39,7,0,1576118152,"~/.config/bashrc"
+-'  7  3  ~/.config/bashrc
+|4,39,7,3,1576118147,"~/.config/bashrc"
+-'  7  3  ~/.config/bashrc
+|4,39,7,3,1576118147,"~/.config/bashrc"
+-'  7  3  ~/.config/bashrc
+|4,39,7,3,1576118147,"~/.config/bashrc"
+-'  7  3  ~/.config/bashrc
+|4,39,7,3,1576118147,"~/.config/bashrc"
+-'  7  3  ~/.config/bashrc
+|4,39,7,3,1576118147,"~/.config/bashrc"
+-'  7  3  ~/.config/bashrc
+|4,39,7,3,1576118147,"~/.config/bashrc"
+-'  7  3  ~/.config/bashrc
+|4,39,7,3,1576118147,"~/.config/bashrc"
+-'  7  3  ~/.config/bashrc
+|4,39,7,3,1576118147,"~/.config/bashrc"
+-'  7  3  ~/.config/bashrc
+|4,39,7,3,1576118147,"~/.config/bashrc"
+-'  7  3  ~/.config/bashrc
+|4,39,7,3,1576118147,"~/.config/bashrc"
+-'  7  3  ~/.config/bashrc
+|4,39,7,3,1576118147,"~/.config/bashrc"
+-'  7  3  ~/.config/bashrc
+|4,39,7,3,1576118147,"~/.config/bashrc"
+-'  7  3  ~/.config/bashrc
+|4,39,7,3,1576118147,"~/.config/bashrc"
+-'  7  3  ~/.config/bashrc
+|4,39,7,3,1576118147,"~/.config/bashrc"
+-'  7  3  ~/.config/bashrc
+|4,39,7,3,1576118147,"~/.config/bashrc"
+-'  7  3  ~/.config/bashrc
+|4,39,7,3,1576118147,"~/.config/bashrc"
+-'  8  0  ~/.config/bashrc
+|4,39,8,0,1576118146,"~/.config/bashrc"
+-'  8  0  ~/.config/bashrc
+|4,39,8,0,1576118146,"~/.config/bashrc"
+-'  8  0  ~/.config/bashrc
+|4,39,8,0,1576118146,"~/.config/bashrc"
+-'  8  0  ~/.config/bashrc
+|4,39,8,0,1576118146,"~/.config/bashrc"
+-'  8  0  ~/.config/bashrc
+|4,39,8,0,1576118146,"~/.config/bashrc"
+-'  8  0  ~/.config/bashrc
+|4,39,8,0,1576118146,"~/.config/bashrc"
+-'  8  0  ~/.config/bashrc
+|4,39,8,0,1576118146,"~/.config/bashrc"
+-'  8  0  ~/.config/bashrc
+|4,39,8,0,1576118146,"~/.config/bashrc"
+-'  8  0  ~/.config/bashrc
+|4,39,8,0,1576118146,"~/.config/bashrc"
+-'  8  0  ~/.config/bashrc
+|4,39,8,0,1576118146,"~/.config/bashrc"
+-'  8  0  ~/.config/bashrc
+|4,39,8,0,1576118146,"~/.config/bashrc"
+-'  8  0  ~/.config/bashrc
+|4,39,8,0,1576118146,"~/.config/bashrc"
+-'  8  0  ~/.config/bashrc
+|4,39,8,0,1576118146,"~/.config/bashrc"
+-'  8  0  ~/.config/bashrc
+|4,39,8,0,1576118146,"~/.config/bashrc"
+-'  8  0  ~/.config/bashrc
+|4,39,8,0,1576118146,"~/.config/bashrc"
+-'  8  0  ~/.config/bashrc
+|4,39,8,0,1576118146,"~/.config/bashrc"
+-'  1  0  ~/.bash_sessions/_expiration_check_timestamp
+|4,39,1,0,1576118123,"~/.bash_sessions/_expiration_check_timestamp"
+-'  1  0  ~/.bash_sessions/_expiration_check_timestamp
+|4,39,1,0,1576118123,"~/.bash_sessions/_expiration_check_timestamp"
+-'  1  0  ~/.bash_sessions/_expiration_check_timestamp
+|4,39,1,0,1576118123,"~/.bash_sessions/_expiration_check_timestamp"
+-'  1  0  ~/.bash_sessions/_expiration_check_timestamp
+|4,39,1,0,1576118123,"~/.bash_sessions/_expiration_check_timestamp"
+-'  1  0  ~/.bash_sessions/_expiration_check_timestamp
+|4,39,1,0,1576118123,"~/.bash_sessions/_expiration_check_timestamp"
+-'  1  0  ~/.bash_sessions/_expiration_check_timestamp
+|4,39,1,0,1576118123,"~/.bash_sessions/_expiration_check_timestamp"
+-'  1  0  ~/.bash_sessions/_expiration_check_timestamp
+|4,39,1,0,1576118123,"~/.bash_sessions/_expiration_check_timestamp"
+-'  1  0  ~/.bash_sessions/_expiration_check_timestamp
+|4,39,1,0,1576118123,"~/.bash_sessions/_expiration_check_timestamp"
+-'  1  0  ~/.bash_sessions/_expiration_check_timestamp
+|4,39,1,0,1576118123,"~/.bash_sessions/_expiration_check_timestamp"
+-'  1  0  ~/.bash_sessions/_expiration_check_timestamp
+|4,39,1,0,1576118123,"~/.bash_sessions/_expiration_check_timestamp"
+-'  1  0  ~/.bash_sessions/_expiration_check_timestamp
+|4,39,1,0,1576118123,"~/.bash_sessions/_expiration_check_timestamp"
+-'  1  0  ~/.bash_sessions/_expiration_check_timestamp
+|4,39,1,0,1576118123,"~/.bash_sessions/_expiration_check_timestamp"
+-'  1  0  ~/.bash_sessions/_expiration_check_timestamp
+|4,39,1,0,1576118123,"~/.bash_sessions/_expiration_check_timestamp"
+-'  1  0  ~/.bash_sessions/_expiration_check_timestamp
+|4,39,1,0,1576118123,"~/.bash_sessions/_expiration_check_timestamp"
+-'  1  0  ~/.bash_sessions/_expiration_check_timestamp
+|4,39,1,0,1576118123,"~/.bash_sessions/_expiration_check_timestamp"
+-'  1  0  ~/.bash_sessions/_expiration_check_timestamp
+|4,39,1,0,1576118123,"~/.bash_sessions/_expiration_check_timestamp"
 
 # History of marks within files (newest to oldest):
+
+> ~/.vim/.gitignore
+	*	1576118255	0
+	"	3	0
+	^	3	1
+	.	3	0
+	+	3	0
+
+> /private/var/folders/tk/6s2nlp4d7b1g5n1vgb2hlqyw0000gn/T/q4fjpF_.viminfo
+	*	1576118250	0
+	"	1	0
+
+> ~/.vim/.viminfo
+	*	1576118250	0
+	"	1	0
+
+> ~/.viminfo
+	*	1576118186	0
+	"	102	1
+
+> ~/.Xauthority
+	*	1576118176	0
+	"	1	0
+
+> ~/.config/bashrc
+	*	1576118153	0
+	"	8	43
+	^	44	10
+	.	146	0
+	+	146	0
+	+	68	0
+	+	67	0
+	+	68	0
+	+	67	10
+	+	65	11
+	+	67	10
+	+	65	16
+	+	66	0
+	+	67	0
+	+	66	16
+	+	67	0
+	+	66	11
+	+	66	18
+	+	66	11
+	+	67	0
+	+	66	12
+	+	67	0
+	+	66	22
+	+	66	4
+	+	66	15
+	+	66	20
+	+	146	20
+	+	66	23
+	+	66	27
+	+	66	21
+	+	66	0
+	+	67	0
+	+	66	0
+	+	67	0
+	+	66	0
+	+	146	0
+	+	65	12
+	+	23	0
+	+	23	2
+	+	23	0
+	+	22	30
+	+	23	14
+	+	26	4
+	+	23	32
+	+	27	7
+	+	26	4
+	+	27	15
+	+	23	9
+	+	27	0
+	+	26	4
+	+	32	21
+	+	31	16
+	+	44	9
+	+	146	0
+
+> ~/.bash_sessions/_expiration_check_timestamp
+	*	1576118122	0
+	"	1	0
+
+> /Users/Shared/SC Info/.sid.lockFile
+	*	1576118064	0
+	"	1	0
+
+> /private/etc/shells~orig
+	*	1576118031	0
+	"	1	0
+
+> /private/etc/shells
+	*	1576118025	0
+	"	11	0
+
+> /Users/Shared/Relocated Items/Configuration/private/etc/shells.system_default
+	*	1576118013	0
+	"	1	0
+
+> ~/.config/.git/COMMIT_EDITMSG
+	*	1576052137	0
+	"	1	50
+
+> /Volumes/MyPassport/Movies/bashrc
+	*	1576051839	0
+	"	1	0
+
+> ~/kill.~
+	*	1576051240	0
+	"	56	0
+	.	1	0
+	+	1	0
+
+> ~/work/bin/bashrc
+	*	1576051102	0
+	"	1	0
+
+> ~/less.~
+	*	1576050205	0
+	"	77	14
+	.	1	0
+	+	1	0
+
+> ~/tree.~
+	*	1576050051	0
+	"	183	0
+	.	1	0
+	+	1	0
+
+> ~/.config/inputrc
+	*	1576049977	0
+	"	28	0
 
 > ~/.vim/vimrc
 	*	1576049903	0
@@ -759,103 +899,6 @@ $
 	+	48	29
 	r	230	16
 
-> ~/.viminfo
-	*	1576049848	0
-	"	1	0
-
 > ~/.vim/viminfo
 	*	1576049847	0
 	"	1	0
-
-> ~/.vim/bundle/Vundle.vim/autoload/vundle/config.vim
-	*	1576048475	0
-	"	149	23
-
-> ~/.vim/bundle/Vundle.vim/autoload/vundle/installer.vim
-	*	1576048374	0
-	"	311	11
-
-> ~/.vim/bundle/Vundle.vim/vi
-	*	1576048137	0
-	"	1	0
-
-> ~/.vim_/.git/config
-	*	1576045709	0
-	"	9	41
-
-> ~/.vim_/vimrc
-	*	1576045203	0
-	"	314	12
-	^	314	13
-	.	314	12
-	+	314	12
-
-> ~/brew.~
-	*	1576035131	0
-	"	45	3
-	.	1	0
-	+	1	0
-
-> /usr/local/Cellar/vim/8.1.2250/share/vim/vim81/doc/tabpage.txt
-	*	1576034185	0
-	"	338	25
-
-> /usr/local/Cellar/vim/8.1.2250/share/vim/vim81/doc/options.txt
-	*	1576034184	0
-	"	7444	32
-
-> /usr/local/Cellar/vim/8.1.2250/share/vim/vim81/doc/syntax.txt
-	*	1576033848	0
-	"	5165	9
-
-> /usr/local/Cellar/vim/8.1.2250/share/vim/vim81/doc/terminal.txt
-	*	1576033772	0
-	"	1403	33
-
-> /usr/local/Cellar/vim/8.1.2250/share/vim/vim81/doc/channel.txt
-	*	1576033398	0
-	"	1014	21
-
-> ~/.vim/bundle/vim-desertBJ/colors/desertBJ.vim
-	*	1576032782	0
-	"	76	0
-	.	76	0
-	+	46	0
-	+	45	0
-	+	47	0
-	+	79	0
-	+	77	27
-	+	79	0
-	+	47	0
-	+	50	0
-	+	21	0
-	+	59	0
-	+	37	0
-	+	59	23
-	+	59	51
-	+	59	0
-	+	21	0
-	+	59	23
-	+	59	0
-	+	79	0
-	+	76	0
-
-> /usr/local/Cellar/vim/8.1.2250/share/vim/vim81/doc/intro.txt
-	*	1576032473	0
-	"	581	4
-
-> /usr/local/Cellar/vim/8.1.2250/share/vim/vim81/doc/undo.txt
-	*	1576031809	0
-	"	353	0
-
-> /usr/local/Cellar/vim/8.1.2250/share/vim/vim81/doc/ft_ada.txt
-	*	1576031388	0
-	"	433	14
-
-> /usr/local/Cellar/vim/8.1.2250/share/vim/vim81/doc/eval.txt
-	*	1576031379	0
-	"	114	21
-
-> ~/.config/bashrc
-	*	1576030411	0
-	"	99	0
