@@ -384,6 +384,7 @@ if !exists('user_filetypes')
     \   set path+=~/work/lib,~/work/lib/specialfunctions,~/work/projectEuler/Library |
     \ endif |
     \ setlocal formatoptions-=o |
+    \ set textwidth=120 |
     \ nnoremap <F2> :call CppmanLapack()<CR>
     autocmd BufWritePost *.c,*.cpp,*.h :TlistUpdate
 
