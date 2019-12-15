@@ -171,6 +171,7 @@ let &shiftwidth=s:nSpace        " Indents width
 let &softtabstop=s:nSpace       " <BS> regards 's:nSpace' spaces as one character
                                 " :%retab replaces all \t's to spaces
 unlet s:nSpace
+
 "--- Search
 set incsearch                   " Show search matches as you type.
 set smartcase                   " ignore case if search pattern is all lowercases, case-sensitive otherwise
@@ -196,9 +197,6 @@ augroup END
 
 "--- Spell check
 set spellsuggest=best,3        " 'z=' shows 3 best suggestions
-
-"--- Color column
-let s:nomore120 = 0
 
 "--- Insert mode completion & AutoComplPop settings
 set completeopt+=menuone,noinsert
@@ -226,32 +224,43 @@ let g:netrw_liststyle=3       " tree style
 let g:netrw_banner=0          " no banner
 let g:netrw_browse_split=2    " <CR> :vsp 'selected file'
 let g:netrw_special_syntax=1  " file type syntax
+
+"--- goyo settings
+let g:goyo_width="123"
+let g:goyo_height="95%"
+function! s:goyo_enter()
+  set number
+  highlight Normal ctermbg=black
+  if exists('+colorcolumn')
+    set colorcolumn=120
+    highlight ColorColumn ctermbg=234
+  endif
+endfunction
+autocmd! User GoyoEnter nested call <SID>goyo_enter()
 " }}}
 "===== >    FUNCTIONS          ===== {{{
 " Toggle highlight characters over 120 columns
-function! ToggleNoMore120()
+function! ToggleColorcolumn()
   if exists('+colorcolumn')
-    if s:nomore120
-      echo "Highlight char 120+ ON"
+    if (&colorcolumn == "")
+      echo "Highlight char 120+ On"
       set colorcolumn=120
-      let s:nomore120 = 0
     else
-      echo "Highlight char 120+ OFF"
+      echo "Highlight char 120+ Off"
       set colorcolumn=
-      let s:nomore120 = 1
     endif
   endif
 endfunction
-silent call ToggleNoMore120()
 " Sets mouse on and off. Utilized with keymap F10
 function! MouseOnOff()
-  let mou=&mouse
-  if (mou == "")
-    set mouse=a
-    echo "Mouse On"
-  else
-    set mouse=""
-    echo "Mouse Off"
+  if has('mouse')
+    if (&mouse == "")
+      set mouse=a
+      echo "Mouse On"
+    else
+      set mouse=""
+      echo "Mouse Off"
+    endif
   endif
 endfunction
 " Toggle AutoComplPop
@@ -446,8 +455,8 @@ nnoremap <silent> ~ :call Tilde4nonAlpha()<cr>
 nnoremap <F3> :TlistToggle<CR>
 
 " Call NoMore120
-nnoremap <F4> :call ToggleNoMore120()<CR>
-inoremap <F4> <Esc>:call ToggleNoMore120()<CR>a
+nnoremap <F4> :call ToggleColorcolumn()<CR>
+inoremap <F4> <Esc>:call ToggleColorcolumn()<CR>a
 
 " Toggle AutoComplPop
 nnoremap <F5> :call ToggleACP()<CR>
