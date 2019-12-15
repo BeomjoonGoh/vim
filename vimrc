@@ -491,7 +491,6 @@ nmap <CR> :call ToggleACP()<CR>i<C-m><Esc>:call ToggleACP()<CR>:echo<CR>
 " To the previous buffer
 nnoremap <Leader><Leader><Leader> <C-^>
 
-
 "--- QuickFix window
 " \ll => save the file and make and show the result in the bottom split (cwindow) if there are errors and/or warnings.
 " \w => show the cwindow (if exists).
@@ -520,7 +519,6 @@ vnoremap <silent> # :<C-U>
   \gvy?<C-R><C-R>=substitute(escape(@", '?\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
   \gV:call setreg('"', old_reg, old_regtype)<CR>
 
-
 "--- Moving around
 " Easy window navigation
 " Note: Karabiner maps <C-hjkl> to Arrows
@@ -548,7 +546,6 @@ nnoremap k gk
 " Move to the end of a line
 nnoremap - $
 
-
 "--- Folding Key Mappings
 nnoremap <Space> za
 vnoremap <Space> za
@@ -557,7 +554,6 @@ nnoremap zr zR
 nnoremap zM zm
 nnoremap zm zM
 "nnoremap z0 :set foldlevel=0<cr>
-
 
 "--- Tab page
 nnoremap <Tab>: :tab
@@ -583,9 +579,12 @@ nnoremap <Tab>4 4gt
 nnoremap <Tab>5 5gt
 nnoremap <Tab>6 6gt
 
-" Yank to and paste from clipboard
+"--- Yank to and paste from clipboard
 vnoremap <C-y> "*y
 nnoremap <C-p> "*p
 
 "nnoremap <F4> mryi":let @/ = @"<CR>`r
+
+"--- goyo
+nnoremap <Leader>f :Goyo<CR>
 " }}}
