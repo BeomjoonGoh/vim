@@ -34,6 +34,7 @@ call vundle#begin()
     Plugin 'tomtom/tlib_vim'
   Plugin 'BeomjoonGoh/vim-cppman'           " cppman within vim on a new tab
   Plugin 'gerw/vim-latex-suite'             " latex-suite
+  Plugin 'junegunn/goyo.vim'
 
   " Colorscheme & Syntax
   Plugin 'BeomjoonGoh/vim-desertBJ'
@@ -165,10 +166,11 @@ set autoindent smartindent      " When opening a new line and no filetype-specif
 let s:cycleIndentOption=1       "   indent as the line you're currently on.
 set tabstop=8                   " Change tab size (set to default for compatibility with others tabbed codes.)
 set expandtab                   " Expand a <tab> to spaces
-let nSpace=2
-let &shiftwidth=nSpace          " Indents width
-let &softtabstop=nSpace         " <BS> regards 'nSpace' spaces as one character
+let s:nSpace=2
+let &shiftwidth=s:nSpace        " Indents width
+let &softtabstop=s:nSpace       " <BS> regards 's:nSpace' spaces as one character
                                 " :%retab replaces all \t's to spaces
+unlet s:nSpace
 "--- Search
 set incsearch                   " Show search matches as you type.
 set smartcase                   " ignore case if search pattern is all lowercases, case-sensitive otherwise
@@ -182,13 +184,14 @@ set nowrap
 set numberwidth=4
 set number
 augroup numbertoggle
+  "Turn off relativenumber for non focused splits.
   "This has potential of slowing down scrolling when combined with iTerm2"
   autocmd!
   autocmd BufEnter,FocusGained *
   \ if (&filetype!="help" && &filetype!="taglist" && &filetype!="netrw" && &filetype!="cppman") |
-  \   set relativenumber |
+  \   setlocal relativenumber |
   \ endif
-  autocmd BufLeave,FocusLost * set norelativenumber
+  autocmd BufLeave,FocusLost * setlocal norelativenumber
 augroup END
 
 "--- Spell check
