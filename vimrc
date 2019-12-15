@@ -20,6 +20,7 @@
 if v:lang =~ "utf8$" || v:lang =~ "UTF-8$"
    set fileencodings=ucs-bom,utf-8,latin1
 endif
+
 set nocompatible
 filetype off
 set runtimepath+=~/.vim/bundle/Vundle.vim
@@ -95,7 +96,6 @@ if has("user_commands")
   command! -nargs=? -complete=file_in_path Find vnew<bar> find <args>
   command Cd cd %:p:h
   if has('terminal')
-    "command Term botright terminal ++close ++rows=10 bash -ls
     let s:termoptions = {
       \ "term_finish":"close",
       \ "term_rows":10,
@@ -110,18 +110,18 @@ if has("user_commands")
   endif
   command Vn vsp ~/work/.scratchpad.txt
   command Sn sp  ~/work/.scratchpad.txt
-  command RemoveTrailingSpaces call RemoveTrailingSpaces()
+  command RemoveTrailingSpaces %s/\s\+$//e
 endif
+
 " }}}
 "===== >    USER INTERFACES    ===== {{{
 "--- Command & Status line
-set cmdheight=1                 " Command mode height
+set cmdheight=1
 set noshowcmd
-set laststatus=2                " Show the status line
+set laststatus=2
 set statusline=%!MyStatusLine()
 function! MyStatusLine()
   return '%h%f %m%r  pwd: %<%{getcwd()} %=%(C: %c%V, L: %l/%L%) %P '
-  " Default value: '%<%f %h%m%r%=%-14.(%l,%c%V%) %P'
 endfunction
 
 "--- Tab page
@@ -185,8 +185,8 @@ set nowrap
 set numberwidth=4
 set number
 augroup numbertoggle
-  "Turn off relativenumber for non focused splits.
-  "This has potential of slowing down scrolling when combined with iTerm2"
+  "Turn off relativenumber for non focused splits. This has a potential of slowing down scrolling when combined with
+  "iTerm2
   autocmd!
   autocmd BufEnter,FocusGained *
   \ if (&filetype!="help" && &filetype!="taglist" && &filetype!="netrw" && &filetype!="cppman") |
@@ -237,10 +237,11 @@ function! s:goyo_enter()
   endif
 endfunction
 autocmd! User GoyoEnter nested call <SID>goyo_enter()
+
 " }}}
 "===== >    FUNCTIONS          ===== {{{
-" Toggle highlight characters over 120 columns
 function! ToggleColorcolumn()
+  " Toggle highlight characters over 120 columns
   if exists('+colorcolumn')
     if (&colorcolumn == "")
       echo "Highlight char 120+ On"
@@ -251,8 +252,9 @@ function! ToggleColorcolumn()
     endif
   endif
 endfunction
-" Sets mouse on and off. Utilized with keymap F10
+
 function! MouseOnOff()
+  " Sets mouse on and off. Utilized with keymap F10
   if has('mouse')
     if (&mouse == "")
       set mouse=a
@@ -263,8 +265,9 @@ function! MouseOnOff()
     endif
   endif
 endfunction
-" Toggle AutoComplPop
+
 function! ToggleACP()
+  " Toggle AutoComplPop
   if s:acpState
     AcpDisable
     echo "AutoComplPop disabled"
@@ -275,8 +278,9 @@ function! ToggleACP()
     let s:acpState = 1
   endif
 endfunction
-" Toggle paste safe mode
+
 function! TogglePasteSafe()
+  " Toggle paste safe mode
   if (s:cycleIndentOption == 0)
     set number relativenumber
     set smartindent autoindent
@@ -294,8 +298,9 @@ function! TogglePasteSafe()
   redraw
   echo msg
 endfunction
-" ~ key behaviour for non-alphabets
+
 function! Tilde4nonAlpha() " {{{
+  " ~ key behaviour for non-alphabets
   let char = getline(".")[col(".") - 1]
   if     char == "`"  | normal! r~l
   elseif char == "1"  | normal! r!l
@@ -343,21 +348,21 @@ function! Tilde4nonAlpha() " {{{
   endif
 endfunction
 " }}}
+
 function CppmanLapack()
+  " before use cppman under cursor this removes trailing underscore character if it has one. (eg., void dgetrf_(...))
   let s:word = expand("<cword>")
   if s:word[strlen(s:word)-1] == "_"
     let s:word = s:word[:-2]
   endif
   execute "Man " . s:word
 endfunction
-" Remove every trailing spaces
-function RemoveTrailingSpaces()
-  normal! %s/\s\+$//e
-endfunction
+
 " }}}
 "===== >    COLOR              ===== {{{
 set t_Co=256                    " Default: 8
 colorscheme desertBJ
+
 " }}}
 "===== >    FILETYPE SPECIFIC  ===== {{{
 if !exists('user_filetypes')
@@ -408,6 +413,7 @@ if !exists('user_filetypes')
     autocmd FileType sh,man nnoremap <buffer> K :execute "Man " . expand("<cword>")<CR>
   augroup END
 endif
+
 " }}}
 "===== >    FOLDING            ===== {{{
 set foldenable                  " enable folding
@@ -433,10 +439,12 @@ function! MyFoldText()
   let fillcharcount = windowwidth - len(line) - len(foldedlinecount) - 7
   return line . repeat(" ",fillcharcount) . foldedlinecount . ' lines '
 endfunction
+
 " }}}
 "===== >    KEY MAPPINGS       ===== {{{
 "--- General
 let mapleader = '\'
+
 " goto file
 nnoremap gf :vertical wincmd f<CR>
 nnoremap gF :w<CR>gf
@@ -558,7 +566,7 @@ nnoremap zm zM
 "--- Tab page
 nnoremap <Tab>: :tab
 nnoremap <Tab>n :tabedit %<CR>
-nnoremap <Tab>e :tabedit 
+nnoremap <Tab>e :tabedit<Space>
 nnoremap <Tab>gf <C-w>gf
 
 " <C-Tab>   : iTerm Sends HEX code for <F11> "[23~"
