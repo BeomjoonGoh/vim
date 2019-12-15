@@ -591,7 +591,8 @@ nnoremap <Tab>6 6gt
 vnoremap <C-y> "*y
 nnoremap <C-p> "*p
 
-"nnoremap <F4> mryi":let @/ = @"<CR>`r
+"--- Test regular expression under cursor in double quotes
+nnoremap <F8> mryi":let @/ = @"<CR>`r
 
 "--- goyo
 nnoremap <Leader>f :Goyo<CR>
