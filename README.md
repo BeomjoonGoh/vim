@@ -1,12 +1,14 @@
-### .vim Directory
+# vim Directory
 
-`vimrc` uses [Vundle](https://github.com/VundleVim/Vundle.vim).
+## Installation
+
+This `vimrc` uses [Vundle](https://github.com/VundleVim/Vundle.vim) plugin manager.
 
 To install,
 ```bash
-mkdir -p .vim/bundle
-git clone https://github.com/BeomjoonGoh/vim .vim
-git clone https://github.com/VundleVim/Vundle.vim .vim/bundle/Vundle.vim
+git clone https://github.com/BeomjoonGoh/vim ~/.vim
+mkdir ~/.vim/bundle # Default installation path for Vundle.
+git clone https://github.com/VundleVim/Vundle.vim ~/.vim/bundle/Vundle.vim
 ```
 And in vim,
 ```vim
