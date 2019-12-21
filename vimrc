@@ -596,4 +596,7 @@ nnoremap <F8> mryi":let @/ = @"<CR>`r
 
 "--- goyo
 nnoremap <Leader>f :Goyo<CR>
+
+"--- open URL
+nnoremap <silent> go :!open -a Safari <cWORD><CR>
 " }}}
