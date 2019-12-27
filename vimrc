@@ -36,6 +36,7 @@ call vundle#begin()
   Plugin 'BeomjoonGoh/vim-cppman'           " cppman within vim on a new tab
   Plugin 'gerw/vim-latex-suite'             " latex-suite
   Plugin 'junegunn/goyo.vim'
+  Plugin 'michaeljsmith/vim-indent-object'
 
   " Colorscheme & Syntax
   Plugin 'BeomjoonGoh/vim-desertBJ'
