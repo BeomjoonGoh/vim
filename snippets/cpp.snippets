@@ -5,11 +5,11 @@ snippet inc
 	#include <${1:iostream}>${2}
 # #include "..."
 snippet Inc
-	#include "${1:`Filename("$1")`}"${2}
+	#include "${1}.h"${2}
 # #ifndef ... #define ... #endif
 snippet Def
 	#ifndef $1
-	#define ${1:SYMBOL} ${2:value}
+		#define ${1:SYMBOL} ${2:value}
 	#endif${3}
 snippet def
 	#define 
@@ -48,13 +48,13 @@ snippet cl
 		private:
 			${3}
 		public:
-			$1() { }
-			virtual ~$1() { }
+			${1}() { }
+			virtual ~${1}() { }
 	};
 # Struct
 snippet st
 	struct ${1:foo} {
-		${2:// data}
+		${2}
 	};
 ################################################################################
 ### Functions
@@ -93,10 +93,10 @@ snippet t
 # switch
 snippet sw
 	switch (${1:val}) { 
-		case ${2:key:}
+		case ${2:key}: ${3}
 	}
 snippet de
-	default
+	default: ${1}
 ################################################################################
 ### Loops
 # do while
@@ -138,7 +138,8 @@ snippet td
 ### Others
 # Scope
 snippet {
-	{${1}
+	{
+		${1}
 	}
 # Subscript
 snippet [
@@ -169,5 +170,5 @@ snippet vec
 # Enumeration
 snippet en
 	enum ${1:foo} {
-		${2:// data}
+		${2}
 	};
