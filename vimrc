@@ -34,7 +34,7 @@ call vundle#begin()
     Plugin 'MarcWeber/vim-addon-mw-utils'
     Plugin 'tomtom/tlib_vim'
   Plugin 'BeomjoonGoh/vim-cppman'           " cppman within vim on a new tab
-  Plugin 'gerw/vim-latex-suite'             " latex-suite
+  Plugin 'vim-latex/vim-latex'
   Plugin 'junegunn/goyo.vim'
   Plugin 'michaeljsmith/vim-indent-object'
 
