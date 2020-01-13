@@ -120,6 +120,8 @@ endif
 set cmdheight=1
 set noshowcmd
 set laststatus=2
+set wildmenu                    " Turn on command line completion wild style
+set wildmode=list:longest,full
 set statusline=%!MyStatusLine()
 function! MyStatusLine()
   return '%h%f %m%r  pwd: %<%{getcwd()} %=%(C: %c%V, L: %l/%L%) %P '
@@ -178,11 +180,10 @@ set incsearch                   " Show search matches as you type.
 set smartcase                   " ignore case if search pattern is all lowercases, case-sensitive otherwise
 set hlsearch                    " Highlights searches
 
-set wildmenu                    " Turn on command line completion wild style
-set wildmode=list:longest,full
-
+"--- Wrap
 set nowrap
 
+"--- Line number
 set numberwidth=4
 set number
 augroup numbertoggle
@@ -204,7 +205,7 @@ set completeopt+=menuone,noinsert
 let g:acp_enableAtStartup=1
 let s:acpState=1                " ACP at start up: 1->enable, 0->disable (Both)
 
-"--- About the split
+"--- Split
 set splitbelow
 set splitright
 
@@ -361,7 +362,7 @@ endfunction
 
 " }}}
 "===== >    COLOR              ===== {{{
-set t_Co=256                    " Default: 8
+set t_Co=256
 colorscheme desertBJ
 
 " }}}
