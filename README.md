@@ -109,3 +109,9 @@ let Tlist_Enable_Fold_Column=0
 ### Commands
 ### Key maps
 
+## Todo
+* [ ] fork cppman, taglist, txt
+* [ ] publish forked plugins and  my owns.
+* [ ] find all the references: MyTabLine, MyFoldText, search in visual mode, regex
+* [ ] complete this readme
+* [ ] publish this repository
