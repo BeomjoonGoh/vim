@@ -240,6 +240,20 @@ function! s:goyo_enter()
 endfunction
 autocmd! User GoyoEnter nested call <SID>goyo_enter()
 
+"--- vimdiff
+if &diff
+  function! IwhiteToggle()
+    if &diffopt =~ 'iwhiteall'
+      set diffopt-=iwhiteall
+      echo "ignore all white spaces off"
+    else
+      set diffopt+=iwhiteall
+      echo "ignore all white spaces on"
+    endif
+  endfunction
+  nnoremap <Leader>iw :call IwhiteToggle()<CR>
+endif
+
 " }}}
 "===== >    FUNCTIONS          ===== {{{
 function! ToggleColorcolumn()
@@ -510,14 +524,14 @@ nnoremap <Leader><Leader><Leader> <C-^>
 " \g => from the cwindow, jump to the code where the cursor below indicates.
 " \e => will run a program xxx if it is the binary file compiled from the source code with the same name
 "       (but extension): xxx.c or xxx.cpp (% is current file name, < eliminates extension)
-nmap <Leader>ll :w<CR>:make -Bs<CR>:botright cwindow<CR>
-nmap <Leader>w :botright cwindow<CR>
-nmap <Leader>c :cclose<CR>
-nmap <Leader>. :cnext<CR>
-nmap <Leader>, :cprevious<CR>
-nmap <Leader>g :.cc<CR>
-"nmap <Leader>e :!./%<<CR>
-nmap <Leader>e :!./main<CR>
+nnoremap <Leader>ll :w<CR>:make -Bs<CR>:botright cwindow<CR>
+nnoremap <Leader>w :botright cwindow<CR>
+nnoremap <Leader>c :cclose<CR>
+nnoremap <Leader>. :cnext<CR>
+nnoremap <Leader>, :cprevious<CR>
+nnoremap <Leader>g :.cc<CR>
+"nnoremap <Leader>e :!./%<<CR>
+nnoremap <Leader>e :!./main<CR>
 
 "--- Search in visual mode (* and #)
 vnoremap <silent> * :<C-U>
