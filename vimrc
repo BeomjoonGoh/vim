@@ -615,4 +615,5 @@ nnoremap <Leader>f :Goyo<CR>
 
 "--- open URL
 nnoremap <silent> go :!open -a Safari <cWORD><CR>
+vnoremap <silent> go y<Esc>:!open -a Safari <C-r>0<CR>
 " }}}
