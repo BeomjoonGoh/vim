@@ -39,7 +39,7 @@ Function `ToggleACP()` toggles `autocomplpop` plugin, and it is mapped to
 ### [vim-snipmate](https://github.com/garbas/vim-snipmate)
 
 > `SnipMate` aims to provide support for textual snippets, similar to
-> `TextMate` or other Vim plugins like `UltiSnips`. 
+> `TextMate` or other Vim plugins like `UltiSnips`.
 
 It depends on `vim-addon-mw-utils`, `tlib_vim`. Snippets are stored in
 `snippets` directory. `g:snipMate.no_default_aliases` is set so that aliases
@@ -103,11 +103,32 @@ let Tlist_Compact_Format=1
 let Tlist_Enable_Fold_Column=0
 ```
 
+### [vim-desertBJ](https://github.com/BeomjoonGoh/vim-desertBJ)
+
+> color scheme based on the default desert.vim, motivated by `desertEx` by Mingbai.
+
+
+### [vim-aftersyntax](https://github.com/BeomjoonGoh/vim-aftersyntax)
+
+> `after/syntax` directory.
+
+It depends on `vim-cpp-enhanced-highlight` plugin.  Supported syntax are: `C`,
+`Cpp`, `Fortran`, `Netrw`, `Python`, `QuickFix`, and `TeX`.
+
+
+### [vim-txt](https://github.com/BeomjoonGoh/vim-txt)
+
+Syntax for .txt, .out, etc.
+
+
 <!--
-Plugin 'BeomjoonGoh/vim-cppman'           " cppman within vim on a new tab
-Plugin 'BeomjoonGoh/vim-desertBJ'
-Plugin 'BeomjoonGoh/vim-txt'
-Plugin 'BeomjoonGoh/vim-aftersyntax'      " requires vim-cpp-enhanced-highlight
+### [vim-cppman](https://github.com/BeomjoonGoh/vim-cppman)
+
+> A plugin for using [*cppman*](https://github.com/aitjcize/cppman) from within
+> Vim. *cppman* is used to lookup "C++ 98/11/14 manual pages for Linux/MacOS"
+> through either [cplusplus.com](https://cplusplus.com) or
+> [cppreference.com](https://cppreference.com).
+
 -->
 
 ## Commands
@@ -117,5 +138,5 @@ Plugin 'BeomjoonGoh/vim-aftersyntax'      " requires vim-cpp-enhanced-highlight
 * [ ] fork cppman, taglist, txt
 * [ ] publish forked plugins and  my owns.
 * [ ] find all the references: MyTabLine, MyFoldText, search in visual mode, regex
-* [ ] complete this readme
+* [ ] complete readme
 * [ ] publish this repository
