@@ -534,6 +534,7 @@ nnoremap <Leader>g :.cc<CR>
 nnoremap <Leader>e :!./main<CR>
 
 "--- Search in visual mode (* and #)
+" See https://vim.fandom.com/wiki/Search_for_visually_selected_text
 vnoremap <silent> * :<C-U>
   \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
   \gvy/<C-R><C-R>=substitute(escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
@@ -608,6 +609,7 @@ vnoremap <C-y> "*y
 nnoremap <C-p> "*p
 
 "--- Test regular expression under cursor in double quotes
+" See https://stackoverflow.com/questions/14499107/easiest-way-to-test-vim-regex/14499299
 nnoremap <F8> mryi":let @/ = @"<CR>`r
 
 "--- goyo
