@@ -224,3 +224,4 @@ mode respectively. See `:help map.txt` for help and `:map` to see defined maps.
 
 ### Todo
 * [ ] publish this repository
+* [ ] (call term_sendkeys({buf}, "ls \<CR>")

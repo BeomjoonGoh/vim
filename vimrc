@@ -95,6 +95,7 @@ if has("user_commands")
   command! -nargs=? -complete=file Vs vs <args>
   command! -nargs=? -complete=file Vsp vsp <args>
   command! -nargs=? -complete=file_in_path Find vnew<bar> find <args>
+  command! -nargs=? -complete=help Help tab help <args>
   command! Cd cd %:p:h
   if has('terminal')
     let s:termoptions = {
