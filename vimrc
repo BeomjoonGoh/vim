@@ -219,6 +219,7 @@ let Tlist_Enable_Fold_Column=0
 "--- SnipMate settings
 let g:snipMate = {}
 let g:snipMate.no_default_aliases = 1
+let g:snipMate.snippet_version = 1
 
 "--- netrw
 let g:netrw_winsize=25        " window size
