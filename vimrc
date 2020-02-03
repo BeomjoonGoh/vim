@@ -40,7 +40,7 @@ call vundle#begin()
 
   " Colorscheme & Syntax
   Plugin 'BeomjoonGoh/vim-desertBJ'
-  Plugin 'BeomjoonGoh/vim-txt'
+  Plugin 'BeomjoonGoh/txt.vim'
   Plugin 'BeomjoonGoh/vim-aftersyntax'      " requires vim-cpp-enhanced-highlight
     Plugin 'octol/vim-cpp-enhanced-highlight'
 call vundle#end()
