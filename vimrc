@@ -95,23 +95,23 @@ if has("user_commands")
   command! -nargs=? -complete=file Vs vs <args>
   command! -nargs=? -complete=file Vsp vsp <args>
   command! -nargs=? -complete=file_in_path Find vnew<bar> find <args>
-  command Cd cd %:p:h
+  command! Cd cd %:p:h
   if has('terminal')
     let s:termoptions = {
       \ "term_finish":"close",
       \ "term_rows":10,
       \ "term_name":"[Terminal] bash",
       \}
-    command Term botright call term_start("bash -ls", s:termoptions)
+    command! Term botright call term_start("bash -ls", s:termoptions)
     let s:vtermoptions = {
       \ "term_finish":"close",
       \ "term_name":"[Terminal] bash",
       \}
-    command Vterm vertical call term_start("bash -ls", s:vtermoptions)
+    command! Vterm vertical call term_start("bash -ls", s:vtermoptions)
   endif
-  command Vn vsp ~/work/.scratchpad.txt
-  command Sn sp  ~/work/.scratchpad.txt
-  command RemoveTrailingSpaces %s/\s\+$//e
+  command! Vn vsp ~/work/.scratchpad.txt
+  command! Sn sp  ~/work/.scratchpad.txt
+  command! RemoveTrailingSpaces %s/\s\+$//e
 endif
 
 " }}}
@@ -191,7 +191,7 @@ augroup numbertoggle
   "iTerm2
   autocmd!
   autocmd BufEnter,FocusGained *
-  \ if (&filetype!="help" && &filetype!="taglist" && &filetype!="netrw" && &filetype!="cppman") |
+  \ if (&filetype!="help" && &filetype!="taglist" && &filetype!="netrw" && &filetype!="cppman" && &filetype!="man") |
   \   setlocal relativenumber |
   \ endif
   autocmd BufLeave,FocusLost * setlocal norelativenumber
@@ -365,7 +365,7 @@ function! Tilde4nonAlpha() " {{{
 endfunction
 " }}}
 
-function CppmanLapack()
+function! CppmanLapack()
   " before use cppman under cursor this removes trailing underscore character if it has one. (eg., void dgetrf_(...))
   let s:word = expand("<cword>")
   if s:word[strlen(s:word)-1] == "_"
