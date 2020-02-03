@@ -223,8 +223,4 @@ mode respectively. See `:help map.txt` for help and `:map` to see defined maps.
 
 
 ### Todo
-* [ ] fork cppman, taglist, txt
-* [ ] publish forked plugins and my owns.
-* [ ] find all the references: MyTabLine, MyFoldText, search in visual mode, regex
-* [ ] complete readme
 * [ ] publish this repository
