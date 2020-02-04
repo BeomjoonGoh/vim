@@ -143,7 +143,8 @@ For builtin commands `e`, `q`, `qa`, `w`, `wa`, `wq`, `wqa`, `sp`, and `vsp`,
 possible uppercase typos are defined.
 
 * `Find` works like `find` but in vertical split.
-* `Cd` change working directory to the buffer's directory.
+* `Cd` changes working directory to the buffer's directory.
+* `Help` opens help page in new tab not in split
 * `Term`(`Vterm`) runs `bash` shell in terminal emulator
   horizontally(vertically) with a few terminal options. See `:help terminal`.
 * `Vn`(`Sn`) opens a scratchpad.
@@ -167,9 +168,10 @@ mode respectively. See `:help map.txt` for help and `:map` to see defined maps.
   `.cpp`, or `.h`
 * `<F9>` [n,i] Type(i) or show(n) the current date and time stamp
 * `<Leader>r` [n] Stop highlight search result
+* `<Leader>R` [n] Brute force reset search
 * `<CR>` [n] Enter works in normal mode when `autocomplpop` is on.
-* `*` [v] Search in visual mode 
-* `#` [v] Search in visual mode 
+* `*` [v] Search in visual mode
+* `#` [v] Search in visual mode
 * `<C-y>` [v] Yank to clipboard
 * `<C-p>` [n] Paste from clipboard
 * `<F8>` [n] Test regular expression under cursor in double quotes
@@ -219,10 +221,5 @@ mode respectively. See `:help map.txt` for help and `:map` to see defined maps.
 * `<Tab>gf` [n] Open a file under cursor in a new tab page
 * `<C-Tab>` [n,i,v,t] Go to the next tab page (`iTerm` sends `<F11>`)
 * `<C-S-Tab>` [n,i,v,t] Go to the previous tab page (`iTerm` sends `<F12>`)
-* `<Tab>[num]` [n] Go to tab number `[num]` = 1 ~ 6 
+* `<Tab>[num]` [n] Go to tab number `[num]` = 1 ~ 6
 
-
-### Todo
-* [ ] publish this repository
-* [ ] terminal communication (`call term_sendkeys({buf}, "ls \<CR>"`)
-* [ ] update readme command section
