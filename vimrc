@@ -91,28 +91,19 @@ if has("user_commands")
   command! -bang Q q<bang>
   command! -bang QA qa<bang>
   command! -bang Qa qa<bang>
-  command! -nargs=? -complete=file Sp sp <args>
-  command! -nargs=? -complete=file Vs vs <args>
-  command! -nargs=? -complete=file Vsp vsp <args>
-  command! -nargs=? -complete=file_in_path Find vnew<bar> find <args>
-  command! -nargs=? -complete=help Help tab help <args>
-  command! Cd cd %:p:h
+  command -nargs=? -complete=file Sp sp <args>
+  command -nargs=? -complete=file Vs vs <args>
+  command -nargs=? -complete=file Vsp vsp <args>
+  command -nargs=? -complete=file_in_path Find vnew<bar> find <args>
+  command -nargs=? -complete=help Help tab help <args>
   if has('terminal')
-    let s:termoptions = {
-      \ "term_finish":"close",
-      \ "term_rows":10,
-      \ "term_name":"[Terminal] bash",
-      \}
-    command! Term botright call term_start("bash -ls", s:termoptions)
-    let s:vtermoptions = {
-      \ "term_finish":"close",
-      \ "term_name":"[Terminal] bash",
-      \}
-    command! Vterm vertical call term_start("bash -ls", s:vtermoptions)
+    command  Term call OpenTerminal(0)
+    command Vterm call OpenTerminal(1)
   endif
-  command! Vn vsp ~/work/.scratchpad.txt
-  command! Sn sp  ~/work/.scratchpad.txt
-  command! RemoveTrailingSpaces %s/\s\+$//e
+  command Cd call ChangeDirectory()
+  command Vn vsp ~/work/.scratchpad.txt
+  command Sn sp  ~/work/.scratchpad.txt
+  command RemoveTrailingSpaces %s/\s\+$//e
 endif
 
 " }}}
@@ -376,6 +367,31 @@ function! CppmanLapack()
   execute "Man " . s:word
 endfunction
 
+function OpenTerminal(vertical)
+  if has('terminal')
+    let l:term_options = {
+        \ "term_finish" : "close",
+        \ "term_name" : "[Terminal] bash",
+        \}
+    if a:vertical == 1
+      vertical let g:term_bufnr = term_start("bash -ls", l:term_options)
+    else
+      let l:term_options["term_rows"] = 10
+      botright let g:term_bufnr = term_start("bash -ls", l:term_options)
+    endif
+  endif
+endfunction
+
+function ChangeDirectory()
+  cd %:p:h
+  if has('terminal')
+    if exists("g:term_bufnr") && term_getstatus(g:term_bufnr) != ""
+      let l:cmd = "cd " . getcwd() . "\<CR>"
+      call term_sendkeys(g:term_bufnr, l:cmd)
+    endif
+  endif
+endfunction
+
 " }}}
 "===== >    COLOR              ===== {{{
 set t_Co=256
@@ -510,6 +526,7 @@ inoremap <C-\> <Esc>:Lexplore<CR>a
 
 " Reset searches
 nmap <silent> <Leader>r :nohlsearch<CR>
+nmap <silent> <Leader>R :silent!/BruteForceResetSearchEntity\.IDoNotReckonAnyoneWithRightMindWouldSearchThisSentence\.<CR>
 
 " Enter works in normal mode
 nmap <CR> :call ToggleACP()<CR>i<C-m><Esc>:call ToggleACP()<CR>:echo<CR>
