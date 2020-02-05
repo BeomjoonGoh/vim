@@ -191,6 +191,7 @@ mode respectively. See `:help map.txt` for help and `:map` to see defined maps.
 * `<Space>` [n,v] Open/close folds
 * `z0` [n] Zero fold level
 * `<Leader>f` [n] Toggle `goyo` plugin
+* `<Leader>iw [n] In diff mode, toggle ignore white spaces
 
 
 ### Moving around
