@@ -27,13 +27,13 @@ set runtimepath+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
   Plugin 'VundleVim/Vundle.vim'
 
-  Plugin 'othree/vim-autocomplpop'          " requires L9 library
-    Plugin 'L9'                             " utility functions / commands library
-  Plugin 'BeomjoonGoh/taglist.vim'          " source code navigation
-  Plugin 'garbas/vim-snipmate'              " requires vim-addon-mw-utils, tlib_vim
+  Plugin 'othree/vim-autocomplpop'
+    Plugin 'L9'
+  Plugin 'BeomjoonGoh/taglist.vim'
+  Plugin 'garbas/vim-snipmate'
     Plugin 'MarcWeber/vim-addon-mw-utils'
     Plugin 'tomtom/tlib_vim'
-  Plugin 'BeomjoonGoh/vim-cppman'           " cppman within vim on a new tab
+  Plugin 'BeomjoonGoh/vim-cppman'
   Plugin 'vim-latex/vim-latex'
   Plugin 'junegunn/goyo.vim'
   Plugin 'michaeljsmith/vim-indent-object'
@@ -41,7 +41,7 @@ call vundle#begin()
   " Colorscheme & Syntax
   Plugin 'BeomjoonGoh/vim-desertBJ'
   Plugin 'BeomjoonGoh/txt.vim'
-  Plugin 'BeomjoonGoh/vim-aftersyntax'      " requires vim-cpp-enhanced-highlight
+  Plugin 'BeomjoonGoh/vim-aftersyntax'
     Plugin 'octol/vim-cpp-enhanced-highlight'
 call vundle#end()
 filetype plugin on
