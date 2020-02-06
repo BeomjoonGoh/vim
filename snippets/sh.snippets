@@ -1,28 +1,72 @@
 # #!/bin/bash
 snippet #!
-	#!/usr/bin/env bash
-	
+	#!/usr/bin/env ${1:bash}
+	# ${2:`Filename()`}
+	#
+	# Maintainer:   ${3:`g:snips_author`}
+	# Last Change:  ${4:`strftime('%d %b %Y %T %z')`}
+
+	${0}
+snippet sets
+	set -o nounset -o pipefail -o errexit
+snippet $
+	"\${${1}}"
 snippet if
-	if [[ ${1:condition} ]]; then
-		${2:#statements}
+	if [ ${1} ]; then
+		${0}
 	fi
 snippet elif
-	elif [[ ${1:condition} ]]; then
-		${2:#statements}
+	elif [ ${1} ]; then
+		${0}
 snippet for
-	for (( ${2:i} = 0; $2 < ${1:count}; $2++ )); do
-		${3:#statements}
+	for ${1} in ${2}; do
+		${0}
+	done
+snippet forc
+	for (( ${1:i} = ${2:0}; $1 < ${3:imax}; $1++ )); do
+		${0}
 	done
 snippet wh
-	while [[ ${1:condition} ]]; do
-		${2:#statements}
+	while [ ${1} ]; do
+		${0}
 	done
 snippet until
-	until [[ ${1:condition} ]]; do
-		${2:#statements}
+	until [ ${1} ]; do
+		${0}
 	done
 snippet case
 	case ${1:word} in
 		${2:pattern})
 			${3};;
 	esac
+snippet func
+	function ${1:fun}() {
+		${0}
+	}
+snippet alias
+	alias ${1}="${2}"
+snippet args
+	for arg in "\$@"; do
+		shift
+		case "\${arg}" in
+		  "--${1}")  set -- "\$@" "-${2}" ;;
+		  "--help")  set -- "\$@" "-h" ;;
+		  "--"*)      set -- "\$@" "-?" ;;
+		  *)          set -- "\$@" "\${arg}"
+		esac
+	done
+	OPTIND=1
+	while getopts "$2${4}h" opt; do
+	  case "\${opt}" in
+	    "$2") ${5} ;;
+	    "h") usage; exit 0 ;;
+	    "?") usage >&2; exit 1 ;;
+	  esac
+	done
+	shift \$((OPTIND - 1))
+snippet usage
+	function usage() {
+		cat <<-HELP
+		${1}
+		HELP
+	}
