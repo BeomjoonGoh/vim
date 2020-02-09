@@ -253,7 +253,7 @@ if has('terminal')
     if     a:type == "botright"
       let l:term_options["term_rows"] = min([float2nr(0.18*&lines),15])
     elseif a:type == "vertical"
-      let l:term_options["term_cols"] = min([float2nr(0.4*&columns),120])
+      let l:term_options["term_cols"] = min([float2nr(0.4*&columns),150])
     elseif a:type == "tab"
       "
     else
