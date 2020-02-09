@@ -5,6 +5,7 @@
 - [Installation](#installation)
 - [Plugins](#plugins)
 - [Commands](#commands)
+- [User Interfaces](#user-interfaces)
 - [Key maps](#key-maps)
 - [Todo](#todo)
 
@@ -148,6 +149,13 @@ possible uppercase typos are defined.
   horizontally(vertically) with a few terminal options. See `:help terminal`.
 * `Vn`(`Sn`) opens a scratchpad.
 * `RemoveTrailingSpaces` does want it sounds like.
+
+
+## User Interfaces
+
+### Tab page
+
+### Terminal
 
 
 ## Key maps

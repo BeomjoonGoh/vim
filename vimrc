@@ -96,10 +96,6 @@ if has("user_commands")
   command -nargs=? -complete=file Vsp vsp <args>
   command -nargs=? -complete=file_in_path Find vnew<bar> find <args>
   command -nargs=? -complete=help Help tab help <args>
-  if has('terminal')
-    command  Term call OpenTerminal(0)
-    command Vterm call OpenTerminal(1)
-  endif
   command Vn vsp ~/work/.scratchpad.txt
   command Sn sp  ~/work/.scratchpad.txt
   command RemoveTrailingSpaces %s/\s\+$//e
@@ -247,6 +243,64 @@ if &diff
   nnoremap <Leader>iw :call IwhiteToggle()<CR>
 endif
 
+"--- terminal
+if has('terminal')
+  function OpenTerminal(type)
+    let l:term_options = {
+          \ "term_finish" : "close",
+          \ "term_name" : "[Terminal] bash",
+          \}
+    if     a:type == "botright" | let l:term_options["term_rows"] = 15
+    elseif a:type == "vertical" | let l:term_options["term_cols"] = 120
+    elseif a:type == "tab"
+    else
+      return 1
+    endif
+    execut a:type . ' let g:term_bufnr = term_start("bash -ls", l:term_options)'
+  endfunction
+
+  function ChangeDirectory()
+    cd %:p:h
+    if getbufvar(g:term_bufnr, '&buftype') == 'terminal'
+      let l:cmd = "cd " . getcwd() . "\<CR>"
+      call term_sendkeys(g:term_bufnr, l:cmd)
+    endif
+  endfunction
+
+  " terminal-api
+  function Tapi_SetTermBufferNumber(bufnr, arglist)
+    let g:term_bufnr = a:bufnr
+    echomsg "This terminal(" . g:term_bufnr . ") is now set to g:term_bufnr."
+  endfunction
+
+  function Tapi_ChangeDirectory(bufnr, arglist)
+    execute 'cd' . a:arglist[0]
+  endfunction
+
+  function Tapi_VerticalSplit(bufnr, arglist)
+    set nosplitright
+    execute 'vertical split' . a:arglist[0]
+    set nosplitright
+  endfunction
+
+  autocmd TerminalOpen *
+  \ if &buftype == 'terminal' |
+  \   set winfixheight | 
+  \   set winfixwidth |
+  \ endif
+
+  " commands
+  if has("user_commands")
+    command Bterm call OpenTerminal("botright")
+    command Vterm call OpenTerminal("vertical")
+    command Tterm call OpenTerminal("tab")
+  endif
+
+  " keymap
+  nnoremap <Leader>cd :call ChangeDirectory()<CR>
+  tnoremap <Leader>cd 2vim cd<CR>
+endif
+
 " }}}
 "===== >    FUNCTIONS          ===== {{{
 function! ToggleColorcolumn()
@@ -367,31 +421,6 @@ function! CppmanLapack()
   execute "Man " . s:word
 endfunction
 
-function OpenTerminal(vertical)
-  if has('terminal')
-    let l:term_options = {
-        \ "term_finish" : "close",
-        \ "term_name" : "[Terminal] bash",
-        \}
-    if a:vertical == 1
-      vertical let g:term_bufnr = term_start("bash -ls", l:term_options)
-    else
-      let l:term_options["term_rows"] = 10
-      botright let g:term_bufnr = term_start("bash -ls", l:term_options)
-    endif
-  endif
-endfunction
-
-function ChangeDirectory()
-  cd %:p:h
-  if has('terminal')
-    if getbufvar(g:term_bufnr, '&buftype') == 'terminal'
-      let l:cmd = "cd " . getcwd() . "\<CR>"
-      call term_sendkeys(g:term_bufnr, l:cmd)
-    endif
-  endif
-endfunction
-
 " }}}
 "===== >    COLOR              ===== {{{
 set t_Co=256
@@ -416,11 +445,6 @@ if !exists('user_filetypes')
     let g:Tex_ViewRule_pdf = 'open -a Preview'
     let g:Tex_FoldedEnvironments=''
     let g:tex_indent_brace=0
-
-    "--- terminal
-    if has('terminal')
-      autocmd TerminalOpen terminal set winfixheight | set winfixwidth
-    endif
 
     "--- .c, .cpp files
     let g:cpp_class_scope_highlight = 1
@@ -639,20 +663,3 @@ nnoremap <silent> go :!open -a Safari <cWORD><CR>
 vnoremap <silent> go y<Esc>:!open -a Safari <C-r>0<CR>
 " }}}
 
-function Tapi_SetTermBufferNumber(bufnr, arglist)
-  let g:term_bufnr = a:bufnr
-  echomsg "This terminal(" . g:term_bufnr . ") is now set to g:term_bufnr."
-endfunction
-
-function Tapi_ChangeDirectory(bufnr, arglist)
-  execute 'cd' . a:arglist[0]
-endfunction
-
-function Tapi_VerticalSplit(bufnr, arglist)
-  set nosplitright
-  execute 'vertical split' . a:arglist[0]
-  set nosplitright
-endfunction
-
-nnoremap <Leader>cd :call ChangeDirectory()<CR>
-tnoremap <Leader>cd 2vim cd<CR>
