@@ -250,14 +250,23 @@ if has('terminal')
           \ "term_finish" : "close",
           \ "term_name" : "[Terminal] bash",
           \}
-    if     a:type == "botright" | let l:term_options["term_rows"] = 15
-    elseif a:type == "vertical" | let l:term_options["term_cols"] = 120
+    if     a:type == "botright"
+      let l:term_options["term_rows"] = min([float2nr(0.15*&lines),15])
+    elseif a:type == "vertical"
+      let l:term_options["term_cols"] = min([float2nr(0.5*&columns),120])
     elseif a:type == "tab"
+      "
     else
       return 1
     endif
     execut a:type . ' let g:term_bufnr = term_start("bash -ls", l:term_options)'
   endfunction
+
+  autocmd TerminalOpen *
+  \ if &buftype == 'terminal' |
+  \   set winfixheight | 
+  \   set winfixwidth |
+  \ endif
 
   function ChangeDirectory()
     cd %:p:h
@@ -282,12 +291,6 @@ if has('terminal')
     execute 'vertical split' . a:arglist[0]
     set nosplitright
   endfunction
-
-  autocmd TerminalOpen *
-  \ if &buftype == 'terminal' |
-  \   set winfixheight | 
-  \   set winfixwidth |
-  \ endif
 
   " commands
   if has("user_commands")
