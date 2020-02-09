@@ -289,7 +289,7 @@ if has('terminal')
   function Tapi_VerticalSplit(bufnr, arglist)
     set nosplitright
     execute 'vertical split' . a:arglist[0]
-    set nosplitright
+    set splitright
   endfunction
 
   function Tapi_Make(bufnr, arglist)
