@@ -143,7 +143,6 @@ For builtin commands `e`, `q`, `qa`, `w`, `wa`, `wq`, `wqa`, `sp`, and `vsp`,
 possible uppercase typos are defined.
 
 * `Find` works like `find` but in vertical split.
-* `Cd` changes working directory to the buffer's directory.
 * `Help` opens help page in new tab not in split
 * `Term`(`Vterm`) runs `bash` shell in terminal emulator
   horizontally(vertically) with a few terminal options. See `:help terminal`.
@@ -224,3 +223,6 @@ mode respectively. See `:help map.txt` for help and `:map` to see defined maps.
 * `<C-S-Tab>` [n,i,v,t] Go to the previous tab page (`iTerm` sends `<F12>`)
 * `<Tab>[num]` [n] Go to tab number `[num]` = 1 ~ 6
 
+### Todo
+[ ] `<Leader>cd` changes working directory to the buffer's directory.
+[ ] Terminal api

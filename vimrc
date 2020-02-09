@@ -48,7 +48,7 @@ filetype plugin on
 filetype indent on
 
 set history=100
-set viminfo='20,\"50,n~/.vim/.viminfo " read/write a .viminfo file, don't store more
+set viminfo='50,\"50,n~/.vim/.viminfo " read/write a .viminfo file, don't store more
 set backspace=indent,eol,start  " backspacing over everything in insert mode
 set scrolloff=3
 set clipboard=exclude:.*        " Fixes slow startup with ssh!! Same as $ vim -X
@@ -100,7 +100,6 @@ if has("user_commands")
     command  Term call OpenTerminal(0)
     command Vterm call OpenTerminal(1)
   endif
-  command Cd call ChangeDirectory()
   command Vn vsp ~/work/.scratchpad.txt
   command Sn sp  ~/work/.scratchpad.txt
   command RemoveTrailingSpaces %s/\s\+$//e
@@ -386,7 +385,7 @@ endfunction
 function ChangeDirectory()
   cd %:p:h
   if has('terminal')
-    if exists("g:term_bufnr") && term_getstatus(g:term_bufnr) != ""
+    if getbufvar(g:term_bufnr, '&buftype') == 'terminal'
       let l:cmd = "cd " . getcwd() . "\<CR>"
       call term_sendkeys(g:term_bufnr, l:cmd)
     endif
@@ -639,3 +638,21 @@ nnoremap <Leader>f :Goyo<CR>
 nnoremap <silent> go :!open -a Safari <cWORD><CR>
 vnoremap <silent> go y<Esc>:!open -a Safari <C-r>0<CR>
 " }}}
+
+function Tapi_SetTermBufferNumber(bufnr, arglist)
+  let g:term_bufnr = a:bufnr
+  echomsg "This terminal(" . g:term_bufnr . ") is now set to g:term_bufnr."
+endfunction
+
+function Tapi_ChangeDirectory(bufnr, arglist)
+  execute 'cd' . a:arglist[0]
+endfunction
+
+function Tapi_VerticalSplit(bufnr, arglist)
+  set nosplitright
+  execute 'vertical split' . a:arglist[0]
+  set nosplitright
+endfunction
+
+nnoremap <Leader>cd :call ChangeDirectory()<CR>
+tnoremap <Leader>cd 2vim cd<CR>
