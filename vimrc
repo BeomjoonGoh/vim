@@ -251,9 +251,9 @@ if has('terminal')
           \ "term_name" : "[Terminal] bash",
           \}
     if     a:type == "botright"
-      let l:term_options["term_rows"] = min([float2nr(0.15*&lines),15])
+      let l:term_options["term_rows"] = min([float2nr(0.18*&lines),15])
     elseif a:type == "vertical"
-      let l:term_options["term_cols"] = min([float2nr(0.5*&columns),120])
+      let l:term_options["term_cols"] = min([float2nr(0.4*&columns),120])
     elseif a:type == "tab"
       "
     else
@@ -292,6 +292,11 @@ if has('terminal')
     set nosplitright
   endfunction
 
+  function Tapi_Make(bufnr, arglist)
+    make -Bs
+    botright cwindow
+  endfunction
+
   " commands
   if has("user_commands")
     command Bterm call OpenTerminal("botright")
@@ -302,6 +307,7 @@ if has('terminal')
   " keymap
   nnoremap <Leader>cd :call ChangeDirectory()<CR>
   tnoremap <Leader>cd 2vim cd<CR>
+  tnoremap <Leader>ll 2vim make<CR>
 endif
 
 " }}}
