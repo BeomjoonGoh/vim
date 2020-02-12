@@ -51,6 +51,7 @@ set history=100
 set viminfo='50,\"50,n~/.vim/.viminfo " read/write a .viminfo file, don't store more
 set backspace=indent,eol,start  " backspacing over everything in insert mode
 set scrolloff=3
+set sidescroll=10
 set clipboard=exclude:.*        " Fixes slow startup with ssh!! Same as $ vim -X
 set lazyredraw                  " Not sure but it makes scrolling faster
 set ttyfast                     " This one too
@@ -109,6 +110,7 @@ set noshowcmd
 set laststatus=2
 set wildmenu                    " Turn on command line completion wild style
 set wildmode=list:longest,full
+set nofileignorecase
 set statusline=%!MyStatusLine()
 function! MyStatusLine()
   return '%h%f %m%r  pwd: %<%{getcwd()} %=%(C: %c%V, L: %l/%L%) %P '
