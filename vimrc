@@ -519,11 +519,7 @@ nnoremap gf :vertical wincmd f<CR>
 nnoremap gF :w<CR>gf
 
 " Tab backwards!
-augroup BackwardTab
-  autocmd!
-  " I don't know why but the ordinary method doesn't work.
-  autocmd BufRead,BufNewFile * inoremap <S-Tab> <C-d>
-augroup END
+inoremap <S-Tab> <C-d>
 
 " Mapping of Tilde4nonAlpha to ~
 nnoremap <silent> ~ :call Tilde4nonAlpha()<cr>
