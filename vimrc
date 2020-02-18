@@ -272,7 +272,7 @@ if has('terminal')
 
   function ChangeDirectory()
     cd %:p:h
-    if getbufvar(g:term_bufnr, '&buftype') == 'terminal'
+    if exists("g:term_bufnr") && getbufvar(g:term_bufnr, '&buftype') == 'terminal'
       let l:cmd = "cd " . getcwd() . "\<CR>"
       call term_sendkeys(g:term_bufnr, l:cmd)
     endif
