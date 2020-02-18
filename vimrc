@@ -444,10 +444,8 @@ if !exists('user_filetypes')
   augroup UserFileType
     autocmd!
     "--- .tex files
-    " Enables snipMate for .tex. Default:.latex
-    autocmd BufRead,BufNewFile *.tex
+    autocmd FileType tex
     \ set textwidth=120 |
-    \ set filetype=tex  |
     \ set foldlevel=99
     "set grepprg=grep\ -nH $*
     let g:Tex_PromptedCommands=''
@@ -462,7 +460,7 @@ if !exists('user_filetypes')
     let g:cpp_class_decl_highlight = 1
     let g:cpp_member_variable_highlight = 1
     let g:cpp_no_function_highlight = 1
-    autocmd BufRead,BufNewFile *.c,*.cpp,*.h
+    autocmd FileType c,cpp
     \ setlocal cindent |
     \ let g:acp_completeOption='.,w,b,u,t,i,d' |
     \ if !exists('pathset') |
@@ -476,6 +474,7 @@ if !exists('user_filetypes')
 
     "--- .py files
     let python_highlight_all = 1
+    autocmd FileType python set keywordprg=pydoc3
     autocmd BufWritePost *.py :TlistUpdate
 
     autocmd FileType vim nnoremap <buffer> K :execute "tab help " . expand("<cword>")<CR>
