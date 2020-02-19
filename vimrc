@@ -557,7 +557,7 @@ inoremap <C-\> <Esc>:Lexplore<CR>a
 
 " Reset searches
 nmap <silent> <Leader>r :nohlsearch<CR>
-nmap <silent> <Leader>R :silent!/BruteForceResetSearchEntity\.IDoNotReckonAnyoneWithRightMindWouldSearchThisSentence\.<CR>
+nmap <silent> <Leader>R :silent!/BruteForceResetSearch_<C-r>=rand()<CR>.<CR>
 
 " Enter works in normal mode
 nmap <CR> :call ToggleACP()<CR>i<C-m><Esc>:call ToggleACP()<CR>:echo<CR>
