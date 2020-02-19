@@ -97,8 +97,8 @@ if has("user_commands")
   command -nargs=? -complete=file Vsp vsp <args>
   command -nargs=? -complete=file_in_path Find vnew<bar> find <args>
   command -nargs=? -complete=help Help tab help <args>
-  command Vn vsp ~/work/.scratchpad.txt
-  command Sn sp  ~/work/.scratchpad.txt
+  command Vn vsp $HOME/.vim/scratchpad.txt
+  command Sn sp  $HOME/.vim/scratchpad.txt
   command RemoveTrailingSpaces %s/\s\+$//e
 endif
 
