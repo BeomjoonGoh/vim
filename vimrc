@@ -37,6 +37,7 @@ call vundle#begin()
   Plugin 'vim-latex/vim-latex'
   Plugin 'junegunn/goyo.vim'
   Plugin 'michaeljsmith/vim-indent-object'
+  Plugin 'junegunn/vim-easy-align'
 
   " Colorscheme & Syntax
   Plugin 'BeomjoonGoh/vim-desertBJ'
@@ -663,6 +664,10 @@ nnoremap <F8> mryi":let @/ = @"<CR>`r
 
 "--- goyo
 nnoremap <Leader>f :Goyo<CR>
+
+"--- EasyAlign
+nmap ga <Plug>(EasyAlign)
+xmap ga <Plug>(EasyAlign)
 
 "--- open URL
 nnoremap <silent> go :!open -a Safari <cWORD><CR>
