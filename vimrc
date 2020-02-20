@@ -50,17 +50,18 @@ filetype indent on
 
 set history=100
 set viminfo='50,\"50,n~/.vim/.viminfo " read/write a .viminfo file, don't store more
-set backspace=indent,eol,start  " backspacing over everything in insert mode
+set backspace=indent,eol,start        " backspacing over everything in insert mode
 set scrolloff=3
 set sidescroll=10
-set clipboard=exclude:.*        " Fixes slow startup with ssh!! Same as $ vim -X
-set lazyredraw                  " Not sure but it makes scrolling faster
-set ttyfast                     " This one too
+set clipboard=exclude:.*              " Fixes slow startup with ssh!! Same as $ vim -X
+set lazyredraw                        " Not sure but it makes scrolling faster
+set ttyfast                           " This one too
 set formatoptions+=rnlj
-set path+=**                    " Search down into subdirectories
+set path+=**                          " Search down into subdirectories
 
 runtime! ftplugin/man.vim
 let g:ft_man_open_mode="tab"
+let g:ft_man_folding_enable=1
 
 syntax on
 set synmaxcol=512
@@ -109,7 +110,7 @@ endif
 set cmdheight=1
 set noshowcmd
 set laststatus=2
-set wildmenu                    " Turn on command line completion wild style
+set wildmenu
 set wildmode=list:longest,full
 set nofileignorecase
 set statusline=%!MyStatusLine()
@@ -156,12 +157,12 @@ endfunction
 
 "--- Indent & tab
 set autoindent smartindent      " When opening a new line and no filetype-specific indenting is enabled, keeps the same
-let s:cycleIndentOption=1       "   indent as the line you're currently on.
+let s:cycleIndentOption = 1     "   indent as the line you're currently on.
 set tabstop=8                   " Change tab size (set to default for compatibility with others tabbed codes.)
 set expandtab                   " Expand a <tab> to spaces
-let s:nSpace=2
-let &shiftwidth=s:nSpace        " Indents width
-let &softtabstop=s:nSpace       " <BS> regards 's:nSpace' spaces as one character
+let s:nSpace     = 2
+let &shiftwidth  = s:nSpace     " Indents width
+let &softtabstop = s:nSpace     " <BS> regards 's:nSpace' spaces as one character
                                 " :%retab replaces all \t's to spaces
 unlet s:nSpace
 
@@ -188,40 +189,40 @@ augroup numbertoggle
 augroup END
 
 "--- Spell check
-set spellsuggest=best,3        " 'z=' shows 3 best suggestions
+set spellsuggest=best,3         " 'z=' shows 3 best suggestions
 
 "--- Insert mode completion & AutoComplPop settings
 set completeopt+=menuone,noinsert
-let g:acp_enableAtStartup=1
-let s:acpState=1                " ACP at start up: 1->enable, 0->disable (Both)
+let g:acp_enableAtStartup = 1
+let s:acpState = 1              " ACP at start up: 1->enable, 0->disable (Both)
 
 "--- Split
 set splitbelow
 set splitright
 
 "--- TagList settings
-let Tlist_Exit_OnlyWindow=1     " Quit when TagList is the last open window
-let Tlist_WinWidth=30           " Set the width
-let Tlist_Use_Right_Window=1    " show TagList window on the right
-let Tlist_Compact_Format=1
-let Tlist_Enable_Fold_Column=0
+let Tlist_Exit_OnlyWindow    = 1  " Quit when TagList is the last open window
+let Tlist_WinWidth           = 30 " Set the width
+let Tlist_Use_Right_Window   = 1  " show TagList window on the right
+let Tlist_Compact_Format     = 1
+let Tlist_Enable_Fold_Column = 0
 
 "--- SnipMate settings
 let g:snipMate = {}
 let g:snipMate.no_default_aliases = 1
 let g:snipMate.snippet_version = 1
-let g:snips_author="Beomjoon Goh"
+let g:snips_author = "Beomjoon Goh"
 
 "--- netrw
-let g:netrw_winsize=25        " window size
-let g:netrw_liststyle=3       " tree style
-let g:netrw_banner=0          " no banner
-let g:netrw_browse_split=2    " <CR> :vsp 'selected file'
-let g:netrw_special_syntax=1  " file type syntax
+let g:netrw_winsize        = 25 " window size
+let g:netrw_liststyle      = 3  " tree style
+let g:netrw_banner         = 0  " no banner
+let g:netrw_browse_split   = 2  " <CR> :vsp 'selected file'
+let g:netrw_special_syntax = 1  " file type syntax
 
 "--- goyo settings
-let g:goyo_width="123"
-let g:goyo_height="95%"
+let g:goyo_width  = "123"
+let g:goyo_height = "95%"
 function! s:goyo_enter()
   set number
   highlight Normal ctermbg=black
@@ -449,18 +450,18 @@ if !exists('user_filetypes')
     \ set textwidth=120 |
     \ set foldlevel=99
     "set grepprg=grep\ -nH $*
-    let g:Tex_PromptedCommands=''
-    let g:tex_flavor='latex'
-    let g:Tex_DefaultTargetFormat='pdf'
-    let g:Tex_ViewRule_pdf = 'open -a Preview'
-    let g:Tex_FoldedEnvironments=''
-    let g:tex_indent_brace=0
+    let g:Tex_PromptedCommands    = ''
+    let g:tex_flavor              = 'latex'
+    let g:Tex_DefaultTargetFormat = 'pdf'
+    let g:Tex_ViewRule_pdf        = 'open -a Preview'
+    let g:Tex_FoldedEnvironments  = ''
+    let g:tex_indent_brace        = 0
 
     "--- .c, .cpp files
-    let g:cpp_class_scope_highlight = 1
-    let g:cpp_class_decl_highlight = 1
+    let g:cpp_class_scope_highlight     = 1
+    let g:cpp_class_decl_highlight      = 1
     let g:cpp_member_variable_highlight = 1
-    let g:cpp_no_function_highlight = 1
+    let g:cpp_no_function_highlight     = 1
     autocmd FileType c,cpp
     \ setlocal cindent |
     \ let g:acp_completeOption='.,w,b,u,t,i,d' |
