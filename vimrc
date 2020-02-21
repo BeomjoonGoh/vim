@@ -267,7 +267,7 @@ if has('terminal')
     else
       return 1
     endif
-    execut l:cmd . ' let g:term_bufnr = term_start("bash -ls", l:term_options)'
+    execut l:cmd . ' let g:term_bufnr = term_start("bash --login", l:term_options)'
   endfunction
 
   autocmd TerminalOpen *
