@@ -250,20 +250,24 @@ endif
 "--- terminal
 if has('terminal')
   function OpenTerminal(type)
+    let l:cmd = a:type
     let l:term_options = {
           \ "term_finish" : "close",
           \ "term_name" : "[Terminal] bash",
           \}
-    if     a:type == "botright"
+    if     l:cmd == "botright"
       let l:term_options["term_rows"] = min([float2nr(0.18*&lines),15])
-    elseif a:type == "vertical"
+    elseif l:cmd == "vertical"
       let l:term_options["term_cols"] = min([float2nr(0.4*&columns),150])
-    elseif a:type == "tab"
+    elseif l:cmd == "call"
+      let l:cmd = ""
+      let l:term_options["curwin"] = 1
+    elseif l:cmd == "tab"
       "
     else
       return 1
     endif
-    execut a:type . ' let g:term_bufnr = term_start("bash -ls", l:term_options)'
+    execut l:cmd . ' let g:term_bufnr = term_start("bash -ls", l:term_options)'
   endfunction
 
   autocmd TerminalOpen *
@@ -305,6 +309,7 @@ if has('terminal')
   if has("user_commands")
     command Bterm call OpenTerminal("botright")
     command Vterm call OpenTerminal("vertical")
+    command Nterm call OpenTerminal("call")
     command Tterm call OpenTerminal("tab")
   endif
 
