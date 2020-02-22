@@ -292,6 +292,8 @@ if has('terminal')
 
   function Tapi_ChangeDirectory(bufnr, arglist)
     execute 'cd' . a:arglist[0]
+    let l:cmd = "cd " . a:arglist[0] . "\<CR>"
+    call term_sendkeys(g:term_bufnr, l:cmd)
   endfunction
 
   function Tapi_VerticalSplit(bufnr, arglist)
@@ -301,7 +303,11 @@ if has('terminal')
   endfunction
 
   function Tapi_Make(bufnr, arglist)
-    make -Bs
+    let l:argstring = ''
+    for a in a:arglist
+      let l:argstring .= a
+    endfor
+    execute 'make -B' . l:argstring
     botright cwindow
   endfunction
 
