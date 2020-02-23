@@ -115,7 +115,9 @@ set wildmode=list:longest,full
 set nofileignorecase
 set statusline=%!MyStatusLine()
 function! MyStatusLine()
-  return '%h%f %m%r  pwd: %<%{getcwd()} %=%(C: %c%V, L: %l/%L%) %P '
+  let l:pwd = substitute(getcwd(), $HOME, '~', '')
+  return '%h%f %m%r  pwd: %<' . l:pwd . ' %=%(C: %c%V, L: %l/%L%) %P '
+ "return '%h%f %m%r  pwd: %<%{getcwd()} %=%(C: %c%V, L: %l/%L%) %P '
 endfunction
 
 "--- Tab page
