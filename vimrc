@@ -297,11 +297,18 @@ if has('terminal')
   endfunction
 
   function Tapi_ChangeDirectory(bufnr, arglist)
-    let l:oldpwd = getcwd()
-    execute 'cd' . a:arglist[0]
-    let l:newpwd = getcwd()
-    if l:oldpwd != l:newpwd
-      let l:cmd = "cd " . fnameescape(l:newpwd) . "\<CR>"
+    let l:pwd = a:arglist[0]
+    let l:do_cd = a:arglist[-1]
+    if len(a:arglist) > 2
+      for l:p in a:arglist[1:-2]
+        let l:pwd .= " " . l:p
+      endfor
+    endif
+    if getcwd() != l:pwd
+      execute 'cd' . l:pwd
+    endif
+    if l:do_cd
+      let l:cmd = "cd " . fnameescape(l:pwd) . "\<CR>"
       call term_sendkeys(g:term_bufnr, l:cmd)
     endif
   endfunction
@@ -314,8 +321,8 @@ if has('terminal')
 
   function Tapi_Make(bufnr, arglist)
     let l:argstring = ''
-    for a in a:arglist
-      let l:argstring .= a
+    for l:a in a:arglist
+      let l:argstring .= l:a
     endfor
     execute 'make -B' . l:argstring
     botright cwindow
