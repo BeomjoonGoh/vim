@@ -154,3 +154,7 @@ x
 y
 z
 popup
+unstaged
+readline
+printf
+pwd
