@@ -279,10 +279,14 @@ if has('terminal')
   \ endif
 
   function ChangeDirectory()
+    let l:oldpwd = getcwd()
     cd %:p:h
-    if exists("g:term_bufnr") && getbufvar(g:term_bufnr, '&buftype') == 'terminal'
-      let l:cmd = "cd " . getcwd() . "\<CR>"
-      call term_sendkeys(g:term_bufnr, l:cmd)
+    let l:newpwd = getcwd()
+    if l:oldpwd != l:newpwd
+      if exists("g:term_bufnr") && getbufvar(g:term_bufnr, '&buftype') == 'terminal'
+        let l:cmd = "cd " . fnameescape(l:newpwd) . "\<CR>"
+        call term_sendkeys(g:term_bufnr, l:cmd)
+      endif
     endif
   endfunction
 
@@ -293,9 +297,13 @@ if has('terminal')
   endfunction
 
   function Tapi_ChangeDirectory(bufnr, arglist)
+    let l:oldpwd = getcwd()
     execute 'cd' . a:arglist[0]
-    let l:cmd = "cd " . a:arglist[0] . "\<CR>"
-    call term_sendkeys(g:term_bufnr, l:cmd)
+    let l:newpwd = getcwd()
+    if l:oldpwd != l:newpwd
+      let l:cmd = "cd " . fnameescape(l:newpwd) . "\<CR>"
+      call term_sendkeys(g:term_bufnr, l:cmd)
+    endif
   endfunction
 
   function Tapi_VerticalSplit(bufnr, arglist)
