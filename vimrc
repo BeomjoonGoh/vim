@@ -223,15 +223,17 @@ let g:netrw_browse_split   = 2  " <CR> :vsp 'selected file'
 let g:netrw_special_syntax = 1  " file type syntax
 
 "--- goyo settings
-let g:goyo_width  = "123"
+let g:goyo_width  = "120"
 let g:goyo_height = "95%"
 function! s:goyo_enter()
-  set number
-  highlight Normal ctermbg=black
-  if exists('+colorcolumn')
-    set colorcolumn=120
-    highlight ColorColumn ctermbg=234
-  endif
+  set nonu nornu
+  highlight ColorColumn ctermbg=234
+  "set number
+  "highlight Normal ctermbg=black
+  "if exists('+colorcolumn')
+  "  set colorcolumn=120
+  "  highlight ColorColumn ctermbg=234
+  "endif
 endfunction
 autocmd! User GoyoEnter nested call <SID>goyo_enter()
 
@@ -507,6 +509,11 @@ if !exists('user_filetypes')
     autocmd FileType python set keywordprg=pydoc3
     autocmd BufWritePost *.py :TlistUpdate
 
+    "--- .md files
+    let g:markdown_fenced_languages = [ 'bash=sh', 'vim', 'python', 'cpp' ]
+    let g:markdown_minlines = 50
+
+
     autocmd FileType vim nnoremap <buffer> K :execute "tab help " . expand("<cword>")<CR>
     autocmd FileType sh,man nnoremap <buffer> K :execute "Man " . expand("<cword>")<CR>
   augroup END
@@ -692,7 +699,7 @@ nnoremap <C-p> "*p
 nnoremap <F8> mryi":let @/ = @"<CR>`r
 
 "--- goyo
-nnoremap <Leader>f :Goyo<CR>
+nnoremap <expr> <Leader>f ":Goyo" . (exists('#goyo') ? '!' : '+5%' ) . "\n"
 
 "--- EasyAlign
 nmap ga <Plug>(EasyAlign)
