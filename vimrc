@@ -58,6 +58,7 @@ set lazyredraw                        " Not sure but it makes scrolling faster
 set ttyfast                           " This one too
 set formatoptions+=rnlj
 set path+=**                          " Search down into subdirectories
+set timeoutlen=300
 
 runtime! ftplugin/man.vim
 let g:ft_man_open_mode="tab"
@@ -342,6 +343,7 @@ if has('terminal')
   nnoremap <Leader>cd :call ChangeDirectory()<CR>
   tnoremap <Leader>cd 2vim cd<CR>
   tnoremap <Leader>ll 2vim make<CR>
+  tnoremap :: <C-w>:
 endif
 
 " }}}
@@ -566,19 +568,19 @@ nnoremap <F3> :TlistToggle<CR>
 
 " Call NoMore120
 nnoremap <F4> :call ToggleColorcolumn()<CR>
-inoremap <F4> <Esc>:call ToggleColorcolumn()<CR>a
+inoremap <F4> <C-o>:call ToggleColorcolumn()<CR>
 
 " Toggle AutoComplPop
 nnoremap <F5> :call ToggleACP()<CR>
-inoremap <F5> <Esc>:call ToggleACP()<CR>a
+inoremap <F5> <C-o>:call ToggleACP()<CR>
 
 " Toggle paste safe mode
 nnoremap <F6> :call TogglePasteSafe()<CR>
-inoremap <F6> <Esc>:call TogglePasteSafe()<CR>a
+inoremap <F6> <C-o>:call TogglePasteSafe()<CR>
 
 " Toggle spell checking
 nnoremap <F7> :setlocal spell!<CR>:echo "Spell Check: " . strpart("OffOn", 3 * &spell, 3)<CR>
-inoremap <F7> <Esc>:setlocal spell!<CR>:echo "Spell Check: " . strpart("OffOn", 3 * &spell, 3)<CR>a
+inoremap <F7> <C-o>:setlocal spell!<CR>:echo "Spell Check: " . strpart("OffOn", 3 * &spell, 3)<CR>
 
 " Type(i) or show(n) the current date stamp
 imap <F9> <C-R>=strftime('%d %b %Y %T %z')<CR>
@@ -586,11 +588,11 @@ nnoremap <F9> :echo 'Current time is ' . strftime('%d %b %Y %T %z')<CR>
 
 " Set mouse on & off
 nnoremap <F10> :call MouseOnOff()<CR>
-inoremap <F10> <Esc>:call MouseOnOff()<CR>a
+inoremap <F10> <C-o>:call MouseOnOff()<CR>
 
 " netrw
 nnoremap <C-\> :Lexplore<CR>
-inoremap <C-\> <Esc>:Lexplore<CR>a
+inoremap <C-\> <C-o>:Lexplore<CR>
 
 " Reset searches
 nmap <silent> <Leader>r :nohlsearch<CR>
@@ -598,6 +600,7 @@ nmap <silent> <Leader>R :silent!/BruteForceResetSearch_<C-r>=rand()<CR>.<CR>
 
 " Enter works in normal mode
 nmap <CR> :call ToggleACP()<CR>i<C-m><Esc>:call ToggleACP()<CR>:echo<CR>
+
 
 " To the previous buffer
 nnoremap <Leader><Leader><Leader> <C-^>
