@@ -511,7 +511,8 @@ if !exists('user_filetypes')
 
     "--- .md files
     let g:markdown_fenced_languages = [ 'bash=sh', 'vim', 'python', 'cpp' ]
-    let g:markdown_minlines = 50
+    let g:markdown_minlines         = 50
+    let g:markdown_folding          = 1
 
 
     autocmd FileType vim nnoremap <buffer> K :execute "tab help " . expand("<cword>")<CR>
