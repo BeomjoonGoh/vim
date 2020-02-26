@@ -23,7 +23,7 @@ endif
 
 set nocompatible
 filetype off
-set runtimepath+=~/.vim/bundle/Vundle.vim
+set runtimepath+=$HOME/.vim/bundle/Vundle.vim
 call vundle#begin()
   Plugin 'VundleVim/Vundle.vim'
 
@@ -49,7 +49,7 @@ filetype plugin on
 filetype indent on
 
 set history=100
-set viminfo='50,\"50,n~/.vim/.viminfo " read/write a .viminfo file, don't store more
+set viminfo='50,\"50,n$HOME/.vim/.viminfo " read/write a .viminfo file, don't store more
 set backspace=indent,eol,start        " backspacing over everything in insert mode
 set scrolloff=3
 set sidescroll=10
@@ -499,7 +499,7 @@ if !exists('user_filetypes')
     \ let g:acp_completeOption='.,w,b,u,t,i,d' |
     \ if !exists('pathset') |
     \   let pathset=1 |
-    \   set path+=~/work/lib,~/work/lib/specialfunctions,~/work/projectEuler/Library |
+    \   set path+=$HOME/work/lib,$HOME/work/lib/specialfunctions,$HOME/work/projectEuler/Library |
     \ endif |
     \ setlocal formatoptions-=o |
     \ set textwidth=120 |
