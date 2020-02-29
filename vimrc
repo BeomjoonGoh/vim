@@ -459,12 +459,71 @@ endfunction
 
 function! CppmanLapack()
   " before use cppman under cursor this removes trailing underscore character if it has one. (eg., void dgetrf_(...))
-  let s:word = expand("<cword>")
-  if s:word[strlen(s:word)-1] == "_"
-    let s:word = s:word[:-2]
+  let l:word = expand("<cword>")
+  if l:word[strlen(l:word)-1] == "_"
+    let l:word = l:word[:-2]
   endif
-  execute "Man " . s:word
+  execute "Man " . l:word
 endfunction
+
+" Cheatsheet
+" TODO
+" [ ] add option to edit.
+" [ ] global variable vs / sp
+" [ ] make it a plugin
+" [ ] use bufname or something safer so that if cs.xxx is closed without
+"     invoking Cheatsheet_close()
+
+let g:cheatsheet_filetype_map = {
+      \ "sh"       : "bash",
+      \ "markdown" : "md",
+      \}
+
+function! Cheatsheet_toggle(cmd)
+  if exists('s:cheatsheet_bufnr')
+    call Cheatsheet_close(s:cheatsheet_bufnr)
+    unlet s:cheatsheet_bufnr
+  else
+    let s:cheatsheet_bufnr = Cheatsheet_view( (a:cmd == "" ? "view" : a:cmd) )
+    if s:cheatsheet_bufnr == -1
+      unlet s:cheatsheet_bufnr
+    endif
+  endif
+endfunction
+
+function! Cheatsheet_getfile()
+  let l:file_type = &filetype
+  if has_key(g:cheatsheet_filetype_map, l:file_type)
+    let l:file_type = g:cheatsheet_filetype_map[l:file_type]
+  endif
+
+  let l:file = expand('~/.vim/cheatsheets/cs.' . l:file_type)
+  if !filereadable(l:file)
+    echomsg 'cheat sheet does not exist: ' . l:file
+    let l:file = "NOFILE"
+  endif
+
+  return l:file
+endfunction
+
+function! Cheatsheet_view(cmd)
+  let l:file = Cheatsheet_getfile()
+  if l:file == "NOFILE"
+    return -1
+  endif
+
+  execute 'vertical split'
+  execute a:cmd . l:file
+  return bufnr('%')
+endfunction
+
+function! Cheatsheet_close(cheatsheet_bufnr)
+  execute 'bdelete' a:cheatsheet_bufnr
+endfunction
+
+if has('user_commands')
+  command! -bang -nargs=? -complete=command Cheat call Cheatsheet_toggle(<q-args>)
+endif
 
 " }}}
 "===== >    COLOR              ===== {{{
