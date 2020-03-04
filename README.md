@@ -232,5 +232,7 @@ mode respectively. See `:help map.txt` for help and `:map` to see defined maps.
 * `<Tab>[num]` [n] Go to tab number `[num]` = 1 ~ 6
 
 ### Todo
-[ ] `<Leader>cd` changes working directory to the buffer's directory.
-[ ] Terminal api
+- [ ] `<Leader>cd` changes working directory to the buffer's directory.
+- [ ] Terminal api
+- [ ] Leave vundle and goto vim-plug
+- [ ] Make cheatsheet a plugin
