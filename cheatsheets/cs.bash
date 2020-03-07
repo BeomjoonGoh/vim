@@ -2,7 +2,7 @@
 # cs.bash
 #
 # Maintainer:   Beomjoon Goh
-# Last Change:  27 Feb 2020 19:50:38 +0900
+# Last Change:  08 Mar 2020 03:22:45 +0900
 
 # Shell execution {{{
   var=$(cmd)
@@ -53,7 +53,7 @@
   # bashism
   [[ string == string ]]
   [[ string != string ]]
-  [[ string =~ regex ]] # regular expression
+  [[ string =~ regex ]] # regular expression (POSIX extended)
   [[ N operation M ]] # operation: ==, !=, <, <=, >, >=
 # }}}
 

@@ -1,3 +1,10 @@
+<!---
+Markdown cheatsheet
+
+Maintainer:  Beomjoon Goh
+Last Change: 08 Mar 2020 03:33:12 +0900
+-->
+
 # Headers
 
 # H1
@@ -114,3 +121,20 @@ ______
 
 \\ ,\` ,\* ,\_ ,\{\} ,\[\] ,\(\) ,\# ,\+ ,\- ,\.  ,\!
  
+## Comments
+
+<!-- HTML comments -->
+
+<!--
+Multi line
+comments
+-->
+
+[//]: # "Comment abusing empty links"
+
+[//]: # (parentheses works too)
+
+[//]: # "
+Multi line comment
+As long as there's no blank line.
+"
