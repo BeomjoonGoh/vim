@@ -55,12 +55,12 @@ disabled.
 
 Settings used are:
 ```vim
-let g:Tex_PromptedCommands=''
-let g:tex_flavor='latex'
-let g:Tex_DefaultTargetFormat='pdf'
-let g:Tex_ViewRule_pdf = 'open -a Preview'
-let g:Tex_FoldedEnvironments=''
-let g:tex_indent_brace=0
+let g:Tex_PromptedCommands    = ''
+let g:tex_flavor              = 'latex'
+let g:Tex_DefaultTargetFormat = 'pdf'
+let g:Tex_ViewRule_pdf        = 'open -a Preview'
+let g:Tex_FoldedEnvironments  = ''
+let g:tex_indent_brace        = 0
 ```
 
 Note the following default mappings:
@@ -103,11 +103,11 @@ Mapped to `<F3>` to toggle the taglist. For `C`, `C++` and `Python` codes,
 taglist is updated upon writing.  Settings used are:
 
 ```vim
-let Tlist_Exit_OnlyWindow=1
-let Tlist_WinWidth=30
-let Tlist_Use_Right_Window=1
-let Tlist_Compact_Format=1
-let Tlist_Enable_Fold_Column=0
+let Tlist_Exit_OnlyWindow    = 1
+let Tlist_WinWidth           = 30
+let Tlist_Use_Right_Window   = 1
+let Tlist_Compact_Format     = 1
+let Tlist_Enable_Fold_Column = 0
 ```
 
 ### [vim-desertBJ](https://github.com/BeomjoonGoh/vim-desertBJ)
