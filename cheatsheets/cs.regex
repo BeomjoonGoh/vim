@@ -6,7 +6,7 @@
 
 # Programs
 POSIX (BRE*)          | `grep` `sed`
-POSIX extended (ERE*) | `egrep` `sed -E` `bash` `awk` `less`
+POSIX extended (ERE*) | `egrep (grep -E)` `sed -E` `bash` `awk` `less`
 VIM                   | `vim`
 Python                | Python `re` library
 PCRE*                 | `grep -P`, `perl`(not really), `java.util.regex`(not really), `Boost.Regex`
