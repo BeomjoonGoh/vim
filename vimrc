@@ -98,7 +98,8 @@ if has("user_commands")
   command -nargs=? -complete=file Sp sp <args>
   command -nargs=? -complete=file Vs vs <args>
   command -nargs=? -complete=file Vsp vsp <args>
-  command -nargs=? -complete=file_in_path Find vnew<bar> find <args>
+  command -nargs=? -complete=file_in_path Vfind vnew<bar> find <args>
+  command -nargs=? -complete=file_in_path Sfind sfind <args>
   command -nargs=? -complete=help Help tab help <args>
   command Vn vsp $HOME/.vim/scratchpad.txt
   command Sn sp  $HOME/.vim/scratchpad.txt
@@ -211,13 +212,13 @@ let Tlist_Compact_Format     = 1
 let Tlist_Enable_Fold_Column = 0
 
 "--- SnipMate settings
-let g:snipMate = {}
+let g:snipMate = get(g:, 'snipMate', {})
 let g:snipMate.no_default_aliases = 1
 let g:snipMate.snippet_version = 1
 let g:snips_author = "Beomjoon Goh"
 
 "--- netrw
-let g:netrw_winsize        = 25 " window size
+let g:netrw_winsize        = 15 " window size
 let g:netrw_liststyle      = 3  " tree style
 let g:netrw_banner         = 0  " no banner
 let g:netrw_browse_split   = 2  " <CR> :vsp 'selected file'
@@ -327,7 +328,7 @@ if has('terminal')
     for l:a in a:arglist
       let l:argstring .= l:a
     endfor
-    execute 'make -B' . l:argstring
+    execute 'make' . l:argstring
     botright cwindow
   endfunction
 
@@ -389,6 +390,7 @@ endfunction
 
 function! TogglePasteSafe()
   " Toggle paste safe mode
+  " see :help pastetoggle
   if (s:cycleIndentOption == 0)
     set number relativenumber
     set smartindent autoindent
