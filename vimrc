@@ -540,8 +540,8 @@ if !exists('user_filetypes')
     autocmd!
     "--- .tex files
     autocmd FileType tex
-    \ set textwidth=120 |
-    \ set foldlevel=99
+    \ setlocal textwidth=120 |
+    \ setlocal foldlevel=99
     "set grepprg=grep\ -nH $*
     let g:Tex_PromptedCommands    = ''
     let g:tex_flavor              = 'latex'
@@ -560,16 +560,19 @@ if !exists('user_filetypes')
     \ let g:acp_completeOption='.,w,b,u,t,i,d' |
     \ if !exists('pathset') |
     \   let pathset=1 |
-    \   set path+=$HOME/work/lib,$HOME/work/lib/specialfunctions,$HOME/work/projectEuler/Library |
+    \   setlocal path+=$HOME/work/lib,$HOME/work/lib/specialfunctions,$HOME/work/projectEuler/Library |
     \ endif |
     \ setlocal formatoptions-=o |
-    \ set textwidth=120 |
+    \ setlocal textwidth=120 |
+    \ setlocal foldmethod=syntax foldnestmax=2 |
     \ nnoremap <F2> :call CppmanLapack()<CR>
     autocmd BufWritePost *.c,*.cpp,*.h :TlistUpdate
 
     "--- .py files
     let python_highlight_all = 1
-    autocmd FileType python set keywordprg=pydoc3
+    autocmd FileType python
+    \ setlocal keywordprg=pydoc3 |
+    \ setlocal foldmethod=indent foldnestmax=2 |
     autocmd BufWritePost *.py :TlistUpdate
 
     "--- .md files
@@ -590,6 +593,8 @@ set foldcolumn=0                " add a fold column
 set foldmethod=marker           " detect triple-{ style fold markers
 set foldlevelstart=99           "  0: start out with everything folded
                                 " 99: start out with everything unfolded
+set foldnestmax=2
+set foldminlines=2
 set foldopen=block,hor,insert,jump,mark,percent,quickfix,search,tag,undo
                                 " which commands trigger auto-unfold
 set foldtext=MyFoldText()
