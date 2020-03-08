@@ -255,7 +255,7 @@ endif
 
 "--- terminal
 if has('terminal')
-  function OpenTerminal(type)
+  function! OpenTerminal(type)
     let l:cmd = a:type
     let l:term_options = {
           \ "term_finish" : "close",
@@ -282,7 +282,7 @@ if has('terminal')
   \   set winfixwidth |
   \ endif
 
-  function ChangeDirectory()
+  function! ChangeDirectory()
     let l:oldpwd = getcwd()
     cd %:p:h
     let l:newpwd = getcwd()
@@ -295,12 +295,12 @@ if has('terminal')
   endfunction
 
   " terminal-api
-  function Tapi_SetTermBufferNumber(bufnr, arglist)
+  function! Tapi_SetTermBufferNumber(bufnr, arglist)
     let g:term_bufnr = a:bufnr
     echomsg "This terminal(" . g:term_bufnr . ") is now set to g:term_bufnr."
   endfunction
 
-  function Tapi_ChangeDirectory(bufnr, arglist)
+  function! Tapi_ChangeDirectory(bufnr, arglist)
     let l:pwd = a:arglist[0]
     let l:do_cd = a:arglist[-1]
     if len(a:arglist) > 2
@@ -317,13 +317,13 @@ if has('terminal')
     endif
   endfunction
 
-  function Tapi_VerticalSplit(bufnr, arglist)
+  function! Tapi_VerticalSplit(bufnr, arglist)
     set nosplitright
     execute 'vertical split' . a:arglist[0]
     set splitright
   endfunction
 
-  function Tapi_Make(bufnr, arglist)
+  function! Tapi_Make(bufnr, arglist)
     let l:argstring = ''
     for l:a in a:arglist
       let l:argstring .= l:a
@@ -672,20 +672,23 @@ nmap <CR> :call ToggleACP()<CR>i<C-m><Esc>:call ToggleACP()<CR>:echo<CR>
 nnoremap <Leader><Leader><Leader> <C-^>
 
 "--- QuickFix window
-" \ll => save the file and make and show the result in the bottom split (cwindow) if there are errors and/or warnings.
-" \w => show the cwindow (if exists).
-" \c => close the cwindow.
-" \. => jump to the next problematic line and column of the code.
-" \, => jump to the previous problematic line and column of the code.
-" \g => from the cwindow, jump to the code where the cursor below indicates.
-" \e => will run a program xxx if it is the binary file compiled from the source code with the same name
-"       (but extension): xxx.c or xxx.cpp (% is current file name, < eliminates extension)
+" \ll  => save the file and make and show the result in the bottom split (cwindow) if there are errors and/or warnings.
+" \w   => show the cwindow (if exists).
+" \c   => close the cwindow.
+" \n   => jump to the next problematic line and column of the code.
+" \N   => jump to the previous problematic line and column of the code.
+" <CR> => from the cwindow, jump to the code where the cursor below indicates.
+" \e   => will run a program xxx if it is the binary file compiled from the source code with the same name
+"         (but extension): xxx.c or xxx.cpp (% is current file name, < eliminates extension)
 nnoremap <Leader>ll :w<CR>:make -Bs<CR>:botright cwindow<CR>
 nnoremap <Leader>w :botright cwindow<CR>
 nnoremap <Leader>c :cclose<CR>
-nnoremap <Leader>. :cnext<CR>
-nnoremap <Leader>, :cprevious<CR>
-nnoremap <Leader>g :.cc<CR>
+nnoremap <Leader>n :cnext<CR>
+nnoremap <Leader>N :cprevious<CR>
+augroup QuickFixMap
+  autocmd!
+  autocmd FileType qf nnoremap <CR> :.cc<CR>
+augroup END
 "nnoremap <Leader>e :!./%<<CR>
 nnoremap <Leader>e :!./main<CR>
 
