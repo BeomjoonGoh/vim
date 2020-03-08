@@ -85,7 +85,7 @@ int main(void) {
     4 spaces indent
 
 ```
-# No syntax hightlight
+# No syntax highlight
 echo "Hello, World!"
 ```
 
