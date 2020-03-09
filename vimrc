@@ -21,32 +21,22 @@ if v:lang =~ "utf8$" || v:lang =~ "UTF-8$"
    set fileencodings=ucs-bom,utf-8,latin1,cp949
 endif
 
-set nocompatible
-filetype off
-set runtimepath+=$HOME/.vim/bundle/Vundle.vim
-call vundle#begin()
-  Plugin 'VundleVim/Vundle.vim'
-
-  Plugin 'othree/vim-autocomplpop'
-    Plugin 'L9'
-  Plugin 'BeomjoonGoh/taglist.vim'
-  Plugin 'garbas/vim-snipmate'
-    Plugin 'MarcWeber/vim-addon-mw-utils'
-    Plugin 'tomtom/tlib_vim'
-  Plugin 'BeomjoonGoh/vim-cppman'
-  Plugin 'vim-latex/vim-latex'
-  Plugin 'junegunn/goyo.vim'
-  Plugin 'michaeljsmith/vim-indent-object'
-  Plugin 'junegunn/vim-easy-align'
+call plug#begin('~/.vim/plugged')
+  Plug 'othree/vim-autocomplpop' | Plug 'vim-scripts/L9'
+  Plug 'BeomjoonGoh/taglist.vim'
+  Plug 'garbas/vim-snipmate' | Plug 'MarcWeber/vim-addon-mw-utils' | Plug 'tomtom/tlib_vim'
+  Plug 'BeomjoonGoh/vim-cppman', { 'for' : 'cpp' }
+  Plug 'vim-latex/vim-latex', { 'for' : 'tex' }
+  Plug 'junegunn/goyo.vim'
+  Plug 'michaeljsmith/vim-indent-object'
+  Plug 'junegunn/vim-easy-align'
 
   " Colorscheme & Syntax
-  Plugin 'BeomjoonGoh/vim-desertBJ'
-  Plugin 'BeomjoonGoh/txt.vim'
-  Plugin 'BeomjoonGoh/vim-aftersyntax'
-    Plugin 'octol/vim-cpp-enhanced-highlight'
-call vundle#end()
-filetype plugin on
-filetype indent on
+  Plug 'BeomjoonGoh/vim-desertBJ'
+  Plug 'BeomjoonGoh/txt.vim'
+  Plug 'BeomjoonGoh/vim-aftersyntax'
+  Plug 'octol/vim-cpp-enhanced-highlight'
+call plug#end()
 
 set history=100
 set viminfo='50,\"50,n$HOME/.vim/.viminfo " read/write a .viminfo file, don't store more
@@ -64,7 +54,6 @@ runtime! ftplugin/man.vim
 let g:ft_man_open_mode="tab"
 let g:ft_man_folding_enable=1
 
-syntax on
 set synmaxcol=512
 set regexpengine=1
 
