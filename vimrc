@@ -44,6 +44,7 @@ set ttyfast                           " This one too
 set formatoptions+=rnlj
 set path+=**                          " Search down into subdirectories
 set timeoutlen=300
+set updatetime=500
 
 runtime! ftplugin/man.vim
 let g:ft_man_open_mode="tab"
