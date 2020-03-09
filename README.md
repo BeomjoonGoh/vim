@@ -236,3 +236,4 @@ mode respectively. See `:help map.txt` for help and `:map` to see defined maps.
 - [ ] Terminal api
 - [ ] Leave vundle and goto vim-plug
 - [ ] Make cheatsheet a plugin
+- [ ] Ditch TagList and goto Tagbar
