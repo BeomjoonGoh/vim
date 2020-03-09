@@ -11,19 +11,20 @@
 
 ## Installation
 
-This `vimrc` uses [Vundle](https://github.com/VundleVim/Vundle.vim) plugin manager.
+This `vimrc` uses [vim-plug](https://github.com/junegunn/vim-plug) plugin
+manager.
 
 To install,
 ```bash
 git clone https://github.com/BeomjoonGoh/vim ~/.vim
-mkdir ~/.vim/bundle    # Default installation path for Vundle.
-git clone https://github.com/VundleVim/Vundle.vim ~/.vim/bundle/Vundle.vim
+curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 ```
 
 And open vimrc,
 ```vim
 :source %
-:PluginInstall
+:PlugInstall
 ```
 
 ## Plugins
@@ -37,6 +38,31 @@ Function `ToggleACP()` toggles `autocomplpop` plugin, and it is mapped to
 `F5`. For `C`(`C++`) files, complete option is set differently.
 
 
+### [tagbar](https://github.com/majutsushi/tagbar)
+
+> Vim plugin that displays tags in a window, ordered by scope
+
+Mapped to `<F3>` to toggle the tagbar.
+
+```vim
+let g:tagbar_width            = 30
+let g:tagbar_compact          = 1
+let g:tagbar_indent           = 1
+let g:tagbar_show_balloon     = 0
+let g:tagbar_map_showproto    = 'f'
+let g:tagbar_map_togglefold   = ['<Space>', 'za']
+let g:tagbar_map_openallfolds = ['_', '<kMultiply>', 'zR']
+let g:tagbar_type_markdown    = {
+    \ 'ctagstype' : 'markdown',
+    \ 'kinds' : [
+        \ 'h:headings',
+        \ 'l:links',
+        \ 'i:images',
+    \ ],
+    \ 'sort' : 0,
+\ }
+```
+
 ### [vim-snipmate](https://github.com/garbas/vim-snipmate)
 
 > `SnipMate` aims to provide support for textual snippets, similar to
@@ -47,6 +73,14 @@ It depends on `vim-addon-mw-utils`, `tlib_vim`.
 Snippets are stored in `snippets` directory and triggered with `<Tab>` key.
 `g:snipMate.no_default_aliases` is set so that aliases such as `C++` -> `C` is
 disabled.
+
+
+### [vim-cppman](https://github.com/BeomjoonGoh/vim-cppman)
+
+> A plugin for using [*cppman*](https://github.com/aitjcize/cppman) from within
+> Vim. *cppman* is used to lookup "C++ 98/11/14 manual pages for Linux/MacOS"
+> through either [cplusplus.com](https://cplusplus.com) or
+> [cppreference.com](https://cppreference.com).
 
 
 ### [vim-latex](https://github.com/vim-latex/vim-latex)
@@ -82,45 +116,15 @@ Mapped to `<Leader>f`. Uses user defined `goyo_enter()` to have `number`, and
 > same indent level. Useful for python/vim scripts, etc.
 
 
-### [vim-cpp-enhanced-highlight](https:/github.com/octol/vim-cpp-enhanced-highlight)
+### [vim-easy-align](https://github.com/junegunn/vim-easy-align)
 
-> Additional Vim syntax highlighting for C++ (including C++11/14/17).
+> A Vim alignment plugin
 
-`vim-aftersyntax` uses this plugin.
-
-
-### [vim-taglist](https://github.com/BeomjoonGoh/vim-taglist)
-
-> This is a mirror of [taglist.vim](http://www.vim.org/scripts/script.php?script_id=273).
-> Few modifications were add by Beomjoon Goh on top of version 4.6.
->
-> The "Tag List" plugin is a source code browser plugin for Vim and provides
-> an overview of the structure of source code files and allows you to
-> efficiently browse through source code files for different programming
-> languages.
-
-Mapped to `<F3>` to toggle the taglist. For `C`, `C++` and `Python` codes,
-taglist is updated upon writing.  Settings used are:
-
-```vim
-let Tlist_Exit_OnlyWindow    = 1
-let Tlist_WinWidth           = 30
-let Tlist_Use_Right_Window   = 1
-let Tlist_Compact_Format     = 1
-let Tlist_Enable_Fold_Column = 0
-```
+Mapped to `ga`.
 
 ### [vim-desertBJ](https://github.com/BeomjoonGoh/vim-desertBJ)
 
 > color scheme based on the default desert.vim, motivated by `desertEx` by Mingbai.
-
-
-### [vim-aftersyntax](https://github.com/BeomjoonGoh/vim-aftersyntax)
-
-> `after/syntax` directory.
-
-It depends on `vim-cpp-enhanced-highlight` plugin.  Supported syntax are: `C`,
-`Cpp`, `Fortran`, `Netrw`, `Python`, `QuickFix`, and `TeX`.
 
 
 ### [vim-txt](https://github.com/BeomjoonGoh/vim-txt)
@@ -130,12 +134,19 @@ It depends on `vim-cpp-enhanced-highlight` plugin.  Supported syntax are: `C`,
 
 Syntax for .txt, .out, etc. defined in `ftdetect/txt.vim`.
 
-### [vim-cppman](https://github.com/BeomjoonGoh/vim-cppman)
+### [vim-aftersyntax](https://github.com/BeomjoonGoh/vim-aftersyntax)
 
-> A plugin for using [*cppman*](https://github.com/aitjcize/cppman) from within
-> Vim. *cppman* is used to lookup "C++ 98/11/14 manual pages for Linux/MacOS"
-> through either [cplusplus.com](https://cplusplus.com) or
-> [cppreference.com](https://cppreference.com).
+> `after/syntax` directory.
+
+It depends on `vim-cpp-enhanced-highlight` plugin.  Supported syntax are: `C`,
+`Cpp`, `Fortran`, `Netrw`, `Python`, `QuickFix`, and `TeX`.
+
+
+### [vim-cpp-enhanced-highlight](https:/github.com/octol/vim-cpp-enhanced-highlight)
+
+> Additional Vim syntax highlighting for C++ (including C++11/14/17).
+
+`vim-aftersyntax` uses this plugin.
 
 
 ## Commands
@@ -182,11 +193,12 @@ mode respectively. See `:help map.txt` for help and `:map` to see defined maps.
 * `<C-y>` [v] Yank to clipboard
 * `<C-p>` [n] Paste from clipboard
 * `<F8>` [n] Test regular expression under cursor in double quotes
+* `ga` [n,x] Start interactive EasyAlign
 
 
 ### Toggle stuff
 
-* `<F3>` [n] Toggle the `TagList` plugin
+* `<F3>` [n] Toggle the `tagbar` plugin
 * `<F4>` [n,i] Toggle `colorcolumn=120`
 * `<F5>` [n,i] Toggle `autocomplpop` plugin
 * `<F6>` [n,i] Toggle smart/auto indent, number, relative number for clipboard
@@ -234,6 +246,6 @@ mode respectively. See `:help map.txt` for help and `:map` to see defined maps.
 ### Todo
 - [ ] `<Leader>cd` changes working directory to the buffer's directory.
 - [ ] Terminal api
-- [ ] Leave vundle and goto vim-plug
+- [x] Leave vundle and goto vim-plug
 - [ ] Make cheatsheet a plugin
-- [ ] Ditch TagList and goto Tagbar
+- [x] Ditch TagList and goto tagbar

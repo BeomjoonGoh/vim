@@ -1,29 +1,24 @@
-"""""""""""""""""""""""""""""""""""""""""""""""""
-"               [.vimrc file]                   "
-"""""""""""""""""""""""""""""""""""""""""""""""""
-"                                               "
-" Maintainer:   Beomjoon Goh (bjgoh1990)        "
-" Last Change:  10 Dec 2019 15:04:13 +0900      "
-"                                               "
-" Contents:                                     "
-"     > General                                 "
-"     > User Interfaces                         "
-"     > Functions                               "
-"     > Color                                   "
-"     > File type Specific                      "
-"     > Folding                                 "
-"     > Key Mappings                            "
-"                                               "
-"""""""""""""""""""""""""""""""""""""""""""""""""
+" File: vimrc
+" Author: Beomjoon Goh
+" Description: 
+" Last Change:  09 Mar 2020 21:40:33 +0900
+" Contents:
+"   General
+"   User Interfaces
+"   Functions
+"   Color
+"   File type Specific
+"   Folding
+"   Key Mappings
 
-"===== >    GENERAL            ===== {{{
+" GENERAL {{{
 if v:lang =~ "utf8$" || v:lang =~ "UTF-8$"
    set fileencodings=ucs-bom,utf-8,latin1,cp949
 endif
 
 call plug#begin('~/.vim/plugged')
   Plug 'othree/vim-autocomplpop' | Plug 'vim-scripts/L9'
-  Plug 'BeomjoonGoh/taglist.vim'
+  Plug 'majutsushi/tagbar'
   Plug 'garbas/vim-snipmate' | Plug 'MarcWeber/vim-addon-mw-utils' | Plug 'tomtom/tlib_vim'
   Plug 'BeomjoonGoh/vim-cppman', { 'for' : 'cpp' }
   Plug 'vim-latex/vim-latex', { 'for' : 'tex' }
@@ -96,7 +91,7 @@ if has("user_commands")
 endif
 
 " }}}
-"===== >    USER INTERFACES    ===== {{{
+" USER INTERFACES {{{
 "--- Command & Status line
 set cmdheight=1
 set noshowcmd
@@ -129,7 +124,7 @@ function! MyTabLine()
     elseif ftype == 'help'    | let fname .= '[Help] '.fnamemodify(bufname(bufnr), ':t:r')
     elseif ftype == 'qf'      | let fname .= '[Quickfix]'
     elseif ftype == 'netrw'   | let fname .= "[Netrw]"
-    elseif ftype == 'taglist' | let fname .= "[TagList]"
+    elseif ftype == 'tagbar'  | let fname .= "[TagBar]"
     elseif ftype == 'cppman'  | let fname .= "[C++] ".g:page_name
     else                      | let fname .= fnamemodify(bufname(bufnr), ':t')
     endif
@@ -175,7 +170,7 @@ augroup numbertoggle
   "iTerm2
   autocmd!
   autocmd BufEnter,FocusGained *
-  \ if (&filetype!="help" && &filetype!="taglist" && &filetype!="netrw" && &filetype!="cppman" && &filetype!="man") |
+  \ if (&filetype!="help" && &filetype!="tagbar" && &filetype!="netrw" && &filetype!="cppman" && &filetype!="man") |
   \   setlocal relativenumber |
   \ endif
   autocmd BufLeave,FocusLost * setlocal norelativenumber
@@ -193,12 +188,24 @@ let s:acpState = 1              " ACP at start up: 1->enable, 0->disable (Both)
 set splitbelow
 set splitright
 
-"--- TagList settings
-let Tlist_Exit_OnlyWindow    = 1  " Quit when TagList is the last open window
-let Tlist_WinWidth           = 30 " Set the width
-let Tlist_Use_Right_Window   = 1  " show TagList window on the right
-let Tlist_Compact_Format     = 1
-let Tlist_Enable_Fold_Column = 0
+"--- tagbar settings
+let g:tagbar_width            = 30
+let g:tagbar_compact          = 1
+let g:tagbar_indent           = 1
+let g:tagbar_show_balloon     = 0
+let g:tagbar_map_showproto    = 'f'
+let g:tagbar_map_togglefold   = ['<Space>', 'za']
+let g:tagbar_map_openallfolds = ['_', '<kMultiply>', 'zR']
+let g:tagbar_type_markdown    = {
+    \ 'ctagstype' : 'markdown',
+    \ 'kinds' : [
+        \ 'h:headings',
+        \ 'l:links',
+        \ 'i:images',
+    \ ],
+    \ 'sort' : 0,
+\ }
+highlight default link TagbarHighlight Visual
 
 "--- SnipMate settings
 let g:snipMate = get(g:, 'snipMate', {})
@@ -337,7 +344,7 @@ if has('terminal')
 endif
 
 " }}}
-"===== >    FUNCTIONS          ===== {{{
+" FUNCTIONS {{{
 function! ToggleColorcolumn()
   " Toggle highlight characters over 120 columns
   if exists('+colorcolumn')
@@ -517,12 +524,12 @@ if has('user_commands')
 endif
 
 " }}}
-"===== >    COLOR              ===== {{{
+" COLOR {{{
 set t_Co=256
 colorscheme desertBJ
 
 " }}}
-"===== >    FILETYPE SPECIFIC  ===== {{{
+" FILETYPE SPECIFIC {{{
 if !exists('user_filetypes')
   let user_filetypes = 1
   augroup UserFileType
@@ -531,7 +538,6 @@ if !exists('user_filetypes')
     autocmd FileType tex
     \ setlocal textwidth=120 |
     \ setlocal foldlevel=99
-    "set grepprg=grep\ -nH $*
     let g:Tex_PromptedCommands    = ''
     let g:tex_flavor              = 'latex'
     let g:Tex_DefaultTargetFormat = 'pdf'
@@ -555,14 +561,12 @@ if !exists('user_filetypes')
     \ setlocal textwidth=120 |
     \ setlocal foldmethod=syntax foldnestmax=2 |
     \ nnoremap <F2> :call CppmanLapack()<CR>
-    autocmd BufWritePost *.c,*.cpp,*.h :TlistUpdate
 
     "--- .py files
     let python_highlight_all = 1
     autocmd FileType python
     \ setlocal keywordprg=pydoc3 |
     \ setlocal foldmethod=indent foldnestmax=2 |
-    autocmd BufWritePost *.py :TlistUpdate
 
     "--- .md files
     let g:markdown_fenced_languages = [ 'bash=sh', 'vim', 'python', 'cpp' ]
@@ -576,7 +580,7 @@ if !exists('user_filetypes')
 endif
 
 " }}}
-"===== >    FOLDING            ===== {{{
+" FOLDING {{{
 set foldenable                  " enable folding
 set foldcolumn=0                " add a fold column
 set foldmethod=marker           " detect triple-{ style fold markers
@@ -604,7 +608,7 @@ function! MyFoldText()
 endfunction
 
 " }}}
-"===== >    KEY MAPPINGS       ===== {{{
+" KEY MAPPINGS {{{
 "--- General
 let mapleader = '\'
 
@@ -618,8 +622,9 @@ inoremap <S-Tab> <C-d>
 " Mapping of Tilde4nonAlpha to ~
 nnoremap <silent> ~ :call Tilde4nonAlpha()<cr>
 
-" Open the TagList plugin
-nnoremap <F3> :TlistToggle<CR>
+" Open the tagbar plugin
+nnoremap <F3> :TagbarToggle<CR>
+tnoremap <F3> <C-w>::TagbarToggle<CR>
 
 " Call NoMore120
 nnoremap <F4> :call ToggleColorcolumn()<CR>
@@ -771,4 +776,3 @@ xmap ga <Plug>(EasyAlign)
 nnoremap <silent> go :!open -a Safari <cWORD><CR>
 vnoremap <silent> go y<Esc>:!open -a Safari <C-r>0<CR>
 " }}}
-
