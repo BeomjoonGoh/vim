@@ -18,13 +18,14 @@ endif
 
 call plug#begin('~/.vim/plugged')
   Plug 'othree/vim-autocomplpop' | Plug 'vim-scripts/L9'
-  Plug 'majutsushi/tagbar'
+  Plug 'majutsushi/tagbar', { 'on' : 'TagbarToggle' }
   Plug 'garbas/vim-snipmate' | Plug 'MarcWeber/vim-addon-mw-utils' | Plug 'tomtom/tlib_vim'
   Plug 'BeomjoonGoh/vim-cppman', { 'for' : 'cpp' }
   Plug 'vim-latex/vim-latex', { 'for' : 'tex' }
   Plug 'junegunn/goyo.vim'
   Plug 'michaeljsmith/vim-indent-object'
   Plug 'junegunn/vim-easy-align'
+  Plug 'mbbill/undotree', { 'on' : 'UndotreeToggle' }
 
   " Colorscheme & Syntax
   Plug 'BeomjoonGoh/vim-desertBJ'
@@ -33,6 +34,7 @@ call plug#begin('~/.vim/plugged')
   Plug 'octol/vim-cpp-enhanced-highlight'
 call plug#end()
 
+set nocompatible
 set history=100
 set viminfo='50,\"50,n$HOME/.vim/.viminfo " read/write a .viminfo file, don't store more
 set backspace=indent,eol,start        " backspacing over everything in insert mode
@@ -122,12 +124,12 @@ function! MyTabLine()
 
     let fname = ''
     if getbufvar(bufnr, '&buftype') == 'terminal' | let fname .= 'bash'
-    elseif ftype == 'help'    | let fname .= '[Help] '.fnamemodify(bufname(bufnr), ':t:r')
-    elseif ftype == 'qf'      | let fname .= '[Quickfix]'
-    elseif ftype == 'netrw'   | let fname .= "[Netrw]"
-    elseif ftype == 'tagbar'  | let fname .= "[TagBar]"
-    elseif ftype == 'cppman'  | let fname .= "[C++] ".g:page_name
-    else                      | let fname .= fnamemodify(bufname(bufnr), ':t')
+    elseif ftype == 'help'   | let fname .= '[Help] '.fnamemodify(bufname(bufnr), ':t:r')
+    elseif ftype == 'qf'     | let fname .= '[Quickfix]'
+    elseif ftype == 'netrw'  | let fname .= "[Netrw]"
+    elseif ftype == 'tagbar' | let fname .= "[TagBar]"
+    elseif ftype == 'cppman' | let fname .= "[C++] ".g:page_name
+    else                     | let fname .= fnamemodify(bufname(bufnr), ':t')
     endif
     let str .= (fname != '' ? fname : "[No Name]")
 
@@ -170,10 +172,9 @@ augroup numbertoggle
   "Turn off relativenumber for non focused splits. This has a potential of slowing down scrolling when combined with
   "iTerm2
   autocmd!
+  let s:no_number_toggle = [ 'help', 'tagbar', 'netrw', 'cppman', 'man', 'undotree', 'diff' ]
   autocmd BufEnter,FocusGained *
-  \ if (&filetype!="help" && &filetype!="tagbar" && &filetype!="netrw" && &filetype!="cppman" && &filetype!="man") |
-  \   setlocal relativenumber |
-  \ endif
+  \ if (index(s:no_number_toggle, &filetype) == -1) | setlocal relativenumber | endif
   autocmd BufLeave,FocusLost * setlocal norelativenumber
 augroup END
 
@@ -227,12 +228,6 @@ let g:goyo_height = "95%"
 function! s:goyo_enter()
   set nonu nornu
   highlight ColorColumn ctermbg=234
-  "set number
-  "highlight Normal ctermbg=black
-  "if exists('+colorcolumn')
-  "  set colorcolumn=120
-  "  highlight ColorColumn ctermbg=234
-  "endif
 endfunction
 autocmd! User GoyoEnter nested call <SID>goyo_enter()
 
@@ -276,8 +271,7 @@ if has('terminal')
 
   autocmd TerminalOpen *
   \ if &buftype == 'terminal' |
-  \   set winfixheight | 
-  \   set winfixwidth |
+  \   set winfixheight winfixwidth |
   \ endif
 
   function! ChangeDirectory()
@@ -344,6 +338,17 @@ if has('terminal')
   tnoremap <Leader>ll 2vim make<CR>
   tnoremap :: <C-w>:
 endif
+
+"--- undotree
+let g:undotree_WindowLayout             = 2
+let g:undotree_SplitWidth               = 24
+let g:undotree_DiffpanelHeight          = 6
+let g:undotree_SetFocusWhenToggle       = 1
+let g:undotree_DiffCommand              = '$HOME/.vim/bin/diff_no_header'
+let g:undotree_ShortIndicators          = 1
+let g:undotree_HighlightChangedText     = 0
+let g:undotree_HighlightChangedWithSign = 0
+let g:undotree_HelpLine                 = 0
 
 " }}}
 " FUNCTIONS {{{
@@ -457,8 +462,8 @@ function! Tilde4nonAlpha() " {{{
 endfunction
 " }}}
 
-function! CppmanLapack()
-  " before use cppman under cursor this removes trailing underscore character if it has one. (eg., void dgetrf_(...))
+function! ManLapack()
+  " before use Man under cursor this removes trailing underscore character if it has one. (eg., void dgetrf_(...))
   let l:word = expand("<cword>")
   if l:word[strlen(l:word)-1] == "_"
     let l:word = l:word[:-2]
@@ -562,7 +567,7 @@ if !exists('user_filetypes')
     \ setlocal formatoptions-=o |
     \ setlocal textwidth=120 |
     \ setlocal foldmethod=syntax foldnestmax=2 |
-    \ nnoremap <F2> :call CppmanLapack()<CR>
+    \ nnoremap <F2> :call ManLapack()<CR>
 
     "--- .py files
     let python_highlight_all = 1
@@ -574,7 +579,6 @@ if !exists('user_filetypes')
     let g:markdown_fenced_languages = [ 'bash=sh', 'vim', 'python', 'cpp' ]
     let g:markdown_minlines         = 50
     let g:markdown_folding          = 1
-
 
     autocmd FileType vim nnoremap <buffer> K :execute "tab help " . expand("<cword>")<CR>
     autocmd FileType sh,man nnoremap <buffer> K :execute "Man " . expand("<cword>")<CR>
@@ -661,7 +665,7 @@ nmap <silent> <Leader>r :nohlsearch<CR>
 nmap <silent> <Leader>R :silent!/BruteForceResetSearch_<C-r>=rand()<CR>.<CR>
 
 " Enter works in normal mode
-nmap <CR> :call ToggleACP()<CR>i<C-m><Esc>:call ToggleACP()<CR>:echo<CR>
+nmap <CR> :AcpLock<CR>i<C-m><Esc>:AcpUnlock<bar>echo<CR>
 
 
 " To the previous buffer
@@ -777,4 +781,7 @@ xmap ga <Plug>(EasyAlign)
 "--- open URL
 nnoremap <silent> go :!open -a Safari <cWORD><CR>
 vnoremap <silent> go y<Esc>:!open -a Safari <C-r>0<CR>
+
+"--- undotree
+nnoremap <Leader>u :UndotreeToggle<CR>
 " }}}
