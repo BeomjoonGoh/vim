@@ -42,7 +42,7 @@ Function `ToggleACP()` toggles `autocomplpop` plugin, and it is mapped to
 
 > Vim plugin that displays tags in a window, ordered by scope
 
-Mapped to `<F3>` to toggle the tagbar.
+Loaded when `:TagbarToggle` is invoked which is mapped to `<F3>`.
 
 ```vim
 let g:tagbar_width            = 30
@@ -74,6 +74,13 @@ Snippets are stored in `snippets` directory and triggered with `<Tab>` key.
 `g:snipMate.no_default_aliases` is set so that aliases such as `C++` -> `C` is
 disabled.
 
+```vim
+let g:snipMate = get(g:, 'snipMate', {})
+let g:snipMate.no_default_aliases = 1
+let g:snipMate.snippet_version = 1
+let g:snips_author = "Beomjoon Goh"
+```
+
 
 ### [vim-cppman](https://github.com/BeomjoonGoh/vim-cppman)
 
@@ -82,12 +89,15 @@ disabled.
 > through either [cplusplus.com](https://cplusplus.com) or
 > [cppreference.com](https://cppreference.com).
 
+Loaded when file type is `cpp`.
+
 
 ### [vim-latex](https://github.com/vim-latex/vim-latex)
 
 > This vim plugin provides a rich tool of features for editing latex files.
 
-Settings used are:
+Loaded when file type is `tex`.  Settings used are:
+
 ```vim
 let g:Tex_PromptedCommands    = ''
 let g:tex_flavor              = 'latex'
@@ -109,6 +119,16 @@ Note the following default mappings:
 Mapped to `<Leader>f`. Uses user defined `goyo_enter()` to have `number`, and
 `colorcolumn`.
 
+```vim
+let g:goyo_width  = "120"
+let g:goyo_height = "95%"
+function! s:goyo_enter()
+  set nonu nornu
+  highlight ColorColumn ctermbg=234
+endfunction
+autocmd! User GoyoEnter nested call <SID>goyo_enter()
+```
+
 
 ### [vim-indent-object](https://github.com/michaeljsmith/vim-indent-object)
 
@@ -122,6 +142,7 @@ Mapped to `<Leader>f`. Uses user defined `goyo_enter()` to have `number`, and
 
 Mapped to `ga`.
 
+
 ### [vim-desertBJ](https://github.com/BeomjoonGoh/vim-desertBJ)
 
 > color scheme based on the default desert.vim, motivated by `desertEx` by Mingbai.
@@ -132,7 +153,8 @@ Mapped to `ga`.
 > This is modified version of 'Vim universal .txt syntax file' by Tomasz
 > Kalkosiński.
 
-Syntax for .txt, .out, etc. defined in `ftdetect/txt.vim`.
+Syntax for `.txt`, `.out`, etc. defined in `ftdetect/txt.vim`.
+
 
 ### [vim-aftersyntax](https://github.com/BeomjoonGoh/vim-aftersyntax)
 
@@ -148,16 +170,43 @@ It depends on `vim-cpp-enhanced-highlight` plugin.  Supported syntax are: `C`,
 
 `vim-aftersyntax` uses this plugin.
 
+```vim
+let g:cpp_class_scope_highlight     = 1
+let g:cpp_class_decl_highlight      = 1
+let g:cpp_member_variable_highlight = 1
+let g:cpp_no_function_highlight     = 1
+```
+
+
+### [undotree](https://github.com/mbbill/undotree)
+
+> The undo history visualizer for VIM
+
+Mapped to `<Leader>u`. See `:help undo.txt` for more on builtin undo tree in
+vim. A custom diff command which is more git-diff like without headers is used.
+Settings used are:
+
+```vim
+let g:undotree_WindowLayout             = 2
+let g:undotree_SplitWidth               = 24
+let g:undotree_DiffpanelHeight          = 6
+let g:undotree_SetFocusWhenToggle       = 1
+let g:undotree_DiffCommand              = '$HOME/.vim/bin/diff_no_header'
+let g:undotree_ShortIndicators          = 1
+let g:undotree_HighlightChangedText     = 0
+let g:undotree_HighlightChangedWithSign = 0
+let g:undotree_HelpLine                 = 0
+```
+
 
 ## Commands
 
 For builtin commands `e`, `q`, `qa`, `w`, `wa`, `wq`, `wqa`, `sp`, and `vsp`,
 possible uppercase typos are defined.
 
-* `Find` works like `find` but in vertical split.
+* `Vfind` works like `find` but in vertical split.
+* `Sfind` is `sfind` for completeness.
 * `Help` opens help page in new tab not in split
-* `Term`(`Vterm`) runs `bash` shell in terminal emulator
-  horizontally(vertically) with a few terminal options. See `:help terminal`.
 * `Vn`(`Sn`) opens a scratchpad.
 * `RemoveTrailingSpaces` does want it sounds like.
 
@@ -168,6 +217,11 @@ possible uppercase typos are defined.
 
 ### Terminal
 
+Terminal api
+* `Term`(`Vterm`) runs `bash` shell in terminal emulator
+  horizontally(vertically) with a few terminal options. See `:help terminal`.
+* `<Leader>cd` changes working directory to the buffer's directory.
+
 
 ## Key maps
 
@@ -177,75 +231,82 @@ mode respectively. See `:help map.txt` for help and `:map` to see defined maps.
 
 ### General
 
-* `gf` [n] Go to a file under cursor in vertical split.
-* `gF` [n] Open a file under cursor to the current window.
-* `go` [n,v] Open URL under cursor
-* `<S-Tab>` [i] Tab backwards.
-* `~` [n] The `~` key works for non-alphabets as well.
-* `<F2>` [n] Manual page for `Lapack` library functions if the file is `.c`,
-  `.cpp`, or `.h`
-* `<F9>` [n,i] Type(i) or show(n) the current date and time stamp
-* `<Leader>r` [n] Stop highlight search result
-* `<Leader>R` [n] Brute force reset search
-* `<CR>` [n] Enter works in normal mode when `autocomplpop` is on.
-* `*` [v] Search in visual mode
-* `#` [v] Search in visual mode
-* `<C-y>` [v] Yank to clipboard
-* `<C-p>` [n] Paste from clipboard
-* `<F8>` [n] Test regular expression under cursor in double quotes
-* `ga` [n,x] Start interactive EasyAlign
+| Key     | Mode | Description |
+|:-------:|:----:|:------------|
+|`gf`     | n    | Go to a file under cursor in vertical split.
+|`gF`     | n    | Open a file under cursor to the current window.
+|`go`     | n v  | Open URL under cursor
+|`<S-Tab>`| i    | Tab backwards.
+|`~`      | n    | The `~` key works for non-alphabets as well.
+|`<F2>`   | n    | Manual page for `Lapack` library functions if the file is `.c`, `.cpp`, or `.h`
+|`<F9>`   | n i  | Type(i) or show(n) the current date and time stamp
+|`\r`     | n    | Stop highlight search result
+|`\R`     | n    | Brute force reset search
+|`<CR>`   | n    | Enter works in normal mode when `autocomplpop` is on.
+|`*`, `#` | v    | Search in visual mode
+|`<C-y>`  | v    | Yank to clipboard
+|`<C-p>`  | n    | Paste from clipboard
+|`<F8>`   | n    | Test regular expression under cursor in double quotes
+|`ga`     | n x  | Start interactive EasyAlign
 
 
 ### Toggle stuff
 
-* `<F3>` [n] Toggle the `tagbar` plugin
-* `<F4>` [n,i] Toggle `colorcolumn=120`
-* `<F5>` [n,i] Toggle `autocomplpop` plugin
-* `<F6>` [n,i] Toggle smart/auto indent, number, relative number for clipboard
-  paste
-* `<F7>` [n,i] Toggle spell checking
-* `<F10>` [n] Set mouse on and off
-* `<C-\>` [n] Toggle `netrw` in the left split
-* `<Leader><Leader><Leader>` [n] Go to the previous buffer
-* `<Space>` [n,v] Open/close folds
-* `z0` [n] Zero fold level
-* `<Leader>f` [n] Toggle `goyo` plugin
-* `<Leader>iw [n] In diff mode, toggle ignore white spaces
+| Key     | Mode | Description |
+|:-------:|:----:|:------------|
+|`<F3>`   | n    | Toggle the `tagbar` plugin
+|`<F4>`   | n i  | Toggle `colorcolumn=120`
+|`<F5>`   | n i  | Toggle `autocomplpop` plugin
+|`<F6>`   | n i  | Toggle smart/auto indent, number, relative number for clipboard paste
+|`<F7>`   | n i  | Toggle spell checking
+|`<F10>`  | n    | Set mouse on and off
+|`<C-\>`  | n    | Toggle `netrw` in the left split
+|`\\\`    | n    | Go to the previous buffer
+|`<Space>`| n v  | Open/close folds
+|`z0`     | n    | Zero fold level
+|`\f`     | n    | Toggle `goyo` plugin with +5% offset
+|`\iw`    | n    | In diff mode, toggle ignore white spaces
+|`\u`     | n    | Toggle `undotree`
 
 
 ### Moving around
 
-* `Arrow key` [n,t] Move around windows
-* `j` [n] Go up to the next row for wrapped lines
-* `k` [n] Go down to the next row for wrapped lines
-* `-` [n] Move to the end of a line
+| Key    | Mode | Description |
+|:------:|:----:|:------------|
+|`Arrows`| n t  | Jump around split windows
+|`j`     | n    | Go up to the next row for wrapped lines
+|`k`     | n    | Go down to the next row for wrapped lines
+|`-`     | n    | Move to the end of a line
 
 
 ### QuickFix
 
-* `<Leader>ll` [n] Invoke `make` command and open QuickFix window
-* `<Leader>w` [n] Open QuickFix window
-* `<Leader>c` [n] Close QuickFix window
-* `<Leader>.` [n] Jump to the next error/warning
-* `<Leader>,` [n] Jump to the previous error/warning
-* `<Leader>g` [n] From the QuickFix window, jump to the code where the cursor
-  below indicates
-* `<Leader>e` [n] Run `./main`
+| Key | Mode | Description |
+|:---:|:----:|:------------|
+|`\ll`| n    | Invoke `make` command and open QuickFix window
+|`\w` | n    | Open QuickFix window
+|`\c` | n    | Close QuickFix window
+|`\.` | n    | Jump to the next error/warning
+|`\,` | n    | Jump to the previous error/warning
+|`\g` | n    | From the QuickFix window, jump to the code where the cursor below indicates
+|`\e` | n    | Run `./main`
 
 
 ### Tab page
 
-* `<Tab>:` [n] Type `:tab` in command-line
-* `<Tab>n` [n] Open current buffer in tab
-* `<Tab>e` [n] Type `:tabedit` in command-line
-* `<Tab>gf` [n] Open a file under cursor in a new tab page
-* `<C-Tab>` [n,i,v,t] Go to the next tab page (`iTerm` sends `<F11>`)
-* `<C-S-Tab>` [n,i,v,t] Go to the previous tab page (`iTerm` sends `<F12>`)
-* `<Tab>[num]` [n] Go to tab number `[num]` = 1 ~ 6
+| Key       | Mode    | Description |
+|:---------:|:-------:|:------------|
+|`<Tab>:`   | n       | Type `:tab` in command-line
+|`<Tab>n`   | n       | Open current buffer in tab
+|`<Tab>e`   | n       | Type `:tabedit` in command-line
+|`<Tab>gf`  | n       | Open a file under cursor in a new tab page
+|`<C-Tab>`  | n i v t | Go to the next tab page (`iTerm` sends `<F11>`)
+|`<C-S-Tab>`| n i v t | Go to the previous tab page (`iTerm` sends `<F12>`)
+|`<Tab>[N]` | n       | Go to tab number `[N]` = 1 ~ 6
 
 ### Todo
-- [ ] `<Leader>cd` changes working directory to the buffer's directory.
-- [ ] Terminal api
-- [x] Leave vundle and goto vim-plug
-- [ ] Make cheatsheet a plugin
-- [x] Ditch TagList and goto tagbar
+- [ ] Make Tilde4nonAlpha work in visual
+- [ ] Make plugin
+  - [ ] cheatsheet
+  - [ ] terminal
+- [ ] help paste, pastetoggle
