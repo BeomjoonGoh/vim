@@ -270,7 +270,8 @@ if has('terminal')
     else
       return 1
     endif
-    execut l:cmd . ' let g:term_bufnr = term_start("bash --login", l:term_options)'
+    execute l:cmd . ' let g:term_bufnr = term_start("bash --login", l:term_options)'
+    call term_sendkeys(g:term_bufnr, "source $HOME/.vim/bin/setup_bash.sh\<CR>")
   endfunction
 
   autocmd TerminalOpen *
