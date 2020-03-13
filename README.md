@@ -44,6 +44,8 @@ Function `ToggleACP()` toggles `autocomplpop` plugin, and it is mapped to
 
 Loaded when `:TagbarToggle` is invoked which is mapped to `<F3>`.
 
+<details> <summary>Settings</summary>
+
 ```vim
 let g:tagbar_width            = 30
 let g:tagbar_compact          = 1
@@ -62,6 +64,8 @@ let g:tagbar_type_markdown    = {
     \ 'sort' : 0,
 \ }
 ```
+</details>
+
 
 ### [vim-snipmate](https://github.com/garbas/vim-snipmate)
 
@@ -74,12 +78,15 @@ Snippets are stored in `snippets` directory and triggered with `<Tab>` key.
 `g:snipMate.no_default_aliases` is set so that aliases such as `C++` -> `C` is
 disabled.
 
+<details> <summary>Settings</summary>
+
 ```vim
 let g:snipMate = get(g:, 'snipMate', {})
 let g:snipMate.no_default_aliases = 1
 let g:snipMate.snippet_version = 1
 let g:snips_author = "Beomjoon Goh"
 ```
+</details>
 
 
 ### [vim-cppman](https://github.com/BeomjoonGoh/vim-cppman)
@@ -96,7 +103,13 @@ Loaded when file type is `cpp`.
 
 > This vim plugin provides a rich tool of features for editing latex files.
 
-Loaded when file type is `tex`.  Settings used are:
+Loaded when file type is `tex`.
+
+Note the following default mappings:
+* `<Leader>lv` view pdf.
+* `<Leader>ll` compile latex.
+
+<details> <summary>Settings</summary>
 
 ```vim
 let g:Tex_PromptedCommands    = ''
@@ -106,10 +119,7 @@ let g:Tex_ViewRule_pdf        = 'open -a Preview'
 let g:Tex_FoldedEnvironments  = ''
 let g:tex_indent_brace        = 0
 ```
-
-Note the following default mappings:
-* `<Leader>lv` view pdf.
-* `<Leader>ll` compile latex.
+</details>
 
 
 ### [goyo.vim](https://github.com/junegunn/goyo.vim)
@@ -118,6 +128,8 @@ Note the following default mappings:
 
 Mapped to `<Leader>f`. Uses user defined `goyo_enter()` to have `number`, and
 `colorcolumn`.
+
+<details> <summary>Settings</summary>
 
 ```vim
 let g:goyo_width  = "120"
@@ -128,6 +140,7 @@ function! s:goyo_enter()
 endfunction
 autocmd! User GoyoEnter nested call <SID>goyo_enter()
 ```
+</details>
 
 
 ### [vim-indent-object](https://github.com/michaeljsmith/vim-indent-object)
@@ -170,12 +183,15 @@ It depends on `vim-cpp-enhanced-highlight` plugin.  Supported syntax are: `C`,
 
 `vim-aftersyntax` uses this plugin.
 
+<details> <summary>Settings</summary>
+
 ```vim
 let g:cpp_class_scope_highlight     = 1
 let g:cpp_class_decl_highlight      = 1
 let g:cpp_member_variable_highlight = 1
 let g:cpp_no_function_highlight     = 1
 ```
+</details>
 
 
 ### [undotree](https://github.com/mbbill/undotree)
@@ -184,7 +200,8 @@ let g:cpp_no_function_highlight     = 1
 
 Mapped to `<Leader>u`. See `:help undo.txt` for more on builtin undo tree in
 vim. A custom diff command which is more git-diff like without headers is used.
-Settings used are:
+
+<details> <summary>Settings</summary>
 
 ```vim
 let g:undotree_WindowLayout             = 2
@@ -197,6 +214,7 @@ let g:undotree_HighlightChangedText     = 0
 let g:undotree_HighlightChangedWithSign = 0
 let g:undotree_HelpLine                 = 0
 ```
+</details>
 
 
 ## Commands
@@ -229,7 +247,8 @@ The backslash key (`\`) is used as The "mapleader" variable. The characters in
 square brakets n, i, v, and t stand for normal, insert, visual, and terminal
 mode respectively. See `:help map.txt` for help and `:map` to see defined maps.
 
-### General
+<details>
+<summary>General</summary>
 
 | Key     | Mode | Description |
 |:-------:|:----:|:------------|
@@ -248,9 +267,10 @@ mode respectively. See `:help map.txt` for help and `:map` to see defined maps.
 |`<C-p>`  | n    | Paste from clipboard
 |`<F8>`   | n    | Test regular expression under cursor in double quotes
 |`ga`     | n x  | Start interactive EasyAlign
+</details>
 
-
-### Toggle stuff
+<details>
+<summary>Toggle stuff </summary>
 
 | Key     | Mode | Description |
 |:-------:|:----:|:------------|
@@ -267,9 +287,10 @@ mode respectively. See `:help map.txt` for help and `:map` to see defined maps.
 |`\f`     | n    | Toggle `goyo` plugin with +5% offset
 |`\iw`    | n    | In diff mode, toggle ignore white spaces
 |`\u`     | n    | Toggle `undotree`
+</details>
 
-
-### Moving around
+<details>
+<summary>Moving around</summary>
 
 | Key    | Mode | Description |
 |:------:|:----:|:------------|
@@ -277,9 +298,10 @@ mode respectively. See `:help map.txt` for help and `:map` to see defined maps.
 |`j`     | n    | Go up to the next row for wrapped lines
 |`k`     | n    | Go down to the next row for wrapped lines
 |`-`     | n    | Move to the end of a line
+</details>
 
-
-### QuickFix
+<details>
+<summary>QuickFix</summary>
 
 | Key | Mode | Description |
 |:---:|:----:|:------------|
@@ -290,9 +312,10 @@ mode respectively. See `:help map.txt` for help and `:map` to see defined maps.
 |`\,` | n    | Jump to the previous error/warning
 |`\g` | n    | From the QuickFix window, jump to the code where the cursor below indicates
 |`\e` | n    | Run `./main`
+</details>
 
-
-### Tab page
+<details>
+<summary>Tab page</summary>
 
 | Key       | Mode    | Description |
 |:---------:|:-------:|:------------|
@@ -303,6 +326,7 @@ mode respectively. See `:help map.txt` for help and `:map` to see defined maps.
 |`<C-Tab>`  | n i v t | Go to the next tab page (`iTerm` sends `<F11>`)
 |`<C-S-Tab>`| n i v t | Go to the previous tab page (`iTerm` sends `<F12>`)
 |`<Tab>[N]` | n       | Go to tab number `[N]` = 1 ~ 6
+</details>
 
 ### Todo
 - [ ] Make Tilde4nonAlpha work in visual
