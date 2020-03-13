@@ -28,6 +28,7 @@ call plug#begin('~/.vim/plugged')
   Plug 'michaeljsmith/vim-indent-object'
   Plug 'junegunn/vim-easy-align'
   Plug 'mbbill/undotree', { 'on' : 'UndotreeToggle' }
+  Plug 'junegunn/vim-peekaboo'
 
   " Colorscheme & Syntax
   Plug 'BeomjoonGoh/vim-desertBJ'
@@ -530,6 +531,23 @@ endfunction
 
 if has('user_commands')
   command! -bang -nargs=? -complete=command Cheat call Cheatsheet_toggle(<q-args>)
+endif
+
+"--- OpenFinder
+function! OpenFinder()
+  let l:cmd = 'open '
+  if filereadable(expand("%"))
+    let l:cmd .= '-R ' . shellescape("%")
+  else
+    let l:cmd .= '.'
+  endif
+
+  execute ":silent! !" . l:cmd
+  redraw!
+endfunction
+
+if has('user_commands')
+  command! OpenFinder call OpenFinder()
 endif
 
 " }}}
