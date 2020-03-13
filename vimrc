@@ -1,6 +1,6 @@
-" File: vimrc
-" Author: Beomjoon Goh
-" Description: 
+" vimrc file
+" Languague:    vim
+" Maintainer:   Beomjoon Goh
 " Last Change:  09 Mar 2020 21:40:33 +0900
 " Contents:
 "   General
@@ -15,6 +15,8 @@
 if v:lang =~ "utf8$" || v:lang =~ "UTF-8$"
    set fileencodings=ucs-bom,utf-8,latin1,cp949
 endif
+
+let mapleader = '\'
 
 call plug#begin('~/.vim/plugged')
   Plug 'othree/vim-autocomplpop' | Plug 'vim-scripts/L9'
@@ -342,7 +344,7 @@ endif
 "--- undotree
 let g:undotree_WindowLayout             = 2
 let g:undotree_SplitWidth               = 24
-let g:undotree_DiffpanelHeight          = 6
+let g:undotree_DiffpanelHeight          = 10
 let g:undotree_SetFocusWhenToggle       = 1
 let g:undotree_DiffCommand              = '$HOME/.vim/bin/diff_no_header'
 let g:undotree_ShortIndicators          = 1
@@ -616,8 +618,6 @@ endfunction
 " }}}
 " KEY MAPPINGS {{{
 "--- General
-let mapleader = '\'
-
 " goto file
 nnoremap gf :vertical wincmd f<CR>
 nnoremap gF :w<CR>gf
