@@ -235,6 +235,7 @@ endfunction
 autocmd! User GoyoEnter nested call <SID>goyo_enter()
 
 "--- vimdiff
+set diffopt=internal,filler,closeoff,context:3
 if &diff
   function! IwhiteToggle()
     if &diffopt =~ 'iwhiteall'
