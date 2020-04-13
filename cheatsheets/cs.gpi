@@ -1,0 +1,16 @@
+#!/usr/local/bin/gnuplot
+
+
+set terminal qt size 600,420
+set xrange [-10:10]
+set yrange [-1:1]
+set logscale x
+plot sin(x)
+
+# arithematics
+
+# for loop
+plot for [i=2:5] "a.out" using 1:i with lines
+
+files = "1.out 2.out 3.out 4.out 5.out"
+plot for [i=1:words(files)] word(files,i) using 1:2 with lines

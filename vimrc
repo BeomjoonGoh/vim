@@ -47,7 +47,7 @@ set clipboard=exclude:.*              " Fixes slow startup with ssh!! Same as $ 
 set lazyredraw                        " Not sure but it makes scrolling faster
 set ttyfast                           " This one too
 set formatoptions+=rnlj
-set path+=**                          " Search down into subdirectories
+"set path+=**                          " Search down into subdirectories
 set timeoutlen=300
 set updatetime=500
 
