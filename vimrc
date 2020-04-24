@@ -111,6 +111,7 @@ function! MyStatusLine()
   return '%h%f %m%r  pwd: %<' . l:pwd . ' %=%(C: %c%V, L: %l/%L%) %P '
  "return '%h%f %m%r  pwd: %<%{getcwd()} %=%(C: %c%V, L: %l/%L%) %P '
 endfunction
+set fillchars=vert:\ ,fold:-
 
 "--- Tab page
 set showtabline=2
@@ -475,7 +476,7 @@ function! ManLapack()
   execute "Man " . l:word
 endfunction
 
-" Cheatsheet
+"--- Cheatsheet
 " TODO
 " [ ] add option to edit.
 " [ ] global variable vs / sp
@@ -549,6 +550,33 @@ endfunction
 
 if has('user_commands')
   command! OpenFinder call OpenFinder()
+endif
+
+"--- InsertKoreanMode
+let g:InsertKoreanMode_IssLib = expand('$HOME/.vim/bin/libInputSourceSwitcher.dylib')
+let g:InsertKoreanMode_DefaultLayout = 'com.apple.keylayout.US'
+let g:InsertKoreanMode_InsertLayout = 'com.apple.inputmethod.Korean.2SetKorean'
+
+if has('mac') && filereadable(g:InsertKoreanMode_IssLib)
+  function! ToggleInsertKoreanMode()
+    if !exists('#InsertKoreanMode#InsertEnter')
+      augroup InsertKoreanMode
+        autocmd!
+        autocmd InsertEnter * call libcall(g:InsertKoreanMode_IssLib, 'Xkb_Switch_setXkbLayout', g:InsertKoreanMode_InsertLayout)
+        autocmd InsertLeave * call libcall(g:InsertKoreanMode_IssLib, 'Xkb_Switch_setXkbLayout', g:InsertKoreanMode_DefaultLayout)
+      augroup END
+      echo "InsertKoreanMode is on"
+    else
+      augroup InsertKoreanMode
+        autocmd!
+      augroup END
+      echo "InsertKoreanMode is off"
+    endif
+  endfunction
+
+  if has('user_commands')
+    command! InsertKoreanMode call ToggleInsertKoreanMode()
+  endif
 endif
 
 " }}}
