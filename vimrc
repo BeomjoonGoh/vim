@@ -611,7 +611,7 @@ if !exists('user_filetypes')
     \ let g:acp_completeOption='.,w,b,u,t,i,d' |
     \ if !exists('pathset') |
     \   let pathset=1 |
-    \   setlocal path+=$HOME/work/lib,$HOME/work/lib/specialfunctions,$HOME/work/projectEuler/Library |
+    \   set path+=$HOME/work/lib,$HOME/work/lib/specialfunctions,$HOME/work/projectEuler/Library |
     \ endif |
     \ setlocal formatoptions-=o |
     \ setlocal textwidth=120 |
@@ -693,7 +693,7 @@ inoremap <F6> <C-o>:call TogglePasteSafe()<CR>
 
 " Toggle spell checking
 nnoremap <F7> :setlocal spell!<CR>:echo "Spell Check: " . strpart("OffOn", 3 * &spell, 3)<CR>
-inoremap <F7> <C-o>:setlocal spell!<CR>:echo "Spell Check: " . strpart("OffOn", 3 * &spell, 3)<CR>
+inoremap <F7> <Esc>:setlocal spell!<CR>:echo "Spell Check: " . strpart("OffOn", 3 * &spell, 3)<CR>
 
 " Type(i) or show(n) the current date stamp
 imap <F9> <C-R>=strftime('%d %b %Y %T %z')<CR>
