@@ -734,7 +734,7 @@ nnoremap <Leader>n :cnext<CR>
 nnoremap <Leader>N :cprevious<CR>
 augroup QuickFixMap
   autocmd!
-  autocmd FileType qf nnoremap <CR> :.cc<CR>
+  autocmd FileType qf nnoremap <Leader><CR> :.cc<CR>
 augroup END
 "nnoremap <Leader>e :!./%<<CR>
 nnoremap <Leader>e :!./main<CR>
