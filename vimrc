@@ -727,7 +727,7 @@ nnoremap <Leader><Leader><Leader> <C-^>
 " <CR> => from the cwindow, jump to the code where the cursor below indicates.
 " \e   => will run a program xxx if it is the binary file compiled from the source code with the same name
 "         (but extension): xxx.c or xxx.cpp (% is current file name, < eliminates extension)
-nnoremap <Leader>ll :w<CR>:make -Bs<CR>:botright cwindow<CR>
+nnoremap <Leader>ll :w<CR>:make -s<CR>:botright cwindow<CR>
 nnoremap <Leader>w :botright cwindow<CR>
 nnoremap <Leader>c :cclose<CR>
 nnoremap <Leader>n :cnext<CR>
