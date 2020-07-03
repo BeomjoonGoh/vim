@@ -35,6 +35,7 @@ call plug#begin('~/.vim/plugged')
   Plug 'BeomjoonGoh/txt.vim'
   Plug 'BeomjoonGoh/vim-aftersyntax'
   Plug 'octol/vim-cpp-enhanced-highlight'
+  Plug 'shiracamus/vim-syntax-x86-objdump-d'
 call plug#end()
 
 set nocompatible
