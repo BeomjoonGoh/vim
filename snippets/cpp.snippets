@@ -43,7 +43,7 @@ snippet usn
 	using namespace ${1:std};${0}
 # Class
 snippet cl
-	class ${1:Name}${2}
+	class ${1:Name}
 	{
 		private:
 			${0}
@@ -67,7 +67,7 @@ snippet main
 		return 0;
 	}
 # function
-snippet fun 
+snippet fun
 	${1:void} ${2}(${3})
 	{${0}
 	}
@@ -81,7 +81,7 @@ snippet re
 # if
 snippet if
 	if (${1})${0}
-# else if 
+# else if
 snippet ei
 	else if (${1})${0}
 # else
@@ -92,7 +92,7 @@ snippet t
 	(${1}) ? ${2} : ${0}
 # switch
 snippet sw
-	switch (${1:val}) { 
+	switch (${1:val}) {
 		case ${2:key}:${0}
 	}
 snippet de
@@ -162,6 +162,12 @@ snippet rc
 # cout
 snippet cout
 	${1:}cout << ${2} << $1endl;${0}
+# cout
+snippet clog
+	${1:}clog << ${2} << $1endl;${0}
+# cout
+snippet cerr
+	${1:}cerr << ${2} << $1endl;${0}
 # STL container
 snippet map
 	${1:}map<${2}, ${3}>${0}
