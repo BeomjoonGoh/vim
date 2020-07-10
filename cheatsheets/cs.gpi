@@ -1,13 +1,16 @@
 #!/usr/local/bin/gnuplot
 
-
-set terminal qt size 600,420
+set terminal qt size 600,420 font "Helvetica,12.0"
 set xrange [-10:10]
 set yrange [-1:1]
 set logscale x
+
 plot sin(x)
+plot "a.out" using 1:2 with lines
 
 # arithematics
+using 1:(($2+$3)/2)
+using ($1/3):(log(abs(cos($2))))
 
 # for loop
 plot for [i=2:5] "a.out" using 1:i with lines
