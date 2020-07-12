@@ -2,7 +2,7 @@
 # cs.bash
 #
 # Maintainer:   Beomjoon Goh
-# Last Change:  08 Mar 2020 03:22:45 +0900
+# Last Change:  10 Jul 2020 17:07:41 +0900
 
 # Shell execution {{{
   var=$(cmd)
@@ -48,7 +48,8 @@
   [ -o option ]   # shell option is set 
   [ -v variable ] # shell variable is set 
 
-  [ N operation M ] # operation: -eq, -ne, -lt, -le, -gt, -ge
+  [ N operation M ] # operation: [integer] -eq, -ne, -lt, -le, -gt, -ge
+                    #            [string ] =, !=, <, >
 
   # bashism
   [[ string == string ]]
