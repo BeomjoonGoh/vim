@@ -2,7 +2,7 @@
 # 2vim
 #
 # Maintainer:   Beomjoon Goh
-# Last Change:  13 Feb 2020 18:51:33 +0900
+# Last Change:  14 Jul 2020 19:52:34 +0900
 
 set -o nounset -o pipefail -o errexit
 
@@ -46,6 +46,19 @@ function vertical_split() {
 }
 
 function make() {
+  makefile=( ./{M,m}akefile )
+  makeable=0
+  for f in "${makefile[@]}"; do
+    if [ -f "${f}" ]; then
+      makeable=1
+      break
+    fi
+  done
+  if [ ${makeable} -eq 0 ]; then
+    >&2 echo "no makefile found."
+    return
+
+  fi
   change_directory
   send call Make "$@"
 }

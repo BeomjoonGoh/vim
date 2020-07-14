@@ -1,7 +1,7 @@
 " vimrc file
 " Languague:    vim
 " Maintainer:   Beomjoon Goh
-" Last Change:  09 Mar 2020 21:40:33 +0900
+" Last Change:  14 Jul 2020 19:52:10 +0900
 " Contents:
 "   General
 "   User Interfaces
@@ -255,6 +255,7 @@ endif
 if has('terminal')
   function! OpenTerminal(type)
     let l:cmd = a:type
+    let l:rcfile = expand('$HOME/.vim/bin/setup_bash.sh')
     let l:term_options = {
           \ "term_finish" : "close",
           \ "term_name" : "[Terminal] bash",
@@ -263,22 +264,21 @@ if has('terminal')
       let l:term_options["term_rows"] = min([float2nr(0.18*&lines),15])
     elseif l:cmd == "vertical"
       let l:term_options["term_cols"] = min([float2nr(0.4*&columns),150])
-    elseif l:cmd == "call"
-      let l:cmd = ""
+    elseif l:cmd == ""
       let l:term_options["curwin"] = 1
     elseif l:cmd == "tab"
-      "
     else
       return 1
     endif
-    execute l:cmd . ' let g:term_bufnr = term_start("bash --login", l:term_options)'
-    call term_sendkeys(g:term_bufnr, "source $HOME/.vim/bin/setup_bash.sh\<CR>")
+    execute l:cmd 'call term_start("bash --rcfile '.l:rcfile.'", l:term_options)'
+    let g:term_bufnr = term_list()[0]
   endfunction
 
   autocmd TerminalOpen *
   \ if &buftype == 'terminal' |
   \   set winfixheight winfixwidth |
-  \ endif
+  \ endif |
+  \ wincmd =
 
   function! ChangeDirectory()
     let l:oldpwd = getcwd()
@@ -307,7 +307,7 @@ if has('terminal')
       endfor
     endif
     if getcwd() != l:pwd
-      execute 'cd' . l:pwd
+      execute 'cd' l:pwd
     endif
     if l:do_cd
       let l:cmd = "cd " . fnameescape(l:pwd) . "\<CR>"
@@ -317,7 +317,7 @@ if has('terminal')
 
   function! Tapi_VerticalSplit(bufnr, arglist)
     set nosplitright
-    execute 'vertical split' . a:arglist[0]
+    execute 'vertical split' a:arglist[0]
     set splitright
   endfunction
 
@@ -326,7 +326,7 @@ if has('terminal')
     for l:a in a:arglist
       let l:argstring .= l:a
     endfor
-    execute 'make' . l:argstring
+    execute 'make' l:argstring
     botright cwindow
   endfunction
 
@@ -334,7 +334,7 @@ if has('terminal')
   if has("user_commands")
     command Bterm call OpenTerminal("botright")
     command Vterm call OpenTerminal("vertical")
-    command Nterm call OpenTerminal("call")
+    command Nterm call OpenTerminal("")
     command Tterm call OpenTerminal("tab")
   endif
 
@@ -474,7 +474,7 @@ function! ManLapack()
   if l:word[strlen(l:word)-1] == "_"
     let l:word = l:word[:-2]
   endif
-  execute "Man " . l:word
+  execute "Man" l:word
 endfunction
 
 "--- Cheatsheet
@@ -524,7 +524,7 @@ function! Cheatsheet_view(cmd)
   endif
 
   execute 'vertical split'
-  execute a:cmd . l:file
+  execute a:cmd l:file
   return bufnr('%')
 endfunction
 
@@ -536,47 +536,48 @@ if has('user_commands')
   command! -bang -nargs=? -complete=command Cheat call Cheatsheet_toggle(<q-args>)
 endif
 
-"--- OpenFinder
-function! OpenFinder()
-  let l:cmd = 'open '
-  if filereadable(expand("%"))
-    let l:cmd .= '-R ' . shellescape("%")
-  else
-    let l:cmd .= '.'
+if has('mac')
+  "--- OpenFinder
+  function! OpenFinder()
+    let l:cmd = 'open '
+    if filereadable(expand("%"))
+      let l:cmd .= '-R ' . shellescape("%")
+    else
+      let l:cmd .= '.'
+    endif
+  
+    execute ":silent! !" . l:cmd
+    redraw!
+  endfunction
+  
+  if has('user_commands')
+    command! OpenFinder call OpenFinder()
   endif
 
-  execute ":silent! !" . l:cmd
-  redraw!
-endfunction
+  "--- InsertKoreanMode
+  let g:InsertKoreanMode_IssLib = expand('$HOME/.vim/bin/libInputSourceSwitcher.dylib')
+  let g:InsertKoreanMode_DefaultLayout = 'com.apple.keylayout.US'
+  let g:InsertKoreanMode_InsertLayout = 'com.apple.inputmethod.Korean.2SetKorean'
+  if filereadable(g:InsertKoreanMode_IssLib)
+    function! ToggleInsertKoreanMode()
+      if !exists('#InsertKoreanMode#InsertEnter')
+        augroup InsertKoreanMode
+          autocmd!
+          autocmd InsertEnter * call libcall(g:InsertKoreanMode_IssLib, 'Xkb_Switch_setXkbLayout', g:InsertKoreanMode_InsertLayout)
+          autocmd InsertLeave * call libcall(g:InsertKoreanMode_IssLib, 'Xkb_Switch_setXkbLayout', g:InsertKoreanMode_DefaultLayout)
+        augroup END
+        echo "InsertKoreanMode is on"
+      else
+        augroup InsertKoreanMode
+          autocmd!
+        augroup END
+        echo "InsertKoreanMode is off"
+      endif
+    endfunction
 
-if has('user_commands')
-  command! OpenFinder call OpenFinder()
-endif
-
-"--- InsertKoreanMode
-let g:InsertKoreanMode_IssLib = expand('$HOME/.vim/bin/libInputSourceSwitcher.dylib')
-let g:InsertKoreanMode_DefaultLayout = 'com.apple.keylayout.US'
-let g:InsertKoreanMode_InsertLayout = 'com.apple.inputmethod.Korean.2SetKorean'
-
-if has('mac') && filereadable(g:InsertKoreanMode_IssLib)
-  function! ToggleInsertKoreanMode()
-    if !exists('#InsertKoreanMode#InsertEnter')
-      augroup InsertKoreanMode
-        autocmd!
-        autocmd InsertEnter * call libcall(g:InsertKoreanMode_IssLib, 'Xkb_Switch_setXkbLayout', g:InsertKoreanMode_InsertLayout)
-        autocmd InsertLeave * call libcall(g:InsertKoreanMode_IssLib, 'Xkb_Switch_setXkbLayout', g:InsertKoreanMode_DefaultLayout)
-      augroup END
-      echo "InsertKoreanMode is on"
-    else
-      augroup InsertKoreanMode
-        autocmd!
-      augroup END
-      echo "InsertKoreanMode is off"
+    if has('user_commands')
+      command! InsertKoreanMode call ToggleInsertKoreanMode()
     endif
-  endfunction
-
-  if has('user_commands')
-    command! InsertKoreanMode call ToggleInsertKoreanMode()
   endif
 endif
 
