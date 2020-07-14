@@ -133,7 +133,7 @@ function! MyTabLine()
     elseif ftype == 'qf'     | let fname .= '[Quickfix]'
     elseif ftype == 'netrw'  | let fname .= "[Netrw]"
     elseif ftype == 'tagbar' | let fname .= "[TagBar]"
-    elseif ftype == 'cppman' | let fname .= "[C++] ".g:page_name
+    elseif ftype == 'cppman' | let fname .= "[C++] ".bufname(bufnr)
     else                     | let fname .= fnamemodify(bufname(bufnr), ':t')
     endif
     let str .= (fname != '' ? fname : "[No Name]")
