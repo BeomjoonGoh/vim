@@ -183,4 +183,7 @@
   "${!ARR[@]}"              # all keys (for indexed array, returns indices.)
   "${#ARR[@]}"              # number of elements
   "${ARR[@]:3:2}"           # sub array from 3, length 2. (associative array has order too)
+
+  # String to array with delimeter. Same as ARR = string.split(',') in python
+  IFS=',' read -r -a ARR <<< ${string}
 # }}}
