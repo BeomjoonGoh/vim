@@ -322,7 +322,6 @@ if has('terminal')
   endfunction
 
   function! Tapi_Make(bufnr, arglist)
-    let l:argstring = ''
     for l:a in a:arglist
       let l:argstring .= l:a
     endfor
@@ -479,61 +478,39 @@ endfunction
 
 "--- Cheatsheet
 " TODO
-" [ ] add option to edit.
-" [ ] global variable vs / sp
 " [ ] make it a plugin
-" [ ] use bufname or something safer so that if cs.xxx is closed without
-"     invoking Cheatsheet_close()
-
 let g:cheatsheet_filetype_map = {
       \ "sh"       : "bash",
       \ "markdown" : "md",
       \}
+let g:cheatsheet_complete = system("ls ~/.vim/cheatsheets | sed 's/cs.//g'")
+let g:cheatsheet_split = 'vertical' " or 'split'
 
-function! Cheatsheet_toggle(cmd)
-  if exists('s:cheatsheet_bufnr')
-    call Cheatsheet_close(s:cheatsheet_bufnr)
-    unlet s:cheatsheet_bufnr
-  else
-    let s:cheatsheet_bufnr = Cheatsheet_view( (a:cmd == "" ? "view" : a:cmd) )
-    if s:cheatsheet_bufnr == -1
-      unlet s:cheatsheet_bufnr
-    endif
-  endif
-endfunction
-
-function! Cheatsheet_getfile()
-  let l:file_type = &filetype
+function! Cheatsheet_getfile(ft)
+  let l:file_type = (a:ft == "") ? &filetype : a:ft
   if has_key(g:cheatsheet_filetype_map, l:file_type)
     let l:file_type = g:cheatsheet_filetype_map[l:file_type]
   endif
+  return expand('~/.vim/cheatsheets/cs.' . l:file_type)
+endfunction
 
-  let l:file = expand('~/.vim/cheatsheets/cs.' . l:file_type)
-  if !filereadable(l:file)
+function! Cheatsheet_open(cmd, ft)
+  let l:file = Cheatsheet_getfile(a:ft)
+  if a:cmd == 'view' && !filereadable(l:file)
     echomsg 'cheat sheet does not exist: ' . l:file
-    let l:file = "NOFILE"
+    return
   endif
-
-  return l:file
-endfunction
-
-function! Cheatsheet_view(cmd)
-  let l:file = Cheatsheet_getfile()
-  if l:file == "NOFILE"
-    return -1
-  endif
-
-  execute 'vertical split'
+  execute g:cheatsheet_split 'split'
   execute a:cmd l:file
-  return bufnr('%')
 endfunction
 
-function! Cheatsheet_close(cheatsheet_bufnr)
-  execute 'bdelete' a:cheatsheet_bufnr
+function! Cheatsheet_complete(A,L,P)
+  return g:cheatsheet_complete
 endfunction
 
 if has('user_commands')
-  command! -bang -nargs=? -complete=command Cheat call Cheatsheet_toggle(<q-args>)
+  command! -bang -nargs=? -complete=custom,Cheatsheet_complete Cheat call Cheatsheet_open('view', <q-args>)
+  command! -bang -nargs=? -complete=custom,Cheatsheet_complete CheatEdit call Cheatsheet_open('edit', <q-args>)
 endif
 
 if has('mac')
