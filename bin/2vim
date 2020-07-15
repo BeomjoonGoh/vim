@@ -60,6 +60,7 @@ function make() {
 
   fi
   change_directory
+  echo "make" "$@"
   send call Make "$@"
 }
 

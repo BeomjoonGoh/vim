@@ -24,7 +24,6 @@ call plug#begin('~/.vim/plugged')
   Plug 'garbas/vim-snipmate' | Plug 'MarcWeber/vim-addon-mw-utils' | Plug 'tomtom/tlib_vim'
   Plug 'BeomjoonGoh/vim-cppman', { 'for' : 'cpp' }
   Plug 'vim-latex/vim-latex', { 'for' : 'tex' }
-  Plug 'junegunn/goyo.vim'
   Plug 'michaeljsmith/vim-indent-object'
   Plug 'junegunn/vim-easy-align'
   Plug 'mbbill/undotree', { 'on' : 'UndotreeToggle' }
@@ -42,13 +41,10 @@ set nocompatible
 set history=100
 set viminfo='50,\"50,n$HOME/.vim/.viminfo " read/write a .viminfo file, don't store more
 set backspace=indent,eol,start        " backspacing over everything in insert mode
-set scrolloff=3
-set sidescroll=10
+set scrolloff=3 sidescroll=10
 set clipboard=exclude:.*              " Fixes slow startup with ssh!! Same as $ vim -X
-set lazyredraw                        " Not sure but it makes scrolling faster
-set ttyfast                           " This one too
+set lazyredraw ttyfast                " Not sure but it makes scrolling faster
 set formatoptions+=rnlj
-"set path+=**                          " Search down into subdirectories
 set timeoutlen=300
 set updatetime=500
 
@@ -108,9 +104,7 @@ set wildmode=list:longest,full
 set nofileignorecase
 set statusline=%!MyStatusLine()
 function! MyStatusLine()
-  let l:pwd = substitute(getcwd(), $HOME, '~', '')
-  return '%h%f %m%r  pwd: %<' . l:pwd . ' %=%(C: %c%V, L: %l/%L%) %P '
- "return '%h%f %m%r  pwd: %<%{getcwd()} %=%(C: %c%V, L: %l/%L%) %P '
+  return '%h%f %m%r  pwd: %<' . substitute(getcwd(), $HOME, '~', '') . ' %=%(C: %c%V, L: %l/%L%) %P '
 endfunction
 set fillchars=vert:\ ,fold:-
 
@@ -155,7 +149,7 @@ endfunction
 set autoindent smartindent      " When opening a new line and no filetype-specific indenting is enabled, keeps the same
 let s:cycleIndentOption = 1     "   indent as the line you're currently on.
 set tabstop=8                   " Change tab size (set to default for compatibility with others tabbed codes.)
-set expandtab                   " Expand a <tab> to spaces
+set expandtab
 let s:nSpace     = 2
 let &shiftwidth  = s:nSpace     " Indents width
 let &softtabstop = s:nSpace     " <BS> regards 's:nSpace' spaces as one character
@@ -165,7 +159,7 @@ unlet s:nSpace
 "--- Search
 set incsearch                   " Show search matches as you type.
 set smartcase                   " ignore case if search pattern is all lowercases, case-sensitive otherwise
-set hlsearch                    " Highlights searches
+set hlsearch
 
 "--- Wrap
 set nowrap
@@ -174,8 +168,7 @@ set nowrap
 set numberwidth=4
 set number
 augroup numbertoggle
-  "Turn off relativenumber for non focused splits. This has a potential of slowing down scrolling when combined with
-  "iTerm2
+  "Turn off relativenumber for non focused splits. This has a potential of slowing down scrolling with iTerm2
   autocmd!
   let s:no_number_toggle = [ 'help', 'tagbar', 'netrw', 'cppman', 'man', 'undotree', 'diff' ]
   autocmd BufEnter,FocusGained *
@@ -227,15 +220,6 @@ let g:netrw_banner         = 0  " no banner
 let g:netrw_browse_split   = 2  " <CR> :vsp 'selected file'
 let g:netrw_special_syntax = 1  " file type syntax
 
-"--- goyo settings
-let g:goyo_width  = "120"
-let g:goyo_height = "95%"
-function! s:goyo_enter()
-  set nonu nornu
-  highlight ColorColumn ctermbg=234
-endfunction
-autocmd! User GoyoEnter nested call <SID>goyo_enter()
-
 "--- vimdiff
 set diffopt=internal,filler,closeoff,context:3
 if &diff
@@ -275,9 +259,7 @@ if has('terminal')
   endfunction
 
   autocmd TerminalOpen *
-  \ if &buftype == 'terminal' |
-  \   set winfixheight winfixwidth |
-  \ endif |
+  \ if &buftype == 'terminal' | set winfixheight winfixwidth | endif |
   \ wincmd =
 
   function! ChangeDirectory()
@@ -299,13 +281,8 @@ if has('terminal')
   endfunction
 
   function! Tapi_ChangeDirectory(bufnr, arglist)
-    let l:pwd = a:arglist[0]
+    let l:pwd = join(a:arglist[:-2], " ")
     let l:do_cd = a:arglist[-1]
-    if len(a:arglist) > 2
-      for l:p in a:arglist[1:-2]
-        let l:pwd .= " " . l:p
-      endfor
-    endif
     if getcwd() != l:pwd
       execute 'cd' l:pwd
     endif
@@ -322,10 +299,7 @@ if has('terminal')
   endfunction
 
   function! Tapi_Make(bufnr, arglist)
-    for l:a in a:arglist
-      let l:argstring .= l:a
-    endfor
-    execute 'make' l:argstring
+    execute 'make' join(a:arglist, " ")
     botright cwindow
   endfunction
 
@@ -360,13 +334,7 @@ let g:undotree_HelpLine                 = 0
 function! ToggleColorcolumn()
   " Toggle highlight characters over 120 columns
   if exists('+colorcolumn')
-    if (&colorcolumn == "")
-      echo "Highlight char 120+ On"
-      set colorcolumn=120
-    else
-      echo "Highlight char 120+ Off"
-      set colorcolumn=
-    endif
+    let &colorcolumn = (&colorcolumn == "") ? 120 : ""
   endif
 endfunction
 
@@ -400,8 +368,7 @@ function! TogglePasteSafe()
   " Toggle paste safe mode
   " see :help pastetoggle
   if (s:cycleIndentOption == 0)
-    set number relativenumber
-    set smartindent autoindent
+    set number relativenumber smartindent autoindent
     let s:cycleIndentOption = 1
     let msg = "Back to normal indenting (smart and auto indent)."
   elseif (s:cycleIndentOption == 1)
@@ -419,61 +386,56 @@ endfunction
 
 function! Tilde4nonAlpha() " {{{
   " ~ key behaviour for non-alphabets
-  let char = getline(".")[col(".") - 1]
-  if     char == "`"  | normal! r~l
-  elseif char == "1"  | normal! r!l
-  elseif char == "2"  | normal! r@l
-  elseif char == "3"  | normal! r#l
-  elseif char == "4"  | normal! r$l
-  elseif char == "5"  | normal! r%l
-  elseif char == "6"  | normal! r^l
-  elseif char == "7"  | normal! r&l
-  elseif char == "8"  | normal! r*l
-  elseif char == "9"  | normal! r(l
-  elseif char == "0"  | normal! r)l
-  elseif char == "-"  | normal! r_l
-  elseif char == "="  | normal! r+l
-  elseif char == "["  | normal! r{l
-  elseif char == "]"  | normal! r}l
-  elseif char == "\\" | normal! r|l
-  elseif char == ";"  | normal! r:l
-  elseif char == "'"  | normal! r"l
-  elseif char == ","  | normal! r<l
-  elseif char == "."  | normal! r>l
-  elseif char == "/"  | normal! r?l
-  elseif char == "~"  | normal! r`l
-  elseif char == "!"  | normal! r1l
-  elseif char == "@"  | normal! r2l
-  elseif char == "#"  | normal! r3l
-  elseif char == "$"  | normal! r4l
-  elseif char == "%"  | normal! r5l
-  elseif char == "^"  | normal! r6l
-  elseif char == "&"  | normal! r7l
-  elseif char == "*"  | normal! r8l
-  elseif char == "("  | normal! r9l
-  elseif char == ")"  | normal! r0l
-  elseif char == "_"  | normal! r-l
-  elseif char == "+"  | normal! r=l
-  elseif char == "{"  | normal! r[l
-  elseif char == "}"  | normal! r]l
-  elseif char == "|"  | normal! r\l
-  elseif char == ":"  | normal! r;l
-  elseif char == "\"" | normal! r'l
-  elseif char == "<"  | normal! r,l
-  elseif char == ">"  | normal! r.l
-  elseif char == "?"  | normal! r/l
-  else                | normal! ~
+  let c = getline(".")[col(".") - 1]
+  if     c == '`' | normal! r~l
+  elseif c == '1' | normal! r!l
+  elseif c == '2' | normal! r@l
+  elseif c == '3' | normal! r#l
+  elseif c == '4' | normal! r$l
+  elseif c == '5' | normal! r%l
+  elseif c == '6' | normal! r^l
+  elseif c == '7' | normal! r&l
+  elseif c == '8' | normal! r*l
+  elseif c == '9' | normal! r(l
+  elseif c == '0' | normal! r)l
+  elseif c == '-' | normal! r_l
+  elseif c == '=' | normal! r+l
+  elseif c == '[' | normal! r{l
+  elseif c == ']' | normal! r}l
+  elseif c == '\' | normal! r|l
+  elseif c == ';' | normal! r:l
+  elseif c == "'" | normal! r"l
+  elseif c == ',' | normal! r<l
+  elseif c == '.' | normal! r>l
+  elseif c == '/' | normal! r?l
+  elseif c == '~' | normal! r`l
+  elseif c == '!' | normal! r1l
+  elseif c == '@' | normal! r2l
+  elseif c == '#' | normal! r3l
+  elseif c == '$' | normal! r4l
+  elseif c == '%' | normal! r5l
+  elseif c == '^' | normal! r6l
+  elseif c == '&' | normal! r7l
+  elseif c == '*' | normal! r8l
+  elseif c == '(' | normal! r9l
+  elseif c == ')' | normal! r0l
+  elseif c == '_' | normal! r-l
+  elseif c == '+' | normal! r=l
+  elseif c == '{' | normal! r[l
+  elseif c == '}' | normal! r]l
+  elseif c == '|' | normal! r\l
+  elseif c == ':' | normal! r;l
+  elseif c == '"' | normal! r'l
+  elseif c == '<' | normal! r,l
+  elseif c == '>' | normal! r.l
+  elseif c == '?' | normal! r/l
+  else            | normal! ~
   endif
 endfunction
 " }}}
 
 function! ManLapack()
-  " before use Man under cursor this removes trailing underscore character if it has one. (eg., void dgetrf_(...))
-  let l:word = expand("<cword>")
-  if l:word[strlen(l:word)-1] == "_"
-    let l:word = l:word[:-2]
-  endif
-  execute "Man" l:word
+  execute "Man" substitute(expand("<cword>"), '_', '','g')
 endfunction
 
 "--- Cheatsheet
@@ -516,14 +478,8 @@ endif
 if has('mac')
   "--- OpenFinder
   function! OpenFinder()
-    let l:cmd = 'open '
-    if filereadable(expand("%"))
-      let l:cmd .= '-R ' . shellescape("%")
-    else
-      let l:cmd .= '.'
-    endif
-  
-    execute ":silent! !" . l:cmd
+    let l:cmd = '!open ' . (filereadable(expand("%")) ? '-R '.shellescape("%") : '.')
+    execute ":silent!" l:cmd
     redraw!
   endfunction
   
@@ -594,14 +550,14 @@ if !exists('user_filetypes')
     \ endif |
     \ setlocal formatoptions-=o |
     \ setlocal textwidth=120 |
-    \ setlocal foldmethod=syntax foldnestmax=2 |
+    \ setlocal foldmethod=syntax |
     \ nnoremap <F2> :call ManLapack()<CR>
 
     "--- .py files
     let python_highlight_all = 1
     autocmd FileType python
     \ setlocal keywordprg=pydoc3 |
-    \ setlocal foldmethod=indent foldnestmax=2 |
+    \ setlocal foldmethod=indent
 
     "--- .md files
     let g:markdown_fenced_languages = [ 'bash=sh', 'vim', 'python', 'cpp' ]
@@ -626,23 +582,27 @@ set foldopen=block,hor,insert,jump,mark,percent,quickfix,search,tag,undo
                                 " which commands trigger auto-unfold
 set foldtext=MyFoldText()
 function! MyFoldText()
-  let line = getline(v:foldstart)
+  let line = substitute(getline(v:foldstart), '\t', repeat(' ', &tabstop), 'g')
+  let nfolded = v:foldend - v:foldstart
 
-  let nucolwidth = &fdc + &number * &numberwidth
-  let windowwidth = winwidth(0) - nucolwidth - 3
-  let foldedlinecount = v:foldend - v:foldstart
-
-  " expand tabs into spaces
-  let onetab = repeat(' ', &tabstop)
-  let line = substitute(line, '\t', onetab, 'g')
-
-  let line = strpart(line, 0, windowwidth - 2 -len(foldedlinecount))
-  let fillcharcount = windowwidth - len(line) - len(foldedlinecount) - 7
-  return line . repeat(" ",fillcharcount) . foldedlinecount . ' lines '
+  let windowwidth = winwidth(0) - &foldcolumn - &number * &numberwidth
+  let maxline = windowwidth - len(nfolded) - len(' lines ') - 1 
+  let line = strpart(line, 0, maxline)
+  return line . repeat(' ', maxline-len(line)+1) . nfolded . ' lines '
 endfunction
 
 " }}}
 " KEY MAPPINGS {{{
+function! Noremap(modelist, key, cmd)
+  for mode in a:modelist
+    if     mode == 'i' | let l:cmd = '<C-o>'.a:cmd
+    elseif mode == 't' | let l:cmd = '<C-w>:'.a:cmd
+    else               | let l:cmd = a:cmd
+    endif
+    execute mode.'noremap' a:key l:cmd
+  endfor
+endfunction 
+
 "--- General
 " goto file
 nnoremap gf :vertical wincmd f<CR>
@@ -654,37 +614,17 @@ inoremap <S-Tab> <C-d>
 " Mapping of Tilde4nonAlpha to ~
 nnoremap <silent> ~ :call Tilde4nonAlpha()<cr>
 
-" Open the tagbar plugin
-nnoremap <F3> :TagbarToggle<CR>
-tnoremap <F3> <C-w>::TagbarToggle<CR>
-
-" Call NoMore120
-nnoremap <F4> :call ToggleColorcolumn()<CR>
-inoremap <F4> <C-o>:call ToggleColorcolumn()<CR>
-
-" Toggle AutoComplPop
-nnoremap <F5> :call ToggleACP()<CR>
-inoremap <F5> <C-o>:call ToggleACP()<CR>
-
-" Toggle paste safe mode
-nnoremap <F6> :call TogglePasteSafe()<CR>
-inoremap <F6> <C-o>:call TogglePasteSafe()<CR>
-
-" Toggle spell checking
-nnoremap <F7> :setlocal spell!<CR>:echo "Spell Check: " . strpart("OffOn", 3 * &spell, 3)<CR>
-inoremap <F7> <Esc>:setlocal spell!<CR>:echo "Spell Check: " . strpart("OffOn", 3 * &spell, 3)<CR>
+call Noremap(['n','t'], '<F3>',  ":TagbarToggle<CR>")
+call Noremap(['n','i'], '<F4>',  ":call ToggleColorcolumn()<CR>")
+call Noremap(['n','i'], '<F5>',  ":call ToggleACP()<CR>")
+call Noremap(['n','i'], '<F6>',  ":call TogglePasteSafe()<CR>")
+call Noremap(['n','i'], '<F7>',  ":setlocal spell!<CR>:echo 'Spell Check: '.strpart('OffOn', 3*&spell, 3)<CR>")
+call Noremap(['n','i'], '<F10>', ":call MouseOnOff()<CR>")
+call Noremap(['n','i'], '<C-\>', ":Lexplore<CR>")
 
 " Type(i) or show(n) the current date stamp
 imap <F9> <C-R>=strftime('%d %b %Y %T %z')<CR>
 nnoremap <F9> :echo 'Current time is ' . strftime('%d %b %Y %T %z')<CR>
-
-" Set mouse on & off
-nnoremap <F10> :call MouseOnOff()<CR>
-inoremap <F10> <C-o>:call MouseOnOff()<CR>
-
-" netrw
-nnoremap <C-\> :Lexplore<CR>
-inoremap <C-\> <C-o>:Lexplore<CR>
 
 " Reset searches
 nmap <silent> <Leader>r :nohlsearch<CR>
@@ -693,19 +633,17 @@ nmap <silent> <Leader>R :silent!/BruteForceResetSearch_<C-r>=rand()<CR>.<CR>
 " Enter works in normal mode
 nmap <CR> :AcpLock<CR>i<C-m><Esc>:AcpUnlock<bar>echo<CR>
 
-
 " To the previous buffer
 nnoremap <Leader><Leader><Leader> <C-^>
 
 "--- QuickFix window
-" \ll  => save the file and make and show the result in the bottom split (cwindow) if there are errors and/or warnings.
+" \ll  => save the file and make and show the result (cwindow) in the bottom
+"         split if there are errors and/or warnings.
 " \w   => show the cwindow (if exists).
 " \c   => close the cwindow.
 " \n   => jump to the next problematic line and column of the code.
 " \N   => jump to the previous problematic line and column of the code.
-" <CR> => from the cwindow, jump to the code where the cursor below indicates.
-" \e   => will run a program xxx if it is the binary file compiled from the source code with the same name
-"         (but extension): xxx.c or xxx.cpp (% is current file name, < eliminates extension)
+" \<CR>=> from the cwindow, jump to the code where the cursor below indicates.
 nnoremap <Leader>ll :w<CR>:make -s<CR>:botright cwindow<CR>
 nnoremap <Leader>w :botright cwindow<CR>
 nnoremap <Leader>c :cclose<CR>
@@ -715,8 +653,6 @@ augroup QuickFixMap
   autocmd!
   autocmd FileType qf nnoremap <Leader><CR> :.cc<CR>
 augroup END
-"nnoremap <Leader>e :!./%<<CR>
-nnoremap <Leader>e :!./main<CR>
 
 "--- Search in visual mode (* and #)
 " See https://vim.fandom.com/wiki/Search_for_visually_selected_text
@@ -773,21 +709,12 @@ nnoremap <Tab>gf <C-w>gf
 
 " <C-Tab>   : iTerm Sends HEX code for <F11> "[23~"
 " <C-S-Tab> : iTerm Sends HEX code for <F12> "[24~"
-nnoremap <silent> <F11> :tabnext<CR>
-nnoremap <silent> <F12> :tabprevious<CR>
-inoremap <silent> <F11> <Esc>:tabnext<CR>
-inoremap <silent> <F12> <Esc>:tabprevious<CR>
-vnoremap <silent> <F11> <Esc>:tabnext<CR>
-vnoremap <silent> <F12> <Esc>:tabprevious<CR>
-tnoremap <silent> <F11> <C-w>:tabnext<CR>
-tnoremap <silent> <F12> <C-w>:tabprevious<CR>
+call Noremap(['n','i','t'], '<silent> <F11>', ":tabnext<CR>")
+call Noremap(['n','i','t'], '<silent> <F12>', ":tabprevious<CR>")
 
-nnoremap <Tab>1 1gt
-nnoremap <Tab>2 2gt
-nnoremap <Tab>3 3gt
-nnoremap <Tab>4 4gt
-nnoremap <Tab>5 5gt
-nnoremap <Tab>6 6gt
+for i in [1,2,3,4,5,6]
+  execute 'nnoremap <Tab>'.i i.'gt'
+endfor
 
 "--- Yank to and paste from clipboard
 vnoremap <C-y> "*y
@@ -796,9 +723,6 @@ nnoremap <C-p> "*p
 "--- Test regular expression under cursor in double quotes
 " See https://stackoverflow.com/questions/14499107/easiest-way-to-test-vim-regex/14499299
 nnoremap <F8> mryi":let @/ = @"<CR>`r
-
-"--- goyo
-nnoremap <expr> <Leader>f ":Goyo" . (exists('#goyo') ? '!' : '+5%' ) . "\n"
 
 "--- EasyAlign
 nmap ga <Plug>(EasyAlign)
