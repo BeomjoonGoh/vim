@@ -551,7 +551,6 @@ if !exists('user_filetypes')
     \ setlocal formatoptions-=o |
     \ setlocal textwidth=120 |
     \ setlocal foldmethod=syntax |
-    \ nnoremap <F2> :call ManLapack()<CR>
 
     "--- .py files
     let python_highlight_all = 1
@@ -614,6 +613,7 @@ inoremap <S-Tab> <C-d>
 " Mapping of Tilde4nonAlpha to ~
 nnoremap <silent> ~ :call Tilde4nonAlpha()<cr>
 
+nnoremap <F2> :call ManLapack()<CR>
 call Noremap(['n','t'], '<F3>',  ":TagbarToggle<CR>")
 call Noremap(['n','i'], '<F4>',  ":call ToggleColorcolumn()<CR>")
 call Noremap(['n','i'], '<F5>',  ":call ToggleACP()<CR>")
@@ -693,8 +693,7 @@ nnoremap k gk
 nnoremap - $
 
 "--- Folding Key Mappings
-nnoremap <Space> za
-vnoremap <Space> za
+call Noremap(['n','v'], '<Space>', "za")
 nnoremap zR zr
 nnoremap zr zR
 nnoremap zM zm
