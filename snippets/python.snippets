@@ -2,11 +2,10 @@ snippet #!
 	#!/usr/bin/python
 
 snippet im
-	from numpy import *
-	from scipy import *
-	from random import *
+	import numpy
+	import sys, os, re, shutil, glob
 	from math import *
-	import sys, os, shutil
+	from subprocess import Popen, PIPE
 snippet imp
 	import ${1:module}
 # Module Docstring
