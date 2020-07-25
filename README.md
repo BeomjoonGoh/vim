@@ -122,27 +122,6 @@ let g:tex_indent_brace        = 0
 </details>
 
 
-### [goyo.vim](https://github.com/junegunn/goyo.vim)
-
-> Distraction-free writing in Vim.
-
-Mapped to `<Leader>f`. Uses user defined `goyo_enter()` to have `number`, and
-`colorcolumn`.
-
-<details> <summary>Settings</summary>
-
-```vim
-let g:goyo_width  = "120"
-let g:goyo_height = "95%"
-function! s:goyo_enter()
-  set nonu nornu
-  highlight ColorColumn ctermbg=234
-endfunction
-autocmd! User GoyoEnter nested call <SID>goyo_enter()
-```
-</details>
-
-
 ### [vim-indent-object](https://github.com/michaeljsmith/vim-indent-object)
 
 > Vim plugin that defines a new text object representing lines of code at the
@@ -154,44 +133,6 @@ autocmd! User GoyoEnter nested call <SID>goyo_enter()
 > A Vim alignment plugin
 
 Mapped to `ga`.
-
-
-### [vim-desertBJ](https://github.com/BeomjoonGoh/vim-desertBJ)
-
-> color scheme based on the default desert.vim, motivated by `desertEx` by Mingbai.
-
-
-### [vim-txt](https://github.com/BeomjoonGoh/vim-txt)
-
-> This is modified version of 'Vim universal .txt syntax file' by Tomasz
-> Kalkosiński.
-
-Syntax for `.txt`, `.out`, etc. defined in `ftdetect/txt.vim`.
-
-
-### [vim-aftersyntax](https://github.com/BeomjoonGoh/vim-aftersyntax)
-
-> `after/syntax` directory.
-
-It depends on `vim-cpp-enhanced-highlight` plugin.  Supported syntax are: `C`,
-`Cpp`, `Fortran`, `Netrw`, `Python`, `QuickFix`, and `TeX`.
-
-
-### [vim-cpp-enhanced-highlight](https:/github.com/octol/vim-cpp-enhanced-highlight)
-
-> Additional Vim syntax highlighting for C++ (including C++11/14/17).
-
-`vim-aftersyntax` uses this plugin.
-
-<details> <summary>Settings</summary>
-
-```vim
-let g:cpp_class_scope_highlight     = 1
-let g:cpp_class_decl_highlight      = 1
-let g:cpp_member_variable_highlight = 1
-let g:cpp_no_function_highlight     = 1
-```
-</details>
 
 
 ### [undotree](https://github.com/mbbill/undotree)
@@ -217,6 +158,55 @@ let g:undotree_HelpLine                 = 0
 </details>
 
 
+### [vim-peekaboo](https://github.com/junegunn/vim-peekaboo)
+
+> Peekaboo extends `"` and `@` in normal mode and `<CTRL-R>` in insert mode so
+> you can see the contents of the registers.
+
+
+### [vim-desertBJ](https://github.com/BeomjoonGoh/vim-desertBJ)
+
+> color scheme based on the default desert.vim, motivated by `desertEx` by Mingbai.
+
+
+### [vim-txt](https://github.com/BeomjoonGoh/vim-txt)
+
+> This is modified version of 'Vim universal .txt syntax file' by Tomasz
+> Kalkosiński.
+
+Syntax for `.txt`, `.out`, etc. defined in `ftdetect/txt.vim`.
+
+
+### [vim-aftersyntax](https://github.com/BeomjoonGoh/vim-aftersyntax)
+
+> `after/syntax` directory.
+
+It depends on `vim-cpp-enhanced-highlight` plugin.  Supported syntax are: `C`,
+`Cpp`, `Fortran`, `Netrw`, `Python`, `QuickFix`, and `TeX`.
+
+
+### [vim-cpp-enhanced-highlight](https://github.com/octol/vim-cpp-enhanced-highlight)
+
+> Additional Vim syntax highlighting for C++ (including C++11/14/17).
+
+`vim-aftersyntax` uses this plugin.
+
+<details> <summary>Settings</summary>
+
+```vim
+let g:cpp_class_scope_highlight     = 1
+let g:cpp_class_decl_highlight      = 1
+let g:cpp_member_variable_highlight = 1
+let g:cpp_no_function_highlight     = 1
+```
+</details>
+
+
+### [vim-syntax-x86-objdump-d](https://github.com/shiracamus/vim-syntax-x86-objdump-d)
+
+> vim syntax for x86/x64 disassemble file created by objdump -d or -D
+
+
 ## Commands
 
 For builtin commands `e`, `q`, `qa`, `w`, `wa`, `wq`, `wqa`, `sp`, and `vsp`,
@@ -231,14 +221,49 @@ possible uppercase typos are defined.
 
 ## User Interfaces
 
-### Tab page
+For all the settings, for instance, `set nocompatible`, I encourage you to see
+the help page for more information (`:help {subject}`).
+
+
+### Status & Tab line
+
+Statusline:
+
+    ([Help]){file} ([+],[-])([RO])  pwd:{dir}     C: {col}-{vcol}, L: {line}/{tot_lines} {percent} 
+
+Tabline: tab = `{tab_num} {file} ([+],[*]) (({tot_win}))`
+
+    {tab} {tab} {tab}                                                                       X
+
+
+* `{file}`: Current buffer name.
+* `{dir}`:  Vim's current directory.
+* `[+]`: If {file} is modified.
+* `[-]`: If {file} is not modifiable.
+* `[*]`: If out of focus window is modified.
+* `[RO]`: If {file} is read only.
+* `X` : Close button for mouse
+
+See `:help statusline, :help tabline`
 
 ### Terminal
 
-Terminal api
-* `Term`(`Vterm`) runs `bash` shell in terminal emulator
-  horizontally(vertically) with a few terminal options. See `:help terminal`.
-* `<Leader>cd` changes working directory to the buffer's directory.
+User defined commands that open `bash` in terminal emulator:
+
+* `Bterm` : `botright call term_start()`
+* `Vterm` : `vertical call term_start()`
+* `Tterm` : `tab call term_start()`
+* `Nterm` : `call term_start()`
+
+Bash is invoked by `bash --rcfile ~/.vim/bin/setup_bash.sh`, which adds
+`~/.vim/bin` in `$PATH`.  When terminal is opened, window height (`min(18%,
+15)` if botright) and width (`min(40%, 150)` if vertical) are fixed. The
+terminal window is closed once the job is finished.
+
+Terminal to Vim communication:
+
+
+### Cheatsheet
 
 
 ## Key maps
