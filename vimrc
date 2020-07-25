@@ -444,6 +444,7 @@ endfunction
 let g:cheatsheet_filetype_map = {
       \ "sh"       : "bash",
       \ "markdown" : "md",
+      \ "make"     : "makefile",
       \}
 let g:cheatsheet_complete = system("ls ~/.vim/cheatsheets | sed 's/cs.//g'")
 let g:cheatsheet_split = 'vertical' " or 'split'
@@ -575,8 +576,8 @@ set foldcolumn=0                " add a fold column
 set foldmethod=marker           " detect triple-{ style fold markers
 set foldlevelstart=99           "  0: start out with everything folded
                                 " 99: start out with everything unfolded
-set foldnestmax=2
-set foldminlines=2
+set foldnestmax=4
+set foldminlines=1
 set foldopen=block,hor,insert,jump,mark,percent,quickfix,search,tag,undo
                                 " which commands trigger auto-unfold
 set foldtext=MyFoldText()
