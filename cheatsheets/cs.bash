@@ -54,7 +54,7 @@
   # bashism
   [[ string == string ]]
   [[ string != string ]]
-  [[ string =~ regex ]] # regular expression (POSIX extended)
+  [[ string =~ ^rege$ ]] # regular expression (POSIX extended)
   [[ N operation M ]] # operation: ==, !=, <, <=, >, >=
 # }}}
 
