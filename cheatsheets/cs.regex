@@ -1,62 +1,65 @@
 # Regular Expressions
 #   Note that this is not a full list of all the available regex.
+#   $ man 7 re_format
 #
 # Maintainer:   Beomjoon Goh
-# Last Change:  08 Mar 2020 03:34:13 +0900
+# Last Change:  27 Jul 2020 00:24:45 +0900
 
-# Programs
-POSIX (BRE*)          | `grep` `sed`
-POSIX extended (ERE*) | `egrep (grep -E)` `sed -E` `bash` `awk` `less`
-VIM                   | `vim`
-Python                | Python `re` library
-PCRE*                 | `grep -P`, `perl`(not really), `java.util.regex`(not really), `Boost.Regex`
+# Flavor               | Programs, libraries
+# ---------------------+--------------------
+  POSIX(BRE*)          | grep, sed
+  POSIX extended(ERE*) | bash, egrep (grep -E), sed -E, awk, less
+  VIM                  | vim
+  Python               | Python.re
+  PCRE*                | grep -P, perl(not really), java.util.regex(not really), Boost.Regex
 
-# Syntax
-## Description \ Flavor   | POSIX             | POSIX extended    | VIM               | Python            |
-## Basics ----------------+-------------------+-------------------+-------------------+-------------------+ {{{ 
-  Custom character class  | [...]             | [...]             | [...]             | [...]             |
-  Negated custom class    | [^...]            | [^...]            | [^...]            | [^...]            |
-  Range                   | [a-z] -           |                   | [a-z] -           | [a-z] -           |
-  Alternation             | \|                | |                 | \| \&             | |                 | }}}
-## Character classes -----+-------------------+-------------------+-------------------+-------------------+ {{{
-  Any char but \n         | .                 | .                 | .                 | .                 |
-  Any char and \n         |                   |                   |                   | \_.               |
-  Word (abc_)             | \w                | \w                | \w                | \w                |
-  Non-word                |                   |                   | \W                | \W                |
-  Upper case              | [[:upper:]]       | [[:upper:]]       | \u [[:upper:]]    |                   |
-  Lower case              | [[:lower:]]       | [[:lower:]]       | \l [[:lower:]]    |                   |
-  Whitesapce but \n       | \s [[:space:]]    | \s [[:space:]]    | \s [[:space:]]    |                   |
-  Whitesapce with \n      |                   |                   | \_s               | \s                |
-  Non whitesapce          | [^[:space:]]      | [^[:space:]]      | \S [^[:space:]]   | \S                |
-  Digit                   | [[:digit:]]       | [[:digit:]]       | \d [[:digit:]]    | \d                |
-  Non digit               | [^[:digit:]]      | [^[:digit:]]      | \D [^[:digit:]]   | \D                |
-  Hexadecimal digit       | [[:xdigit:]]      | [[:xdigit:]]      | \x [[:xdigit:]]   |                   |
-  Octal digit             |                   |                   | \o                |                   |
-  Alphabets               | [[:alpha:]]       | [[:alpha:]]       | \a [[:alpha:]]    |                   |
-  Non alphabets           | [^[:alpha:]]      | [^[:alpha:]]      | \A [^[:alpha:]]   |                   |
-  Alphanumeric            | [[:alnum:]]       | [[:alnum:]]       | [[:alnum:]]       |                   |
-  Punctuations            | [[:punct:]]       | [[:punct:]]       | [[:punct:]]       |                   | }}}
-## Multiplicity ----------+-------------------+-------------------+-------------------+-------------------+ {{{
-  0 or 1                  | \?                | ?                 | \?                | ?                 |
-  0 or more               | *                 | *                 | *                 | *                 |
-  1 or more               | \+                | +                 | \+                | +                 |
-  Specific count          | \{n\}\{n,m\}\{n,\}| {n} {n,m} {n,}    | \{n} \{n,m} \{n,} | {n} {n,m} {n,}    | }}}
-## Zero width assertions -+-------------------+-------------------+-------------------+-------------------+ {{{
-  Word boundary           | \b                | \b                | \< \>             | \b                |
-  But word boundary       | \B                | \B                |                   | \B                |
-  Beginning of line       | ^                 | ^                 | ^ \_^             | ^ \A              |
-  End of line             | $                 | $                 | $ \_$             | $ \Z              | }}}
-## Captures --------------+-------------------+-------------------+-------------------+-------------------+ {{{
-  Capturing group         | \(...\)           | (...)             | \(...\)           | (...)             |
-  Non capturing group     |                   |                   | \%(...\)          | (?:...)           |
-  Backreference group     | \1                | \1                | \1                | \1                | }}}
-## Look around -----------+-------------------+-------------------+-------------------+-------------------+ {{{
-  Positive look ahead     |                   |                   | \(...\)\@=        | (?=...)           |
-  Negative look ahead     |                   |                   | \(...\)\@!        | (?!...)           |
-  Positive look behind    |                   |                   | \(...\)\@<=       | (?<=...)          |
-  Negative look behind    |                   |                   | \(...\)\@<!       | (?<+...)          | }}}
+# Description          | POSIX          | POSIX extended | VIM             | Python     |
+ "Basic"---------------+----------------+----------------+-----------------+------------+{{{
+  Custom char class    | [...]          | [...]          | [...]           | [...]      |
+  Negated custom class | [^...]         | [^...]         | [^...]          | [^...]     |
+  Range                | [a-z] -        |                | [a-z] -         | [a-z] -    |
+  Alternation          | \|             | |              | \| \&           | |          |}}}
+ "Character class"-----+----------------+----------------+-----------------+------------+{{{
+  Any char but \n      | .              | .              | .               | .          |
+  Any char and \n      |                |                |                 | \_.        |
+  Word (abc_)          | \w             | \w             | \w              | \w         |
+  Non-word             |                |                | \W              | \W         |
+  Upper case           | [[:upper:]]    | [[:upper:]]    | \u [[:upper:]]  |            |
+  Lower case           | [[:lower:]]    | [[:lower:]]    | \l [[:lower:]]  |            |
+  Whitesapce but \n    | \s [[:space:]] | \s [[:space:]] | \s [[:space:]]  |            |
+  Whitesapce with \n   |                |                | \_s             | \s         |
+  Non whitesapce       | [^[:space:]]   | [^[:space:]]   | \S [^[:space:]] | \S         |
+  Digit                | [[:digit:]]    | [[:digit:]]    | \d [[:digit:]]  | \d         |
+  Non digit            | [^[:digit:]]   | [^[:digit:]]   | \D [^[:digit:]] | \D         |
+  Hexadecimal digit    | [[:xdigit:]]   | [[:xdigit:]]   | \x [[:xdigit:]] |            |
+  Octal digit          |                |                | \o              |            |
+  Alphabets            | [[:alpha:]]    | [[:alpha:]]    | \a [[:alpha:]]  |            |
+  Non alphabets        | [^[:alpha:]]   | [^[:alpha:]]   | \A [^[:alpha:]] |            |
+  Alphanumeric         | [[:alnum:]]    | [[:alnum:]]    | [[:alnum:]]     |            |
+  Punctuations         | [[:punct:]]    | [[:punct:]]    | [[:punct:]]     |            |}}}
+ "Multiplicity"--------+----------------+----------------+-----------------+------------+{{{
+  0 or 1               | \?             | ?              | \?              | ?          |
+  0 or more            | *              | *              | *               | *          |
+  1 or more            | \+             | +              | \+              | +          |
+  Specific count       | \{n\}          | {n}            | \{n}            | {n}        |}}}
+  Specific count range | \{n,m\} \{n,\} | {n,m} {n,}     | \{n,m} \{n,}    | {n,m} {n,} |}}}
+ "Zero-width assertion"+----------------+----------------+-----------------+------------+{{{
+  Word boundary        | \b             | \b             | \< \>           | \b         |
+  But word boundary    | \B             | \B             |                 | \B         |
+  Beginning of line    | ^              | ^              | ^ \_^           | ^ \A       |
+  End of line          | $              | $              | $ \_$           | $ \Z       |}}}
+ "Capture"-------------+----------------+----------------+-----------------+------------+{{{
+  Capturing group      | \(...\)        | (...)          | \(...\)         | (...)      |
+  Non capturing group  |                |                | \%(...\)        | (?:...)    |
+  Backreference group  | \1             | \1             | \1              | \1         |}}}
+ "Look around"---------+----------------+----------------+-----------------+------------+{{{
+  Positive look ahead  |                |                | \(...\)\@=      | (?=...)    |
+  Negative look ahead  |                |                | \(...\)\@!      | (?!...)    |
+  Positive look behind |                |                | \(...\)\@<=     | (?<=...)   |
+  Negative look behind |                |                | \(...\)\@<!     | (?<+...)   |}}}
 
-* BRE (Basic regular expressions)
-* ERE (Extended regular expressions)
-* PCRE (Perl compatible regular expression), see https://www.pcre.org
+* BRE  = Basic regular expressions
+* ERE  = Extended regular expressions
+* PCRE = Perl compatible regular expression, see https://www.pcre.org
 
+# vim:ft=txt
