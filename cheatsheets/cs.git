@@ -1,3 +1,31 @@
-# git
+# vim:ft=bash
+# Git cheatsheet
+#
+# Maintainer:   Beomjoon Goh
+# Last Change:  26 Jul 2020 23:38:15 +0900
 
-git branch 
+# New repository
+git init
+git remote add origin https://github.com/${username}/${github_repository}.git
+git push -u origin master
+
+# New branch
+git branch ${branch}
+git checkout ${branch}
+git push origin ${branch}
+
+# Merge branch to master
+git checkout ${master}
+git merge ${branch}
+if [ -n ${merge_confict} ]; then
+  git mergetool ${unmerged}
+  git commit 
+fi
+
+# Delete branch
+git push origin --delete ${branch}
+git branch -d ${branch}
+git fetch --all --prune     # on other machines.
+
+# Commonly used commands
+
