@@ -1,8 +1,8 @@
 # Makefile cheatsheet
+#   See http://www.gnu.org/software/make/manual/make.html
 #
 # Maintainer:  Beomjoon Goh
 # Last Change: 25 Jul 2020 01:48:47 +0900
-# See http://www.gnu.org/software/make/manual/make.html
 
 # Rule {{{
 # The first target is run if you don't specify one.
