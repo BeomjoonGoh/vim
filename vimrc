@@ -318,6 +318,45 @@ if has('terminal')
   tnoremap :: <C-w>:
 endif
 
+"--- Cheatsheet {{{
+" TODO
+" [ ] make it a plugin
+let g:cheatsheet_filetype_map = {
+      \ "sh"       : "bash",
+      \ "markdown" : "md",
+      \ "make"     : "makefile",
+      \}
+let g:cheatsheet_complete = system("ls ~/.vim/cheatsheets | sed 's/cs.//g'")
+let g:cheatsheet_split = 'vertical' " or 'split'
+
+function! Cheatsheet_getfile(ft)
+  let l:file_type = (a:ft == "") ? &filetype : a:ft
+  if has_key(g:cheatsheet_filetype_map, l:file_type)
+    let l:file_type = g:cheatsheet_filetype_map[l:file_type]
+  endif
+  return expand('~/.vim/cheatsheets/cs.' . l:file_type)
+endfunction
+
+function! Cheatsheet_open(cmd, ft)
+  let l:file = Cheatsheet_getfile(a:ft)
+  if a:cmd == 'view' && !filereadable(l:file)
+    echomsg 'cheat sheet does not exist: ' . l:file
+    return
+  endif
+  execute g:cheatsheet_split 'split'
+  execute a:cmd l:file
+endfunction
+
+function! Cheatsheet_complete(A,L,P)
+  return g:cheatsheet_complete
+endfunction
+
+if has('user_commands')
+  command! -bang -nargs=? -complete=custom,Cheatsheet_complete Cheat call Cheatsheet_open('view', <q-args>)
+  command! -bang -nargs=? -complete=custom,Cheatsheet_complete CheatEdit call Cheatsheet_open('edit', <q-args>)
+endif
+" }}}
+
 "--- undotree
 let g:undotree_WindowLayout             = 2
 let g:undotree_SplitWidth               = 24
@@ -438,43 +477,11 @@ function! ManLapack()
   execute "Man" substitute(expand("<cword>"), '_', '','g')
 endfunction
 
-"--- Cheatsheet
-" TODO
-" [ ] make it a plugin
-let g:cheatsheet_filetype_map = {
-      \ "sh"       : "bash",
-      \ "markdown" : "md",
-      \ "make"     : "makefile",
-      \}
-let g:cheatsheet_complete = system("ls ~/.vim/cheatsheets | sed 's/cs.//g'")
-let g:cheatsheet_split = 'vertical' " or 'split'
-
-function! Cheatsheet_getfile(ft)
-  let l:file_type = (a:ft == "") ? &filetype : a:ft
-  if has_key(g:cheatsheet_filetype_map, l:file_type)
-    let l:file_type = g:cheatsheet_filetype_map[l:file_type]
-  endif
-  return expand('~/.vim/cheatsheets/cs.' . l:file_type)
+function! ClearNamedRegisters()
+  for i in split("a b c d e f g h i j k l m n o p q r s t u v w x y z")
+    execute "let" '@'.i "= ''"
+  endfor
 endfunction
-
-function! Cheatsheet_open(cmd, ft)
-  let l:file = Cheatsheet_getfile(a:ft)
-  if a:cmd == 'view' && !filereadable(l:file)
-    echomsg 'cheat sheet does not exist: ' . l:file
-    return
-  endif
-  execute g:cheatsheet_split 'split'
-  execute a:cmd l:file
-endfunction
-
-function! Cheatsheet_complete(A,L,P)
-  return g:cheatsheet_complete
-endfunction
-
-if has('user_commands')
-  command! -bang -nargs=? -complete=custom,Cheatsheet_complete Cheat call Cheatsheet_open('view', <q-args>)
-  command! -bang -nargs=? -complete=custom,Cheatsheet_complete CheatEdit call Cheatsheet_open('edit', <q-args>)
-endif
 
 if has('mac')
   "--- OpenFinder
