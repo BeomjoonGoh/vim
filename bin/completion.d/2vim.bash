@@ -10,7 +10,7 @@ function _2vim_complete() {
   curr=${COMP_WORDS[COMP_CWORD]}
   prev=${COMP_WORDS[COMP_CWORD - 1]}
   if [ "${COMP_CWORD}" -eq 1 ]; then
-    COMPREPLY=( $(compgen -W "cd help make set vs" -- "$curr") )
+    COMPREPLY=( $(compgen -W "cd help make set vs sp" -- "$curr") )
   elif [ "${COMP_CWORD}" -eq 2 ]; then
     local IFS=$'\n'
     case "${prev}" in

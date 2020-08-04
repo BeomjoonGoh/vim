@@ -182,7 +182,12 @@ set spellsuggest=best,3         " 'z=' shows 3 best suggestions
 "--- Insert mode completion & AutoComplPop settings
 set completeopt+=menuone,noinsert
 let g:acp_enableAtStartup = 1
-let s:acpState = 1              " ACP at start up: 1->enable, 0->disable (Both)
+let s:acpState = 1              " acp at start up: 1->enable, 0->disable (Both)
+augroup AcpDisableForTerminal
+  autocmd!
+  autocmd BufEnter * if &buftype == 'terminal' && s:acpState | AcpDisable | endif
+  autocmd BufLeave * if &buftype == 'terminal' && s:acpState | AcpEnable  | endif
+augroup END
 
 "--- Split
 set splitbelow
@@ -292,10 +297,15 @@ if has('terminal')
     endif
   endfunction
 
-  function! Tapi_VerticalSplit(bufnr, arglist)
-    set nosplitright
-    execute 'vertical split' a:arglist[0]
-    set splitright
+  function! Tapi_Split(bufnr, arglist)
+    if a:arglist[0] != 'v' && a:arglist[0] != 's'
+      return
+    endif
+    let l:mode = (a:arglist[0] == 's') ? '' : a:arglist[0]
+    let l:file = a:arglist[1]
+    let l:cmd = (l:file == "new") ? '' : "split "
+    wincmd W
+    execute l:mode.l:cmd.l:file
   endfunction
 
   function! Tapi_Make(bufnr, arglist)
