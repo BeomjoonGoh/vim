@@ -3,3 +3,4 @@
 .viminfo
 scratchpad.txt
 plugged/
+autoload/plug.vim
