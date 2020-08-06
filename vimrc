@@ -331,30 +331,33 @@ endif
 "--- Cheatsheet {{{
 " TODO
 " [ ] make it a plugin
+" [ ] write doc
 let g:cheatsheet_filetype_map = {
-      \ "sh"       : "bash",
-      \ "markdown" : "md",
-      \ "make"     : "makefile",
-      \}
-let g:cheatsheet_complete = system("ls ~/.vim/cheatsheets | sed 's/cs.//g'")
-let g:cheatsheet_split = 'vertical' " or 'split'
+      \  "sh"       : "bash",
+      \  "markdown" : "md",
+      \  "make"     : "makefile",
+      \} "filetype  : extension
+let g:cheatsheet_path = '~/.vim/cheatsheets' " ??? global? automatically find path?
+let g:cheatsheet_complete = system("ls " . g:cheatsheet_path . " | sed 's/cs.//g'")
+let g:cheatsheet_split = 'vsp' " or 'sp'
 
 function! Cheatsheet_getfile(ft)
   let l:file_type = (a:ft == "") ? &filetype : a:ft
   if has_key(g:cheatsheet_filetype_map, l:file_type)
     let l:file_type = g:cheatsheet_filetype_map[l:file_type]
   endif
-  return expand('~/.vim/cheatsheets/cs.' . l:file_type)
+  return expand(g:cheatsheet_path . '/cs.' . l:file_type)
 endfunction
 
 function! Cheatsheet_open(cmd, ft)
   let l:file = Cheatsheet_getfile(a:ft)
   if a:cmd == 'view' && !filereadable(l:file)
-    echomsg 'cheat sheet does not exist: ' . l:file
+    echomsg 'cheatsheet does not exist:' l:file
     return
   endif
-  execute g:cheatsheet_split 'split'
+  execute g:cheatsheet_split
   execute a:cmd l:file
+  silent! %foldclose!
 endfunction
 
 function! Cheatsheet_complete(A,L,P)
