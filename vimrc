@@ -13,7 +13,7 @@
 
 " GENERAL {{{
 if v:lang =~ "utf8$" || v:lang =~ "UTF-8$"
-   set fileencodings=ucs-bom,utf-8,latin1,cp949
+  set fileencodings=ucs-bom,utf-8,latin1,cp949
 endif
 
 let mapleader = '\'
@@ -41,7 +41,7 @@ set nocompatible
 set history=100
 set viminfo='50,\"50,n$HOME/.vim/.viminfo " read/write a .viminfo file, don't store more
 set backspace=indent,eol,start        " backspacing over everything in insert mode
-set scrolloff=3 sidescroll=10
+set scrolloff=1 sidescroll=5
 set clipboard=exclude:.*              " Fixes slow startup with ssh!! Same as $ vim -X
 set lazyredraw ttyfast                " Not sure but it makes scrolling faster
 set formatoptions+=rnlj
@@ -104,7 +104,7 @@ set wildmode=list:longest,full
 set nofileignorecase
 set statusline=%!MyStatusLine()
 function! MyStatusLine()
-  return '%h%f %m%r  pwd: %<' . substitute(getcwd(), $HOME, '~', '') . ' %=%(C: %c%V, L: %l/%L%) %P '
+  return '%h%f %m%r  cwd: %<' . substitute(getcwd(), $HOME, '~', '') . ' %=%(C: %c%V, L: %l/%L%) %P '
 endfunction
 set fillchars=vert:\ ,fold:-
 
@@ -264,18 +264,23 @@ if has('terminal')
   endfunction
 
   autocmd TerminalOpen *
-  \ if &buftype == 'terminal' | set winfixheight winfixwidth | endif |
-  \ wincmd =
+  \ if &buftype == 'terminal' |
+  \   set winfixheight winfixwidth | 
+  \   wincmd = |
+  \ endif
 
-  function! ChangeDirectory()
-    let l:oldpwd = getcwd()
+  function! ChangeDirectoryTerm()
+    if exists("g:term_bufnr") && getbufvar(g:term_bufnr, '&buftype') == 'terminal'
+      let l:cmd = "cd " . fnameescape(getcwd()) . "\<CR>"
+      call term_sendkeys(g:term_bufnr, l:cmd)
+    endif
+  endfunction
+
+  function! ChangeDirectoryVim()
+    let l:oldcwd = getcwd()
     cd %:p:h
-    let l:newpwd = getcwd()
-    if l:oldpwd != l:newpwd
-      if exists("g:term_bufnr") && getbufvar(g:term_bufnr, '&buftype') == 'terminal'
-        let l:cmd = "cd " . fnameescape(l:newpwd) . "\<CR>"
-        call term_sendkeys(g:term_bufnr, l:cmd)
-      endif
+    if l:oldcwd != getcwd()
+      call ChangeDirectoryTerm()
     endif
   endfunction
 
@@ -286,14 +291,13 @@ if has('terminal')
   endfunction
 
   function! Tapi_ChangeDirectory(bufnr, arglist)
-    let l:pwd = join(a:arglist[:-2], " ")
+    let l:cwd = join(a:arglist[:-2], " ")
     let l:do_cd = a:arglist[-1]
-    if getcwd() != l:pwd
-      execute 'cd' l:pwd
+    if getcwd() != l:cwd
+      execute 'cd' l:cwd
     endif
     if l:do_cd
-      let l:cmd = "cd " . fnameescape(l:pwd) . "\<CR>"
-      call term_sendkeys(g:term_bufnr, l:cmd)
+      call ChangeDirectoryTerm()
     endif
   endfunction
 
@@ -322,8 +326,8 @@ if has('terminal')
   endif
 
   " keymap
-  nnoremap <Leader>cd :call ChangeDirectory()<CR>
-  tnoremap <Leader>cd 2vim cd<CR>
+  nnoremap <silent> <Leader>cd :call ChangeDirectoryVim()<CR>
+  tnoremap <silent> <Leader>cd <C-w>:call ChangeDirectoryTerm()<CR>
   tnoremap <Leader>ll 2vim make<CR>
   tnoremap :: <C-w>:
 endif
