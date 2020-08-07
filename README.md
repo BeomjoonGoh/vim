@@ -21,7 +21,7 @@ curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 ```
 
-And open vimrc,
+And open vimrc (`vim ~/.vim/vimrc`),
 ```vim
 :source %
 :PlugInstall
@@ -217,6 +217,8 @@ possible uppercase typos are defined.
 * `Help` opens help page in new tab not in split
 * `Vn`(`Sn`) opens a scratchpad.
 * `RemoveTrailingSpaces` does want it sounds like.
+* `OpenFinder`<sup>[[1]](#MacOS)</sup> opens 
+* `InsertKoreanMode`<sup>[[1]](#MacOS)</sup> toggles
 
 
 ## User Interfaces
@@ -231,7 +233,7 @@ Statusline:
 
     ([Help]){file} ([+],[-])([RO])  pwd:{dir}     C: {col}-{vcol}, L: {line}/{tot_lines} {percent} 
 
-Tabline: tab = `{tab_num} {file} ([+],[*]) (({tot_win}))`
+Tabline: `{tab}` = `{tab_num} {file} ([+],[*]) (({tot_win}))`
 
     {tab} {tab} {tab}                                                                       X
 
@@ -279,7 +281,6 @@ mode respectively. See `:help map.txt` for help and `:map` to see defined maps.
 |:-------:|:----:|:------------|
 |`gf`     | n    | Go to a file under cursor in vertical split.
 |`gF`     | n    | Open a file under cursor to the current window.
-|`go`     | n v  | Open URL under cursor
 |`<S-Tab>`| i    | Tab backwards.
 |`~`      | n    | The `~` key works for non-alphabets as well.
 |`<F2>`   | n    | Manual page for `Lapack` library functions if the file is `.c`, `.cpp`, or `.h`
@@ -292,6 +293,7 @@ mode respectively. See `:help map.txt` for help and `:map` to see defined maps.
 |`<C-p>`  | n    | Paste from clipboard
 |`<F8>`   | n    | Test regular expression under cursor in double quotes
 |`ga`     | n x  | Start interactive EasyAlign
+|`go`<sup>[[1]](#MacOS)</sup>| n v  | Open URL under cursor
 </details>
 
 <details>
@@ -359,3 +361,5 @@ mode respectively. See `:help map.txt` for help and `:map` to see defined maps.
   - [ ] cheatsheet
   - [ ] terminal
 - [ ] help paste, pastetoggle
+
+<b name="MacOS">[1]</b>: Defined for MacOS only.
