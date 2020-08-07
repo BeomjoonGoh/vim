@@ -20,11 +20,29 @@
   cmd &>/dev/null # stdout and stderr to a black hole
 # }}}
 
+# Default values {{{
+                   | unset FOO    | FOO=''       | FOO='new'
+  -----------------+--------------+--------------+--------------
+  echo ${FOO:-val} | val          | val          | new          # $FOO, 'val' if unset/empty
+  echo ${FOO:=val} | val (stored) | val (stored) | new          # $FOO, FOO='val' if unset/empty
+  echo ${FOO:+val} | ''           | ''           | val          # 'val' if $FOO is set
+  echo ${FOO:?err} | err (exit)   | err (exit)   | new          # show 'err' and exit if $FOO is unset/empty
+
+                   | unset FOO    | FOO=''       | FOO='new'
+  -----------------+--------------+--------------+--------------
+  echo ${FOO-val}  | val          | ''           | new          # $FOO, 'val' if unset
+  echo ${FOO=val}  | val (stored) | ''           | new          # $FOO, FOO='val' if unset
+  echo ${FOO+val}  | ''           | val          | val          # 'val' if $FOO is set
+  echo ${FOO?err}  | err (exit)   | ''           | new          # show 'err' and exit if $FOO is unset
+# }}}
+
 # Conditionals {{{
   command1 && command2 
   command1 || command2
   ! condition
   if condition; then
+    ...
+  elif
     ...
   else
     ...
@@ -58,13 +76,71 @@
   [[ N operation M ]] # operation: ==, !=, <, <=, >, >=
 # }}}
 
+# Loops {{{
+  for needle in hay; do
+    ...
+  done
+
+  for i in {1..3}; do
+    ...
+  done
+
+  while [ condition ]; do
+    ...
+  done
+
+  until [ condition ]; do
+    ... 
+  done
+
+  for (( i = 0; i < imax; i++ )); do
+    echo "bashism"
+  done
+# }}}
+
 # Function {{{
-  function fun() {
+  fun() {
     $#  # number of arguments
     $1  # first argument
     $@  # all arguments as an array
     $*  # all arguments as a single string
   }
+
+  # bashism
+  function fun() {
+    ...
+  }
+# }}}
+
+# String {{{
+  # Substring.
+  name="John Doe"
+  ${name:0:2}    # = "Jo"
+  ${name::2}     # = "Jo"
+  ${name::-1}    # = "John Do"
+  ${name:(-1)}   # = "e" (from right)
+  ${name:(-2):2} # = "oe" (from right)
+
+  # Substitution
+  ${FOO/this/that}  # replace first match
+  ${FOO//this/that} # replace all
+  ${FOO/#this/that} # replace prefix
+  ${FOO/%this/that} # replace suffix
+
+  # Remove from left/right
+  ${FOO#*this}       # remove first '*this' from left
+  ${FOO##*this}      # remove last  '*this' from left
+  ${FOO%this*}       # remove first 'this*' from right
+  ${FOO%%this*}      # remove last  'this*' from right
+
+  # Length
+  ${#FOO}
+# }}}
+
+# Expansion {{{
+  {A,B}.h   # = A.h B.h
+  {1..3}    # = 1 2 3 No variables allowed
+  {1..7..2} # = 1 3 5 7
 # }}}
 
 # Arithmetic evalutation {{{
@@ -97,72 +173,6 @@
   # - Parameter expansion syntax ($) is not necessary.
 # }}}
 
-# Expansion {{{
-  {A,B}.h   # = A.h B.h
-  {1..3}    # = 1 2 3 No variables allowed
-  {1..7..2} # = 1 3 5 7
-# }}}
-
-# String {{{
-
-  # Substring.
-  name="John Doe"
-  ${name:0:2}    # = "Jo"
-  ${name::2}     # = "Jo"
-  ${name::-1}    # = "John Do"
-  ${name:(-1)}   # = "e" (from right)
-  ${name:(-2):2} # = "oe" (from right)
-
-  # Substitution
-  ${FOO/this/that}  # replace first match
-  ${FOO//this/that} # replace all
-  ${FOO#this}       # remove first 'this' from the start
-  ${FOO##this}      # remove last  'this' from the start
-  ${FOO%this}       # remove first 'this' to the end
-  ${FOO%%this}      # remove last  'this' to the end
-  ${FOO/#this/that} # replace prefix
-  ${FOO/%this/that} # replace suffix
-
-  # Length
-  ${#FOO}
-# }}}
-
-# Default values {{{
-  ${FOO:-val} # $FOO or val if not set
-  ${FOO:=val} # FOO=val if not set
-  ${FOO:+val} # val if $FOO is set
-  ${FOO:?err} # show err as error message and exit if $FOO is not set
-# }}}
-
-# Multi line comment {{{
-  : '
-  this is
-  a multi line comment.
-  '
-# }}}
-
-# Loops {{{
-  for needle in hay; do
-    ...
-  done
-
-  for i in {1..3}; do
-    ...
-  done
-
-  while [ condition ]; do
-    ...
-  done
-
-  until [ condition ]; do
-    ... 
-  done
-
-  for (( i = 0; i < imax; i++ )); do
-    echo "bashism"
-  done
-# }}}
-
 # Arrays {{{
   # Indexed (normal) array 
   ARR=( "foo" "bar" )       # declaration
@@ -186,4 +196,12 @@
 
   # String to array with delimeter. Same as ARR = string.split(',') in python
   IFS=',' read -r -a ARR <<< ${string}
+# }}}
+
+# Comment {{{
+  # line comment
+  : '
+  this is
+  a multi line comment.
+  '
 # }}}
