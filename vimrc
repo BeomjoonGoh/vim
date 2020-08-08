@@ -19,7 +19,7 @@ endif
 let mapleader = '\'
 
 call plug#begin('~/.vim/plugged')
-  Plug 'othree/vim-autocomplpop' | Plug 'vim-scripts/L9'
+  Plug 'othree/vim-autocomplpop', { 'frozen' : 1 } | Plug 'vim-scripts/L9'
   Plug 'majutsushi/tagbar', { 'on' : 'TagbarToggle' }
   Plug 'garbas/vim-snipmate' | Plug 'MarcWeber/vim-addon-mw-utils' | Plug 'tomtom/tlib_vim'
   Plug 'BeomjoonGoh/vim-cppman', { 'for' : 'cpp' }
@@ -45,8 +45,10 @@ set scrolloff=1 sidescroll=5
 set clipboard=exclude:.*              " Fixes slow startup with ssh!! Same as $ vim -X
 set lazyredraw ttyfast                " Not sure but it makes scrolling faster
 set formatoptions+=rnlj
-set timeoutlen=300
+set timeoutlen=500
 set updatetime=500
+set wildignore+=*out*,*inp*,*log*
+set path+=**
 
 runtime! ftplugin/man.vim
 let g:ft_man_open_mode="tab"
@@ -65,7 +67,7 @@ augroup redhat
 augroup END
 
 if has('mouse')
-  set mouse=""                   " Disable(enable) mouse: =""(a)
+  set mouse=""
 endif
 
 "--- Commands
@@ -82,15 +84,16 @@ if has("user_commands")
   command! -bang Q q<bang>
   command! -bang QA qa<bang>
   command! -bang Qa qa<bang>
-  command -nargs=? -complete=file Sp sp <args>
-  command -nargs=? -complete=file Vs vs <args>
-  command -nargs=? -complete=file Vsp vsp <args>
-  command -nargs=? -complete=file_in_path Vfind vnew<bar> find <args>
-  command -nargs=? -complete=file_in_path Sfind sfind <args>
-  command -nargs=? -complete=help Help tab help <args>
-  command Vn vsp $HOME/.vim/scratchpad.txt
-  command Sn sp  $HOME/.vim/scratchpad.txt
-  command RemoveTrailingSpaces %s/\s\+$//e
+  command! -nargs=? -complete=file Sp sp <args>
+  command! -nargs=? -complete=file Vs vs <args>
+  command! -nargs=? -complete=file Vsp vsp <args>
+  command! -nargs=? -complete=file_in_path Vfind vnew<bar> find <args>
+  command! -nargs=? -complete=file_in_path Sfind sfind <args>
+  command! -nargs=? -complete=help Help tab help <args>
+  command! Vn vsp $HOME/.vim/scratchpad.txt
+  command! Sn sp  $HOME/.vim/scratchpad.txt
+  command! RemoveTrailingSpaces %s/\s\+$//e
+  command! Source source $HOME/.vim/vimrc
 endif
 
 " }}}
@@ -180,14 +183,23 @@ augroup END
 set spellsuggest=best,3         " 'z=' shows 3 best suggestions
 
 "--- Insert mode completion & AutoComplPop settings
+set complete=.,w,b,u,t
 set completeopt+=menuone,noinsert
 let g:acp_enableAtStartup = 1
-let s:acpState = 1              " acp at start up: 1->enable, 0->disable (Both)
-augroup AcpDisableForTerminal
-  autocmd!
-  autocmd BufEnter * if &buftype == 'terminal' && s:acpState | AcpDisable | endif
-  autocmd BufLeave * if &buftype == 'terminal' && s:acpState | AcpEnable  | endif
-augroup END
+
+function! CompleteInclude()
+  if &complete =~ 'i'
+    set complete-=i
+  else
+    set complete+=i
+  endif
+  echo 'complete =' &complete
+  let g:acp_completeOption = '&complete'
+endfunction
+if has('user_commands')
+  command! CompleteIncludeToggle call CompleteInclude()
+endif
+silent call CompleteInclude()
 
 "--- Split
 set splitbelow
@@ -227,18 +239,15 @@ let g:netrw_special_syntax = 1  " file type syntax
 
 "--- vimdiff
 set diffopt=internal,filler,closeoff,context:3
-if &diff
-  function! IwhiteToggle()
-    if &diffopt =~ 'iwhiteall'
-      set diffopt-=iwhiteall
-      echo "ignore all white spaces off"
-    else
-      set diffopt+=iwhiteall
-      echo "ignore all white spaces on"
-    endif
-  endfunction
-  nnoremap <Leader>iw :call IwhiteToggle()<CR>
-endif
+function! IwhiteToggle()
+  if &diffopt =~ 'iwhiteall'
+    set diffopt-=iwhiteall
+    echo "ignore all white spaces off"
+  else
+    set diffopt+=iwhiteall
+    echo "ignore all white spaces on"
+  endif
+endfunction
 
 "--- terminal
 if has('terminal')
@@ -319,10 +328,10 @@ if has('terminal')
 
   " commands
   if has("user_commands")
-    command Bterm call OpenTerminal("botright")
-    command Vterm call OpenTerminal("vertical")
-    command Nterm call OpenTerminal("")
-    command Tterm call OpenTerminal("tab")
+    command! Bterm call OpenTerminal("botright")
+    command! Vterm call OpenTerminal("vertical")
+    command! Nterm call OpenTerminal("")
+    command! Tterm call OpenTerminal("tab")
   endif
 
   " keymap
@@ -388,40 +397,28 @@ let g:undotree_HelpLine                 = 0
 " }}}
 " FUNCTIONS {{{
 function! ToggleColorcolumn()
-  " Toggle highlight characters over 120 columns
   if exists('+colorcolumn')
     let &colorcolumn = (&colorcolumn == "") ? 120 : ""
+    echo "colorcolumn =" &colorcolumn
   endif
 endfunction
 
-function! MouseOnOff()
-  " Sets mouse on and off. Utilized with keymap F10
+function! ToggleMouse()
   if has('mouse')
-    if (&mouse == "")
-      set mouse=a
-      echo "Mouse On"
-    else
-      set mouse=""
-      echo "Mouse Off"
-    endif
+    let &mouse = (&mouse == "") ? "a" : ""
+    echo "mouse =" &mouse
   endif
 endfunction
 
 function! ToggleACP()
-  " Toggle AutoComplPop
-  if s:acpState
+  if exists('#AcpGlobalAutoCommand#InsertEnter')
     AcpDisable
-    echo "AutoComplPop disabled"
-    let s:acpState = 0
   else
     AcpEnable
-    echo "AutoComplPop enabled"
-    let s:acpState = 1
   endif
 endfunction
 
 function! TogglePasteSafe()
-  " Toggle paste safe mode
   " see :help pastetoggle
   if (s:cycleIndentOption == 0)
     set number relativenumber smartindent autoindent
@@ -504,7 +501,7 @@ if has('mac')
   "--- OpenFinder
   function! OpenFinder()
     let l:cmd = '!open ' . (filereadable(expand("%")) ? '-R '.shellescape("%") : '.')
-    execute ":silent!" l:cmd
+    execute "silent!" l:cmd
     redraw!
   endfunction
   
@@ -512,29 +509,29 @@ if has('mac')
     command! OpenFinder call OpenFinder()
   endif
 
-  "--- InsertKoreanMode
-  let g:InsertKoreanMode_IssLib = expand('$HOME/.vim/bin/libInputSourceSwitcher.dylib')
-  let g:InsertKoreanMode_DefaultLayout = 'com.apple.keylayout.US'
-  let g:InsertKoreanMode_InsertLayout = 'com.apple.inputmethod.Korean.2SetKorean'
-  if filereadable(g:InsertKoreanMode_IssLib)
-    function! ToggleInsertKoreanMode()
-      if !exists('#InsertKoreanMode#InsertEnter')
-        augroup InsertKoreanMode
+  "--- InsertForeign
+  let g:InsertForeign_IssLib = expand('$HOME/.vim/bin/libInputSourceSwitcher.dylib')
+  let g:InsertForeign_DefaultLayout = 'com.apple.keylayout.US'
+  let g:InsertForeign_InsertLayout = 'com.apple.inputmethod.Korean.2SetKorean'
+  if filereadable(g:InsertForeign_IssLib)
+    function! ToggleInsertForeign()
+      if !exists('#InsertForeignAu#InsertEnter')
+        augroup InsertForeignAu
           autocmd!
-          autocmd InsertEnter * call libcall(g:InsertKoreanMode_IssLib, 'Xkb_Switch_setXkbLayout', g:InsertKoreanMode_InsertLayout)
-          autocmd InsertLeave * call libcall(g:InsertKoreanMode_IssLib, 'Xkb_Switch_setXkbLayout', g:InsertKoreanMode_DefaultLayout)
+          autocmd InsertEnter * call libcall(g:InsertForeign_IssLib, 'Xkb_Switch_setXkbLayout', g:InsertForeign_InsertLayout)
+          autocmd InsertLeave * call libcall(g:InsertForeign_IssLib, 'Xkb_Switch_setXkbLayout', g:InsertForeign_DefaultLayout)
         augroup END
-        echo "InsertKoreanMode is on"
+        echo "InsertForeign is on"
       else
-        augroup InsertKoreanMode
+        augroup InsertForeignAu
           autocmd!
         augroup END
-        echo "InsertKoreanMode is off"
+        echo "InsertForeign is off"
       endif
     endfunction
 
     if has('user_commands')
-      command! InsertKoreanMode call ToggleInsertKoreanMode()
+      command! InsertForeign call ToggleInsertForeign()
     endif
   endif
 endif
@@ -568,14 +565,13 @@ if !exists('user_filetypes')
     let g:cpp_no_function_highlight     = 1
     autocmd FileType c,cpp
     \ setlocal cindent |
-    \ let g:acp_completeOption='.,w,b,u,t,i,d' |
     \ if !exists('pathset') |
-    \   let pathset=1 |
+    \   let pathset = 1 |
     \   set path+=$HOME/work/lib,$HOME/work/lib/specialfunctions,$HOME/work/projectEuler/Library |
     \ endif |
     \ setlocal formatoptions-=o |
     \ setlocal textwidth=120 |
-    \ setlocal foldmethod=syntax |
+    \ setlocal foldmethod=syntax
 
     "--- .py files
     let python_highlight_all = 1
@@ -585,7 +581,7 @@ if !exists('user_filetypes')
 
     "--- .md files
     let g:markdown_fenced_languages = [ 'bash=sh', 'vim', 'python', 'cpp' ]
-    let g:markdown_minlines         = 50
+    let g:markdown_minlines         = 100
     let g:markdown_folding          = 1
 
     autocmd FileType vim nnoremap <buffer> K :execute "tab help " . expand("<cword>")<CR>
@@ -636,16 +632,7 @@ nnoremap gF :w<CR>gf
 inoremap <S-Tab> <C-d>
 
 " Mapping of Tilde4nonAlpha to ~
-nnoremap <silent> ~ :call Tilde4nonAlpha()<cr>
-
-nnoremap <F2> :call ManLapack()<CR>
-call Noremap(['n','t'], '<F3>',  ":TagbarToggle<CR>")
-call Noremap(['n','i'], '<F4>',  ":call ToggleColorcolumn()<CR>")
-call Noremap(['n','i'], '<F5>',  ":call ToggleACP()<CR>")
-call Noremap(['n','i'], '<F6>',  ":call TogglePasteSafe()<CR>")
-call Noremap(['n','i'], '<F7>',  ":setlocal spell!<CR>:echo 'Spell Check: '.strpart('OffOn', 3*&spell, 3)<CR>")
-call Noremap(['n','i'], '<F10>', ":call MouseOnOff()<CR>")
-call Noremap(['n','i'], '<C-\>', ":Lexplore<CR>")
+nnoremap <silent> ~ :call Tilde4nonAlpha()<CR>
 
 " Type(i) or show(n) the current date stamp
 imap <F9> <C-R>=strftime('%d %b %Y %T %z')<CR>
@@ -656,28 +643,37 @@ nmap <silent> <Leader>r :nohlsearch<CR>
 nmap <silent> <Leader>R :silent!/BruteForceResetSearch_<C-r>=rand()<CR>.<CR>
 
 " Enter works in normal mode
-nmap <CR> :AcpLock<CR>i<C-m><Esc>:AcpUnlock<bar>echo<CR>
+nmap <silent> <CR> :AcpLock<CR>i<C-m><Esc>:AcpUnlock<CR>
 
 " To the previous buffer
 nnoremap <Leader><Leader><Leader> <C-^>
 
+" Yank to and paste from clipboard
+vnoremap <C-y> "*y
+nnoremap <C-p> "*p
+
+" Test regular expression under cursor in double quotes
+" See https://stackoverflow.com/questions/14499107/easiest-way-to-test-vim-regex/14499299
+nnoremap <F8> mryi":let @/ = @"<CR>`r
+
+"--- Toggle
+nnoremap <Leader>iw :call IwhiteToggle()<CR>
+nnoremap <F2> :call ManLapack()<CR>
+call Noremap(['n','t'], '<F3>',  ":TagbarToggle<CR>")
+call Noremap(['n','i'], '<F4>',  ":call ToggleColorcolumn()<CR>")
+call Noremap(['n','i'], '<F5>',  ":call ToggleACP()<CR>")
+call Noremap(['n','i'], '<F6>',  ":call TogglePasteSafe()<CR>")
+call Noremap(['n','i'], '<F7>',  ":setlocal spell!<CR>:echo 'Spell Check: '.strpart('OffOn', 3*&spell, 3)<CR>")
+call Noremap(['n','i'], '<F10>', ":call ToggleMouse()<CR>")
+call Noremap(['n','i'], '<C-\>', ":Lexplore<CR>")
+
 "--- QuickFix window
-" \ll  => save the file and make and show the result (cwindow) in the bottom
-"         split if there are errors and/or warnings.
-" \w   => show the cwindow (if exists).
-" \c   => close the cwindow.
-" \n   => jump to the next problematic line and column of the code.
-" \N   => jump to the previous problematic line and column of the code.
-" \<CR>=> from the cwindow, jump to the code where the cursor below indicates.
 nnoremap <Leader>ll :w<CR>:make -s<CR>:botright cwindow<CR>
 nnoremap <Leader>w :botright cwindow<CR>
 nnoremap <Leader>c :cclose<CR>
 nnoremap <Leader>n :cnext<CR>
 nnoremap <Leader>N :cprevious<CR>
-augroup QuickFixMap
-  autocmd!
-  autocmd FileType qf nnoremap <Leader><CR> :.cc<CR>
-augroup END
+nnoremap <Leader>g :.cc<CR>
 
 "--- Search in visual mode (* and #)
 " See https://vim.fandom.com/wiki/Search_for_visually_selected_text
@@ -704,7 +700,7 @@ tnoremap <down> <C-w>j
 tnoremap <up> <C-w>k
 tnoremap <right> <C-w>l
 
-" For completeness. Use bash cmd mode instead
+" For completeness. Use readline's normal mode instead
 tnoremap <C-h> <left>
 tnoremap <C-j> <down>
 tnoremap <C-k> <up>
@@ -714,16 +710,15 @@ tnoremap <C-l> <right>
 nnoremap j gj
 nnoremap k gk
 
-" Move to the end of a line
-nnoremap - $
-
-"--- Folding Key Mappings
+"--- Folding
 call Noremap(['n','v'], '<Space>', "za")
 nnoremap zR zr
 nnoremap zr zR
 nnoremap zM zm
 nnoremap zm zM
-"nnoremap z0 :set foldlevel=0<cr>
+for i in range(10)
+  execute 'nnoremap' 'z'.i ':set foldlevel='.i.'<CR>'
+endfor
 
 "--- Tab page
 nnoremap <Tab>: :tab
@@ -736,25 +731,19 @@ nnoremap <Tab>gf <C-w>gf
 call Noremap(['n','i','t'], '<silent> <F11>', ":tabnext<CR>")
 call Noremap(['n','i','t'], '<silent> <F12>', ":tabprevious<CR>")
 
-for i in [1,2,3,4,5,6]
+for i in range(1,6)
   execute 'nnoremap <Tab>'.i i.'gt'
 endfor
-
-"--- Yank to and paste from clipboard
-vnoremap <C-y> "*y
-nnoremap <C-p> "*p
-
-"--- Test regular expression under cursor in double quotes
-" See https://stackoverflow.com/questions/14499107/easiest-way-to-test-vim-regex/14499299
-nnoremap <F8> mryi":let @/ = @"<CR>`r
 
 "--- EasyAlign
 nmap ga <Plug>(EasyAlign)
 xmap ga <Plug>(EasyAlign)
 
 "--- open URL
-nnoremap <silent> go :!open -a Safari <cWORD><CR>
-vnoremap <silent> go y<Esc>:!open -a Safari <C-r>0<CR>
+if has('mac')
+  nnoremap <silent> go :!open <cWORD><CR>
+  vnoremap <silent> go y<Esc>:!open <C-r>0<CR>
+endif
 
 "--- undotree
 nnoremap <Leader>u :UndotreeToggle<CR>
