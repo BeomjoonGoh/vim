@@ -109,7 +109,7 @@ set statusline=%!MyStatusLine()
 function! MyStatusLine()
   return '%h%f %m%r  cwd: %<' . substitute(getcwd(), $HOME, '~', '') . ' %=%(C: %c%V, L: %l/%L%) %P '
 endfunction
-set fillchars=vert:\ ,fold:-
+let &fillchars = 'vert: ,fold: ,diff: '
 
 "--- Tab page
 set showtabline=2
@@ -591,15 +591,18 @@ endif
 
 " }}}
 " FOLDING {{{
-set foldenable                  " enable folding
-set foldcolumn=0                " add a fold column
-set foldmethod=marker           " detect triple-{ style fold markers
-set foldlevelstart=99           "  0: start out with everything folded
-                                " 99: start out with everything unfolded
+set foldenable
+set foldcolumn=0
+set foldmethod=marker
+set foldlevelstart=99
 set foldnestmax=4
 set foldminlines=1
 set foldopen=block,hor,insert,jump,mark,percent,quickfix,search,tag,undo
-                                " which commands trigger auto-unfold
+
+let s:char = matchstr(split(&fillchars,','), 'fold:.\{1}')
+let g:foldchar = (s:char == "") ? '-' : s:char[-1:]
+unlet s:char
+
 set foldtext=MyFoldText()
 function! MyFoldText()
   let line = substitute(getline(v:foldstart), '\t', repeat(' ', &tabstop), 'g')
@@ -608,18 +611,18 @@ function! MyFoldText()
   let windowwidth = winwidth(0) - &foldcolumn - &number * &numberwidth
   let maxline = windowwidth - len(nfolded) - len(' lines ') - 1 
   let line = strpart(line, 0, maxline)
-  return line . repeat(' ', maxline-len(line)+1) . nfolded . ' lines '
+  return line . repeat(g:foldchar, maxline-len(line)+1) . nfolded . ' lines '
 endfunction
 
 " }}}
 " KEY MAPPINGS {{{
 function! Noremap(modelist, key, cmd)
-  for mode in a:modelist
-    if     mode == 'i' | let l:cmd = '<C-o>'.a:cmd
-    elseif mode == 't' | let l:cmd = '<C-w>:'.a:cmd
+  for l:mode in a:modelist
+    if     l:mode == 'i' | let l:cmd = '<C-o>'.a:cmd
+    elseif l:mode == 't' | let l:cmd = '<C-w>:'.a:cmd
     else               | let l:cmd = a:cmd
     endif
-    execute mode.'noremap' a:key l:cmd
+    execute l:mode.'noremap' a:key l:cmd
   endfor
 endfunction 
 
