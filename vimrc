@@ -187,7 +187,7 @@ set complete=.,w,b,u,t
 set completeopt+=menuone,noinsert
 let g:acp_enableAtStartup = 1
 
-function! CompleteInclude()
+function! s:completeInclude()
   if &complete =~ 'i'
     set complete-=i
   else
@@ -197,9 +197,9 @@ function! CompleteInclude()
   let g:acp_completeOption = '&complete'
 endfunction
 if has('user_commands')
-  command! CompleteIncludeToggle call CompleteInclude()
+  command! CompleteIncludeToggle call <SID>completeInclude()
 endif
-silent call CompleteInclude()
+silent call <SID>completeInclude()
 
 "--- Split
 set splitbelow
@@ -239,7 +239,7 @@ let g:netrw_special_syntax = 1  " file type syntax
 
 "--- vimdiff
 set diffopt=internal,filler,closeoff,context:3
-function! IwhiteToggle()
+function! s:iwhiteToggle()
   if &diffopt =~ 'iwhiteall'
     set diffopt-=iwhiteall
     echo "ignore all white spaces off"
@@ -437,76 +437,88 @@ function! TogglePasteSafe()
   echo msg
 endfunction
 
-function! Tilde4nonAlpha() " {{{
-  " ~ key behaviour for non-alphabets
-  let c = getline(".")[col(".") - 1]
-  if     c == '`' | normal! r~l
-  elseif c == '1' | normal! r!l
-  elseif c == '2' | normal! r@l
-  elseif c == '3' | normal! r#l
-  elseif c == '4' | normal! r$l
-  elseif c == '5' | normal! r%l
-  elseif c == '6' | normal! r^l
-  elseif c == '7' | normal! r&l
-  elseif c == '8' | normal! r*l
-  elseif c == '9' | normal! r(l
-  elseif c == '0' | normal! r)l
-  elseif c == '-' | normal! r_l
-  elseif c == '=' | normal! r+l
-  elseif c == '[' | normal! r{l
-  elseif c == ']' | normal! r}l
-  elseif c == '\' | normal! r|l
-  elseif c == ';' | normal! r:l
-  elseif c == "'" | normal! r"l
-  elseif c == ',' | normal! r<l
-  elseif c == '.' | normal! r>l
-  elseif c == '/' | normal! r?l
-  elseif c == '~' | normal! r`l
-  elseif c == '!' | normal! r1l
-  elseif c == '@' | normal! r2l
-  elseif c == '#' | normal! r3l
-  elseif c == '$' | normal! r4l
-  elseif c == '%' | normal! r5l
-  elseif c == '^' | normal! r6l
-  elseif c == '&' | normal! r7l
-  elseif c == '*' | normal! r8l
-  elseif c == '(' | normal! r9l
-  elseif c == ')' | normal! r0l
-  elseif c == '_' | normal! r-l
-  elseif c == '+' | normal! r=l
-  elseif c == '{' | normal! r[l
-  elseif c == '}' | normal! r]l
-  elseif c == '|' | normal! r\l
-  elseif c == ':' | normal! r;l
-  elseif c == '"' | normal! r'l
-  elseif c == '<' | normal! r,l
-  elseif c == '>' | normal! r.l
-  elseif c == '?' | normal! r/l
-  else            | normal! ~
-  endif
+function! s:getSelectedText()
+  let l:old_reg = getreg('"')
+  let l:old_regtype = getregtype('"')
+  norm gvy
+  let l:ret = getreg('"')
+  call setreg('"', l:old_reg, l:old_regtype)
+  exe "norm \<Esc>"
+  return l:ret
+endfunction
+
+function! s:tilde4nonAlpha(str) " {{{
+  for l:c in split(a:str, '\zs')
+    if     l:c == '`' | normal! r~l
+    elseif l:c == '1' | normal! r!l
+    elseif l:c == '2' | normal! r@l
+    elseif l:c == '3' | normal! r#l
+    elseif l:c == '4' | normal! r$l
+    elseif l:c == '5' | normal! r%l
+    elseif l:c == '6' | normal! r^l
+    elseif l:c == '7' | normal! r&l
+    elseif l:c == '8' | normal! r*l
+    elseif l:c == '9' | normal! r(l
+    elseif l:c == '0' | normal! r)l
+    elseif l:c == '-' | normal! r_l
+    elseif l:c == '=' | normal! r+l
+    elseif l:c == '[' | normal! r{l
+    elseif l:c == ']' | normal! r}l
+    elseif l:c == '\' | normal! r|l
+    elseif l:c == ';' | normal! r:l
+    elseif l:c == "'" | normal! r"l
+    elseif l:c == ',' | normal! r<l
+    elseif l:c == '.' | normal! r>l
+    elseif l:c == '/' | normal! r?l
+    elseif l:c == '~' | normal! r`l
+    elseif l:c == '!' | normal! r1l
+    elseif l:c == '@' | normal! r2l
+    elseif l:c == '#' | normal! r3l
+    elseif l:c == '$' | normal! r4l
+    elseif l:c == '%' | normal! r5l
+    elseif l:c == '^' | normal! r6l
+    elseif l:c == '&' | normal! r7l
+    elseif l:c == '*' | normal! r8l
+    elseif l:c == '(' | normal! r9l
+    elseif l:c == ')' | normal! r0l
+    elseif l:c == '_' | normal! r-l
+    elseif l:c == '+' | normal! r=l
+    elseif l:c == '{' | normal! r[l
+    elseif l:c == '}' | normal! r]l
+    elseif l:c == '|' | normal! r\l
+    elseif l:c == ':' | normal! r;l
+    elseif l:c == '"' | normal! r'l
+    elseif l:c == '<' | normal! r,l
+    elseif l:c == '>' | normal! r.l
+    elseif l:c == '?' | normal! r/l
+    elseif l:c =~ '\s'| normal! l
+    elseif l:c =~ '\n'| normal! j|
+    else              | normal! ~
+    endif
+  endfor
 endfunction
 " }}}
 
-function! ManLapack()
+function! s:manLapack()
   execute "Man" substitute(expand("<cword>"), '_', '','g')
 endfunction
 
 function! ClearNamedRegisters()
-  for i in split("a b c d e f g h i j k l m n o p q r s t u v w x y z")
-    execute "let" '@'.i "= ''"
+  for i in split("abcdefghijklmnopqrstuvwxyz",'\zs')
+    call setreg(i,'')
   endfor
 endfunction
 
 if has('mac')
   "--- OpenFinder
-  function! OpenFinder()
+  function! s:openFinder()
     let l:cmd = '!open ' . (filereadable(expand("%")) ? '-R '.shellescape("%") : '.')
     execute "silent!" l:cmd
     redraw!
   endfunction
   
   if has('user_commands')
-    command! OpenFinder call OpenFinder()
+    command! OpenFinder call <SID>openFinder()
   endif
 
   "--- InsertForeign
@@ -514,7 +526,7 @@ if has('mac')
   let g:InsertForeign_DefaultLayout = 'com.apple.keylayout.US'
   let g:InsertForeign_InsertLayout = 'com.apple.inputmethod.Korean.2SetKorean'
   if filereadable(g:InsertForeign_IssLib)
-    function! ToggleInsertForeign()
+    function! s:toggleInsertForeign()
       if !exists('#InsertForeignAu#InsertEnter')
         augroup InsertForeignAu
           autocmd!
@@ -531,7 +543,7 @@ if has('mac')
     endfunction
 
     if has('user_commands')
-      command! InsertForeign call ToggleInsertForeign()
+      command! InsertForeign call <SID>toggleInsertForeign()
     endif
   endif
 endif
@@ -599,7 +611,7 @@ set foldnestmax=4
 set foldminlines=1
 set foldopen=block,hor,insert,jump,mark,percent,quickfix,search,tag,undo
 
-let s:char = matchstr(split(&fillchars,','), 'fold:.\{1}')
+let s:char = matchstr(split(&fillchars,','), 'fold:.')
 let g:foldchar = (s:char == "") ? '-' : s:char[-1:]
 unlet s:char
 
@@ -616,11 +628,11 @@ endfunction
 
 " }}}
 " KEY MAPPINGS {{{
-function! Noremap(modelist, key, cmd)
+function! s:Noremap(modelist, key, cmd)
   for l:mode in a:modelist
     if     l:mode == 'i' | let l:cmd = '<C-o>'.a:cmd
     elseif l:mode == 't' | let l:cmd = '<C-w>:'.a:cmd
-    else               | let l:cmd = a:cmd
+    else                 | let l:cmd = a:cmd
     endif
     execute l:mode.'noremap' a:key l:cmd
   endfor
@@ -634,8 +646,12 @@ nnoremap gF :w<CR>gf
 " Tab backwards!
 inoremap <S-Tab> <C-d>
 
-" Mapping of Tilde4nonAlpha to ~
-nnoremap <silent> ~ :call Tilde4nonAlpha()<CR>
+" Switch case for non-alphabets
+nnoremap <silent> ~ :call <SID>tilde4nonAlpha(getline(".")[col(".")-1])<CR>
+vnoremap <silent> ~ :<C-u>call <SID>tilde4nonAlpha(<SID>getSelectedText())<CR>
+
+" manLapack
+nnoremap <F2> :call <SID>manLapack()<CR>
 
 " Type(i) or show(n) the current date stamp
 imap <F9> <C-R>=strftime('%d %b %Y %T %z')<CR>
@@ -643,7 +659,7 @@ nnoremap <F9> :echo 'Current time is ' . strftime('%d %b %Y %T %z')<CR>
 
 " Reset searches
 nmap <silent> <Leader>r :nohlsearch<CR>
-nmap <silent> <Leader>R :silent!/BruteForceResetSearch_<C-r>=rand()<CR>.<CR>
+nmap <silent> <Leader>R :silent!/BruteForceSearchReset_<C-r>=rand()<CR>.<CR>
 
 " Enter works in normal mode
 nmap <silent> <CR> :AcpLock<CR>i<C-m><Esc>:AcpUnlock<CR>
@@ -655,20 +671,15 @@ nnoremap <Leader><Leader><Leader> <C-^>
 vnoremap <C-y> "*y
 nnoremap <C-p> "*p
 
-" Test regular expression under cursor in double quotes
-" See https://stackoverflow.com/questions/14499107/easiest-way-to-test-vim-regex/14499299
-nnoremap <F8> mryi":let @/ = @"<CR>`r
-
 "--- Toggle
-nnoremap <Leader>iw :call IwhiteToggle()<CR>
-nnoremap <F2> :call ManLapack()<CR>
-call Noremap(['n','t'], '<F3>',  ":TagbarToggle<CR>")
-call Noremap(['n','i'], '<F4>',  ":call ToggleColorcolumn()<CR>")
-call Noremap(['n','i'], '<F5>',  ":call ToggleACP()<CR>")
-call Noremap(['n','i'], '<F6>',  ":call TogglePasteSafe()<CR>")
-call Noremap(['n','i'], '<F7>',  ":setlocal spell!<CR>:echo 'Spell Check: '.strpart('OffOn', 3*&spell, 3)<CR>")
-call Noremap(['n','i'], '<F10>', ":call ToggleMouse()<CR>")
-call Noremap(['n','i'], '<C-\>', ":Lexplore<CR>")
+call s:Noremap(['n','t'], '<F3>',  ":TagbarToggle<CR>")
+call s:Noremap(['n','i'], '<F4>',  ":call ToggleColorcolumn()<CR>")
+call s:Noremap(['n','i'], '<F5>',  ":call ToggleACP()<CR>")
+call s:Noremap(['n','i'], '<F6>',  ":call TogglePasteSafe()<CR>")
+call s:Noremap(['n','i'], '<F7>',  ":setlocal spell!<CR>:echo 'Spell Check: '.strpart('OffOn', 3*&spell, 3)<CR>")
+call s:Noremap(['n','i'], '<F10>', ":call ToggleMouse()<CR>")
+call s:Noremap(['n','i'], '<C-\>', ":Lexplore<CR>")
+nnoremap <Leader>iw :call <SID>iwhiteToggle()<CR>
 
 "--- QuickFix window
 nnoremap <Leader>ll :w<CR>:make -s<CR>:botright cwindow<CR>
@@ -680,14 +691,8 @@ nnoremap <Leader>g :.cc<CR>
 
 "--- Search in visual mode (* and #)
 " See https://vim.fandom.com/wiki/Search_for_visually_selected_text
-vnoremap <silent> * :<C-U>
-  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
-  \gvy/<C-R><C-R>=substitute(escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
-  \gV:call setreg('"', old_reg, old_regtype)<CR>
-vnoremap <silent> # :<C-U>
-  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
-  \gvy?<C-R><C-R>=substitute(escape(@", '?\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
-  \gV:call setreg('"', old_reg, old_regtype)<CR>
+vnoremap <silent> * :call setreg("/", substitute(<SID>getSelectedText(), "\_s\+", '\\_s\\+', 'g'))<Cr>n
+vnoremap <silent> # :call setreg("?", substitute(<SID>getSelectedText(), '\_s\+', '\\_s\\+', 'g'))<Cr>n
 
 "--- Moving around
 " Easy window navigation
@@ -714,7 +719,7 @@ nnoremap j gj
 nnoremap k gk
 
 "--- Folding
-call Noremap(['n','v'], '<Space>', "za")
+call s:Noremap(['n','v'], '<Space>', "za")
 nnoremap zR zr
 nnoremap zr zR
 nnoremap zM zm
@@ -731,8 +736,8 @@ nnoremap <Tab>gf <C-w>gf
 
 " <C-Tab>   : iTerm Sends HEX code for <F11> "[23~"
 " <C-S-Tab> : iTerm Sends HEX code for <F12> "[24~"
-call Noremap(['n','i','t'], '<silent> <F11>', ":tabnext<CR>")
-call Noremap(['n','i','t'], '<silent> <F12>', ":tabprevious<CR>")
+call s:Noremap(['n','i','t'], '<silent> <F11>', ":tabnext<CR>")
+call s:Noremap(['n','i','t'], '<silent> <F12>', ":tabprevious<CR>")
 
 for i in range(1,6)
   execute 'nnoremap <Tab>'.i i.'gt'
