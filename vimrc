@@ -345,7 +345,7 @@ endif
 " TODO
 " [ ] make it a plugin
 " [ ] write doc
-let g:cheatsheet_filetype_map = {
+let g:cheatsheet_filetypeDict = {
       \  "sh"       : "bash",
       \  "markdown" : "md",
       \  "make"     : "makefile",
@@ -356,8 +356,8 @@ let g:cheatsheet_split = 'vsp' " or 'sp'
 
 function! Cheatsheet_getfile(ft)
   let l:file_type = (a:ft == "") ? &filetype : a:ft
-  if has_key(g:cheatsheet_filetype_map, l:file_type)
-    let l:file_type = g:cheatsheet_filetype_map[l:file_type]
+  if has_key(g:cheatsheet_filetypeDict, l:file_type)
+    let l:file_type = g:cheatsheet_filetypeDict[l:file_type]
   endif
   return expand(g:cheatsheet_path . '/cs.' . l:file_type)
 endfunction
@@ -411,11 +411,7 @@ function! ToggleMouse()
 endfunction
 
 function! ToggleACP()
-  if exists('#AcpGlobalAutoCommand#InsertEnter')
-    AcpDisable
-  else
-    AcpEnable
-  endif
+  execute exists('#AcpGlobalAutoCommand#InsertEnter') ? 'AcpDisable' : 'AcpEnable'
 endfunction
 
 function! TogglePasteSafe()
@@ -447,57 +443,20 @@ function! s:getSelectedText()
   return l:ret
 endfunction
 
-function! s:tilde4nonAlpha(str) " {{{
+function! s:tildeForNonAlpha(str)
+  let l:pool = '`1234567890-=[]\;,./''~!@#$%^&*()_+{}|:<>?"'
+  let l:lines = 0
   for l:c in split(a:str, '\zs')
-    if     l:c == '`' | normal! r~l
-    elseif l:c == '1' | normal! r!l
-    elseif l:c == '2' | normal! r@l
-    elseif l:c == '3' | normal! r#l
-    elseif l:c == '4' | normal! r$l
-    elseif l:c == '5' | normal! r%l
-    elseif l:c == '6' | normal! r^l
-    elseif l:c == '7' | normal! r&l
-    elseif l:c == '8' | normal! r*l
-    elseif l:c == '9' | normal! r(l
-    elseif l:c == '0' | normal! r)l
-    elseif l:c == '-' | normal! r_l
-    elseif l:c == '=' | normal! r+l
-    elseif l:c == '[' | normal! r{l
-    elseif l:c == ']' | normal! r}l
-    elseif l:c == '\' | normal! r|l
-    elseif l:c == ';' | normal! r:l
-    elseif l:c == "'" | normal! r"l
-    elseif l:c == ',' | normal! r<l
-    elseif l:c == '.' | normal! r>l
-    elseif l:c == '/' | normal! r?l
-    elseif l:c == '~' | normal! r`l
-    elseif l:c == '!' | normal! r1l
-    elseif l:c == '@' | normal! r2l
-    elseif l:c == '#' | normal! r3l
-    elseif l:c == '$' | normal! r4l
-    elseif l:c == '%' | normal! r5l
-    elseif l:c == '^' | normal! r6l
-    elseif l:c == '&' | normal! r7l
-    elseif l:c == '*' | normal! r8l
-    elseif l:c == '(' | normal! r9l
-    elseif l:c == ')' | normal! r0l
-    elseif l:c == '_' | normal! r-l
-    elseif l:c == '+' | normal! r=l
-    elseif l:c == '{' | normal! r[l
-    elseif l:c == '}' | normal! r]l
-    elseif l:c == '|' | normal! r\l
-    elseif l:c == ':' | normal! r;l
-    elseif l:c == '"' | normal! r'l
-    elseif l:c == '<' | normal! r,l
-    elseif l:c == '>' | normal! r.l
-    elseif l:c == '?' | normal! r/l
-    elseif l:c =~ '\s'| normal! l
-    elseif l:c =~ '\n'| normal! j|
-    else              | normal! ~
+    if     l:c =~ '\a' | normal! ~
+    elseif l:c =~ '\s' | normal! l
+    elseif l:c =~ '\d\|[[:punct:]]'
+      execute 'normal!' 'r'.l:pool[((stridx(l:pool,l:c) + 21) % 42)].'l'
+    elseif l:c =~ '\n'
+      let l:lines = l:lines + 1
+      execute 'normal! `<'.l:lines.'j'
     endif
   endfor
 endfunction
-" }}}
 
 function! s:manLapack()
   execute "Man" substitute(expand("<cword>"), '_', '','g')
@@ -647,8 +606,8 @@ nnoremap gF :w<CR>gf
 inoremap <S-Tab> <C-d>
 
 " Switch case for non-alphabets
-nnoremap <silent> ~ :call <SID>tilde4nonAlpha(getline(".")[col(".")-1])<CR>
-vnoremap <silent> ~ :<C-u>call <SID>tilde4nonAlpha(<SID>getSelectedText())<CR>
+nnoremap <silent> ~ :call <SID>tildeForNonAlpha(getline(".")[col(".")-1])<CR>
+vnoremap <silent> ~ :<C-u>call <SID>tildeForNonAlpha(<SID>getSelectedText())<CR>
 
 " manLapack
 nnoremap <F2> :call <SID>manLapack()<CR>
