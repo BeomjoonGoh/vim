@@ -19,7 +19,7 @@ endif
 let mapleader = '\'
 
 call plug#begin('~/.vim/plugged')
-  Plug 'othree/vim-autocomplpop', { 'frozen' : 1 } | Plug 'vim-scripts/L9'
+  Plug 'othree/vim-autocomplpop' | Plug 'vim-scripts/L9'
   Plug 'majutsushi/tagbar', { 'on' : 'TagbarToggle' }
   Plug 'garbas/vim-snipmate' | Plug 'MarcWeber/vim-addon-mw-utils' | Plug 'tomtom/tlib_vim'
   Plug 'BeomjoonGoh/vim-cppman', { 'for' : 'cpp' }
@@ -170,7 +170,7 @@ set nowrap
 "--- Line number
 set numberwidth=4
 set number
-augroup numbertoggle
+augroup Numbertoggle
   "Turn off relativenumber for non focused splits. This has a potential of slowing down scrolling with iTerm2
   autocmd!
   let s:no_number_toggle = [ 'help', 'tagbar', 'netrw', 'cppman', 'man', 'undotree', 'diff' ]
@@ -187,6 +187,16 @@ set complete=.,w,b,u,t
 set completeopt+=menuone,noinsert
 let g:acp_enableAtStartup = 1
 
+function! s:unmapAcp()
+  nnoremap i <Nop> | nunmap i
+  nnoremap a <Nop> | nunmap a
+  nnoremap R <Nop> | nunmap R
+endfunction
+augroup UnmapAcp
+  autocmd!
+  autocmd BufEnter * call s:unmapAcp()
+augroup END
+
 function! s:completeInclude()
   if &complete =~ 'i'
     set complete-=i
@@ -199,7 +209,7 @@ endfunction
 if has('user_commands')
   command! CompleteIncludeToggle call <SID>completeInclude()
 endif
-silent call <SID>completeInclude()
+silent call s:completeInclude()
 
 "--- Split
 set splitbelow
@@ -249,7 +259,7 @@ function! s:iwhiteToggle()
   endif
 endfunction
 
-"--- terminal
+"--- terminal {{{
 if has('terminal')
   function! OpenTerminal(type)
     let l:cmd = a:type
@@ -291,6 +301,37 @@ if has('terminal')
     if l:oldcwd != getcwd()
       call ChangeDirectoryTerm()
     endif
+  endfunction
+
+  function! TextToTerm(text = "")
+    let l:text = (a:text != "") ? a:text : substitute(getline("."), '$', '\n', '')
+
+    let l:ftype = getbufvar("%", '&filetype')
+    if l:ftype == 'vim'
+      let l:text = substitute(l:text, '\n\+', '\n', 'g')
+    elseif l:ftype == 'python'
+      let l:text = s:processPython(l:text)
+    endif
+
+    call term_sendkeys(g:term_bufnr, l:text)
+  endfunction
+
+  function! s:processPython(code)
+    let l:text = ""
+    let l:previous_indent = 0
+    for l:line in split(a:code, '\n')
+      if empty(l:line) || l:line =~ '^\s*#'
+        continue
+      endif
+      let l:current_indent = match(l:line, '\w')
+      if l:previous_indent && !l:current_indent
+        let l:text .= ''.l:line.''
+      else
+        let l:text .= l:line.''
+      endif
+      let l:previous_indent = l:current_indent
+    endfor
+    return l:previous_indent ? l:text.'' : l:text
   endfunction
 
   " terminal-api
@@ -338,8 +379,11 @@ if has('terminal')
   nnoremap <silent> <Leader>cd :call ChangeDirectoryVim()<CR>
   tnoremap <silent> <Leader>cd <C-w>:call ChangeDirectoryTerm()<CR>
   tnoremap <Leader>ll 2vim make<CR>
+  nnoremap <Leader>t :call TextToTerm()<CR>
+  vnoremap <Leader>t :<C-u>call TextToTerm(<SID>getSelectedText())<CR>
   tnoremap :: <C-w>:
 endif
+" }}}
 
 "--- Cheatsheet {{{
 " TODO
@@ -621,7 +665,7 @@ nmap <silent> <Leader>r :nohlsearch<CR>
 nmap <silent> <Leader>R :silent!/BruteForceSearchReset_<C-r>=rand()<CR>.<CR>
 
 " Enter works in normal mode
-nmap <silent> <CR> :AcpLock<CR>i<C-m><Esc>:AcpUnlock<CR>
+nmap <silent> <CR> i<C-m><Esc>
 
 " To the previous buffer
 nnoremap <Leader><Leader><Leader> <C-^>

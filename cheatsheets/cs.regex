@@ -27,7 +27,7 @@
  "Character class"-----+----------------+----------------+-----------------+------------+{{{
   Any char but \n      | .              | .              | .               | .          |
   Any char and \n      |                |                |                 | \_.        |
-  Word (abc_)          | \w             | \w             | \w              | \w         |
+  Word (abc1_)         | \w             | \w             | \w              | \w         |
   Non-word             |                |                | \W              | \W         |
   Upper case           | [[:upper:]]    | [[:upper:]]    | \u [[:upper:]]  |            |
   Lower case           | [[:lower:]]    | [[:lower:]]    | \l [[:lower:]]  |            |
