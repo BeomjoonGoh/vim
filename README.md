@@ -7,25 +7,28 @@
 - [Commands](#commands)
 - [User Interfaces](#user-interfaces)
 - [Key maps](#key-maps)
-- [Todo](#todo)
 
 ## Installation
 
 This `vimrc` uses [vim-plug](https://github.com/junegunn/vim-plug) plugin
 manager.
 
-To install,
+To install, first clone this repository,
 ```bash
 git clone https://github.com/BeomjoonGoh/vim ~/.vim
+```
+Then get vim-plug in `~/.vim/autoload/` directory.
+```bash
 curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 ```
-
-And open vimrc (`vim ~/.vim/vimrc`),
+Lastly open vimrc (`vim ~/.vim/vimrc`). You would get a few error messages
+since none of the plugins are installed yet.  Install all plugins used by this
+repository.
 ```vim
-:source %
 :PlugInstall
 ```
+
 
 ## Plugins
 
@@ -44,26 +47,27 @@ Function `ToggleACP()` toggles `autocomplpop` plugin, and it is mapped to
 
 Loaded when `:TagbarToggle` is invoked which is mapped to `<F3>`.
 
-<details> <summary>Settings</summary>
+<details>
+  <summary>Settings</summary>
 
-```vim
-let g:tagbar_width            = 30
-let g:tagbar_compact          = 1
-let g:tagbar_indent           = 1
-let g:tagbar_show_balloon     = 0
-let g:tagbar_map_showproto    = 'f'
-let g:tagbar_map_togglefold   = ['<Space>', 'za']
-let g:tagbar_map_openallfolds = ['_', '<kMultiply>', 'zR']
-let g:tagbar_type_markdown    = {
-    \ 'ctagstype' : 'markdown',
-    \ 'kinds' : [
-        \ 'h:headings',
-        \ 'l:links',
-        \ 'i:images',
-    \ ],
-    \ 'sort' : 0,
-\ }
-```
+  ```vim
+  let g:tagbar_width            = 30
+  let g:tagbar_compact          = 1
+  let g:tagbar_indent           = 1
+  let g:tagbar_show_balloon     = 0
+  let g:tagbar_map_showproto    = 'f'
+  let g:tagbar_map_togglefold   = ['<Space>', 'za']
+  let g:tagbar_map_openallfolds = ['_', '<kMultiply>', 'zR']
+  let g:tagbar_type_markdown    = {
+      \ 'ctagstype' : 'markdown',
+      \ 'kinds' : [
+          \ 'h:headings',
+          \ 'l:links',
+          \ 'i:images',
+      \ ],
+      \ 'sort' : 0,
+  \ }
+  ```
 </details>
 
 
@@ -78,14 +82,15 @@ Snippets are stored in `snippets` directory and triggered with `<Tab>` key.
 `g:snipMate.no_default_aliases` is set so that aliases such as `C++` -> `C` is
 disabled.
 
-<details> <summary>Settings</summary>
+<details>
+  <summary>Settings</summary>
 
-```vim
-let g:snipMate = get(g:, 'snipMate', {})
-let g:snipMate.no_default_aliases = 1
-let g:snipMate.snippet_version = 1
-let g:snips_author = "Beomjoon Goh"
-```
+  ```vim
+  let g:snipMate = get(g:, 'snipMate', {})
+  let g:snipMate.no_default_aliases = 1
+  let g:snipMate.snippet_version = 1
+  let g:snips_author = "Beomjoon Goh"
+  ```
 </details>
 
 
@@ -109,16 +114,17 @@ Note the following default mappings:
 * `<Leader>lv` view pdf.
 * `<Leader>ll` compile latex.
 
-<details> <summary>Settings</summary>
+<details>
+  <summary>Settings</summary>
 
-```vim
-let g:Tex_PromptedCommands    = ''
-let g:tex_flavor              = 'latex'
-let g:Tex_DefaultTargetFormat = 'pdf'
-let g:Tex_ViewRule_pdf        = 'open -a Preview'
-let g:Tex_FoldedEnvironments  = ''
-let g:tex_indent_brace        = 0
-```
+  ```vim
+  let g:Tex_PromptedCommands    = ''
+  let g:tex_flavor              = 'latex'
+  let g:Tex_DefaultTargetFormat = 'pdf'
+  let g:Tex_ViewRule_pdf        = 'open -a Preview'
+  let g:Tex_FoldedEnvironments  = ''
+  let g:tex_indent_brace        = 0
+  ```
 </details>
 
 
@@ -139,22 +145,23 @@ Mapped to `ga`.
 
 > The undo history visualizer for VIM
 
-Mapped to `<Leader>u`. See `:help undo.txt` for more on builtin undo tree in
-vim. A custom diff command which is more git-diff like without headers is used.
+Mapped to `<Leader>u`. See `:help undo.txt` for more info on builtin undo tree
+in vim. A custom diff command, which is more git-diff like, is used.
 
-<details> <summary>Settings</summary>
+<details>
+  <summary>Settings</summary>
 
-```vim
-let g:undotree_WindowLayout             = 2
-let g:undotree_SplitWidth               = 24
-let g:undotree_DiffpanelHeight          = 6
-let g:undotree_SetFocusWhenToggle       = 1
-let g:undotree_DiffCommand              = '$HOME/.vim/bin/diff_no_header'
-let g:undotree_ShortIndicators          = 1
-let g:undotree_HighlightChangedText     = 0
-let g:undotree_HighlightChangedWithSign = 0
-let g:undotree_HelpLine                 = 0
-```
+  ```vim
+  let g:undotree_WindowLayout             = 2
+  let g:undotree_SplitWidth               = 24
+  let g:undotree_DiffpanelHeight          = 6
+  let g:undotree_SetFocusWhenToggle       = 1
+  let g:undotree_DiffCommand              = '$HOME/.vim/bin/diff_no_header'
+  let g:undotree_ShortIndicators          = 1
+  let g:undotree_HighlightChangedText     = 0
+  let g:undotree_HighlightChangedWithSign = 0
+  let g:undotree_HelpLine                 = 0
+  ```
 </details>
 
 
@@ -191,14 +198,15 @@ It depends on `vim-cpp-enhanced-highlight` plugin.  Supported syntax are: `C`,
 
 `vim-aftersyntax` uses this plugin.
 
-<details> <summary>Settings</summary>
+<details>
+  <summary>Settings</summary>
 
-```vim
-let g:cpp_class_scope_highlight     = 1
-let g:cpp_class_decl_highlight      = 1
-let g:cpp_member_variable_highlight = 1
-let g:cpp_no_function_highlight     = 1
-```
+  ```vim
+  let g:cpp_class_scope_highlight     = 1
+  let g:cpp_class_decl_highlight      = 1
+  let g:cpp_member_variable_highlight = 1
+  let g:cpp_no_function_highlight     = 1
+  ```
 </details>
 
 
@@ -212,13 +220,21 @@ let g:cpp_no_function_highlight     = 1
 For builtin commands `e`, `q`, `qa`, `w`, `wa`, `wq`, `wqa`, `sp`, and `vsp`,
 possible uppercase typos are defined.
 
-* `Vfind` works like `find` but in vertical split.
-* `Sfind` is `sfind` for completeness.
+* `Vfind`(`Sfind`) works like `find` but in vertical(horizontal) split.
 * `Help` opens help page in new tab not in split
-* `Vn`(`Sn`) opens a scratchpad.
+* `Vn`(`Sn`) opens a scratchpad in vertical(horizontal) split.
 * `RemoveTrailingSpaces` does want it sounds like.
-* `OpenFinder`<sup>[[1]](#MacOS)</sup> opens 
-* `InsertKoreanMode`<sup>[[1]](#MacOS)</sup> toggles
+* `Source` sources `vimrc`.
+* `OpenFinder`<sup>[[1]](#MacOS)</sup> opens a `Finder` window of the current
+  buffer.
+* `InsertForeign`<sup>[[1]](#MacOS)</sup> invokes the `ToggleInsertForeign()`
+  function.  When on, the input method is changed to Korean 2 set layout upon
+  entering the insert mode.  When leaving the insert mode, it's changed back
+  to US keyboard layout.  It uses the [input source switcher][issw], a command
+  line tool for switching the keyboard layout by Vladimir Timofeev.  A global
+  variable `g:InsertForeign_InsertLayout` stores which layout to be used.  
+
+[issw]: https://github.com/vovkasm/input-source-switcher
 
 
 ## User Interfaces
@@ -237,7 +253,6 @@ Tabline: `{tab}` = `{tab_num} {file} ([+],[*]) (({tot_win}))`
 
     {tab} {tab} {tab}                                                                       X
 
-
 * `{file}`: Current buffer name.
 * `{dir}`:  Vim's current directory.
 * `[+]`: If {file} is modified.
@@ -247,6 +262,7 @@ Tabline: `{tab}` = `{tab_num} {file} ([+],[*]) (({tot_win}))`
 * `X` : Close button for mouse
 
 See `:help statusline, :help tabline`
+
 
 ### Terminal
 
@@ -258,11 +274,15 @@ User defined commands that open `bash` in terminal emulator:
 * `Nterm` : `call term_start()`
 
 Bash is invoked by `bash --rcfile ~/.vim/bin/setup_bash.sh`, which adds
-`~/.vim/bin` in `$PATH`.  When terminal is opened, window height (`min(18%,
-15)` if botright) and width (`min(40%, 150)` if vertical) are fixed. The
-terminal window is closed once the job is finished.
+`~/.vim/bin` in `$PATH` environment.  When terminal is opened, window height
+(`min(18%, 15)` if `botright`) and width (`min(40%, 150)` if `vertical`) are
+fixed. The terminal window is closed once the job is finished.
 
-Terminal to Vim communication:
+#### Terminal - Vim communication
+
+`~/.vim/bin/2vim`
+
+#### Vim -Terminal communication
 
 
 ### Cheatsheet
@@ -270,93 +290,89 @@ Terminal to Vim communication:
 
 ## Key maps
 
-The backslash key (`\`) is used as The "mapleader" variable. The characters in
-square brakets n, i, v, and t stand for normal, insert, visual, and terminal
+The backslash key (`\`) is used as The "mapleader" variable. The characters n,
+i, v, and t stand for normal, insert, visual, and terminal
 mode respectively. See `:help map.txt` for help and `:map` to see defined maps.
 
 <details>
-<summary>General</summary>
-
-| Key     | Mode | Description |
-|:-------:|:----:|:------------|
-|`gf`     | n    | Go to a file under cursor in vertical split.
-|`gF`     | n    | Open a file under cursor to the current window.
-|`<S-Tab>`| i    | Tab backwards.
-|`~`      | n    | The `~` key works for non-alphabets as well.
-|`<F2>`   | n    | Manual page for `Lapack` library functions if the file is `.c`, `.cpp`, or `.h`
-|`<F9>`   | n i  | Type(i) or show(n) the current date and time stamp
-|`\r`     | n    | Stop highlight search result
-|`\R`     | n    | Brute force reset search
-|`<CR>`   | n    | Enter works in normal mode when `autocomplpop` is on.
-|`*`, `#` | v    | Search in visual mode
-|`<C-y>`  | v    | Yank to clipboard
-|`<C-p>`  | n    | Paste from clipboard
-|`<F8>`   | n    | Test regular expression under cursor in double quotes
-|`ga`     | n x  | Start interactive EasyAlign
-|`go`<sup>[[1]](#MacOS)</sup>| n v  | Open URL under cursor
+  <summary>General</summary>
+  
+  | Key     | Mode | Description |
+  |:-------:|:----:|:------------|
+  |`gf`     | n    | Go to a file under cursor in vertical split.
+  |`gF`     | n    | Open a file under cursor to the current window.
+  |`<S-Tab>`| i    | Tab backwards.
+  |`~`      | n    | The `~` key works for non-alphabets as well.
+  |`<F2>`   | n    | Manual page for `Lapack` library functions if the file is `.c`, `.cpp`, or `.h`
+  |`<F9>`   | n i  | Type(i) or show(n) the current date and time stamp
+  |`\r`     | n    | Stop highlight search result
+  |`\R`     | n    | Clear search result (register `"/"`)
+  |`<CR>`   | n    | Enter works in normal mode when `autocomplpop` is on.
+  |`\\\`    | n    | Go to the previous buffer
+  |`*`, `#` | v    | Search in visual mode
+  |`<C-y>`  | v    | Yank to clipboard (register `"\*`)
+  |`<C-p>`  | n    | Paste from clipboard (register `"\*`)
+  |`ga`     | n x  | Start interactive EasyAlign
+  |`go`<sup>[[1]](#MacOS)</sup>| n v  | Open URL/file under cursor
 </details>
 
 <details>
-<summary>Toggle stuff </summary>
-
-| Key     | Mode | Description |
-|:-------:|:----:|:------------|
-|`<F3>`   | n    | Toggle the `tagbar` plugin
-|`<F4>`   | n i  | Toggle `colorcolumn=120`
-|`<F5>`   | n i  | Toggle `autocomplpop` plugin
-|`<F6>`   | n i  | Toggle smart/auto indent, number, relative number for clipboard paste
-|`<F7>`   | n i  | Toggle spell checking
-|`<F10>`  | n    | Set mouse on and off
-|`<C-\>`  | n    | Toggle `netrw` in the left split
-|`\\\`    | n    | Go to the previous buffer
-|`<Space>`| n v  | Open/close folds
-|`z0`     | n    | Zero fold level
-|`\f`     | n    | Toggle `goyo` plugin with +5% offset
-|`\iw`    | n    | In diff mode, toggle ignore white spaces
-|`\u`     | n    | Toggle `undotree`
+  <summary>Toggle stuff </summary>
+  
+  | Key     | Mode | Description |
+  |:-------:|:----:|:------------|
+  |`<F3>`   | n    | Toggle the `tagbar` plugin
+  |`<F4>`   | n i  | Toggle `colorcolumn=120`
+  |`<F5>`   | n i  | Toggle `autocomplpop` plugin
+  |`<F6>`   | n i  | Toggle smart/auto indent, number, relative number for clipboard paste
+  |`<F7>`   | n i  | Toggle spell checking
+  |`<F10>`  | n    | Set mouse on and off
+  |`<C-\>`  | n    | Toggle `netrw` in the left split
+  |`<Space>`| n v  | Open/close folds
+  |`z[N]`   | n    | Set fold level to `[N]` = 0 ~ 9
+  |`\iw`    | n    | In diff mode, toggle ignore white spaces
+  |`\u`     | n    | Toggle `undotree`
 </details>
 
 <details>
-<summary>Moving around</summary>
-
-| Key    | Mode | Description |
-|:------:|:----:|:------------|
-|`Arrows`| n t  | Jump around split windows
-|`j`     | n    | Go up to the next row for wrapped lines
-|`k`     | n    | Go down to the next row for wrapped lines
-|`-`     | n    | Move to the end of a line
+  <summary>Moving around</summary>
+  
+  | Key    | Mode | Description |
+  |:------:|:----:|:------------|
+  |`Arrows`| n t  | Jump around split windows
+  |`j`     | n    | Go up to the next row for wrapped lines
+  |`k`     | n    | Go down to the next row for wrapped lines
 </details>
 
 <details>
-<summary>QuickFix</summary>
-
-| Key | Mode | Description |
-|:---:|:----:|:------------|
-|`\ll`| n    | Invoke `make` command and open QuickFix window
-|`\w` | n    | Open QuickFix window
-|`\c` | n    | Close QuickFix window
-|`\.` | n    | Jump to the next error/warning
-|`\,` | n    | Jump to the previous error/warning
-|`\g` | n    | From the QuickFix window, jump to the code where the cursor below indicates
-|`\e` | n    | Run `./main`
+  <summary>QuickFix</summary>
+  
+  | Key | Mode | Description |
+  |:---:|:----:|:------------|
+  |`\ll`| n    | Invoke `make` command and open QuickFix window
+  |`\w` | n    | Open QuickFix window
+  |`\c` | n    | Close QuickFix window
+  |`\.` | n    | Jump to the next error/warning
+  |`\,` | n    | Jump to the previous error/warning
+  |`\g` | n    | From the QuickFix window, go to the code where error occured.
 </details>
 
 <details>
-<summary>Tab page</summary>
-
-| Key       | Mode    | Description |
-|:---------:|:-------:|:------------|
-|`<Tab>:`   | n       | Type `:tab` in command-line
-|`<Tab>n`   | n       | Open current buffer in tab
-|`<Tab>e`   | n       | Type `:tabedit` in command-line
-|`<Tab>gf`  | n       | Open a file under cursor in a new tab page
-|`<C-Tab>`  | n i v t | Go to the next tab page (`iTerm` sends `<F11>`)
-|`<C-S-Tab>`| n i v t | Go to the previous tab page (`iTerm` sends `<F12>`)
-|`<Tab>[N]` | n       | Go to tab number `[N]` = 1 ~ 6
+  <summary>Tab page</summary>
+  
+  | Key       | Mode    | Description |
+  |:---------:|:-------:|:------------|
+  |`<Tab>:`   | n       | Type `:tab` in command-line
+  |`<Tab>e`   | n       | Type `:tabedit` in command-line
+  |`<Tab>n`   | n       | Open the current buffer in a new tab page
+  |`<Tab>gf`  | n       | Open a file under cursor in a new tab page
+  |`<C-Tab>`  | n i v t | Go to the next tab page (`iTerm` sends `<F11>`)
+  |`<C-S-Tab>`| n i v t | Go to the previous tab page (`iTerm` sends `<F12>`)
+  |`<Tab>[N]` | n       | Go to `[N]`th tab page, `[N]` = 1 ~ 6
 </details>
 
-### Todo
-- [ ] Make Tilde4nonAlpha work in visual
+## Todo
+- [x] Make Tilde4nonAlpha work in visual
 - [ ] Make plugin
   - [ ] cheatsheet
   - [ ] terminal
