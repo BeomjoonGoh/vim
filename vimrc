@@ -93,7 +93,7 @@ if has("user_commands")
   command! -nargs=? -complete=help Help tab help <args>
   command! Vn vsp $HOME/.vim/scratchpad.txt
   command! Sn sp  $HOME/.vim/scratchpad.txt
-  command! RemoveTrailingSpaces %s/\s\+$//e
+  command! RemoveTrailingSpaces %s/\m\s\+$//e
   command! Source source $HOME/.vim/vimrc
 endif
 
@@ -366,11 +366,11 @@ function! s:tildeForNonAlpha(str)
   let l:pool = '`1234567890-=[]\;,./''~!@#$%^&*()_+{}|:<>?"'
   let l:lines = 0
   for l:c in split(a:str, '\zs')
-    if     l:c =~ '\a' | normal! ~
-    elseif l:c =~ '\s' | normal! l
-    elseif l:c =~ '\d\|[[:punct:]]'
+    if     l:c =~ '\m\a' | normal! ~
+    elseif l:c =~ '\m\s' | normal! l
+    elseif l:c =~ '\m\d\|[[:punct:]]'
       execute 'normal!' 'r'.l:pool[((stridx(l:pool,l:c) + 21) % 42)].'l'
-    elseif l:c =~ '\n'
+    elseif l:c =~ '\m\n'
       let l:lines = l:lines + 1
       execute 'normal! `<'.l:lines.'j'
     endif
@@ -569,8 +569,8 @@ nnoremap <Leader>g :.cc<CR>
 
 "--- Search in visual mode (* and #)
 " See https://vim.fandom.com/wiki/Search_for_visually_selected_text
-vnoremap <silent> * :call setreg("/", substitute(<SID>getSelectedText(), "\_s\+", '\\_s\\+', 'g'))<Cr>n
-vnoremap <silent> # :call setreg("?", substitute(<SID>getSelectedText(), '\_s\+', '\\_s\\+', 'g'))<Cr>n
+vnoremap <silent> * :call setreg('/', substitute(<SID>getSelectedText(), '\m\_s\+', '\\_s\\+', 'g'))<Cr>n
+vnoremap <silent> # :call setreg('?', substitute(<SID>getSelectedText(), '\m\_s\+', '\\_s\\+', 'g'))<Cr>n
 
 "--- Moving around
 " Easy window navigation
@@ -603,7 +603,7 @@ nnoremap zr zR
 nnoremap zM zm
 nnoremap zm zM
 for i in range(10)
-  execute 'nnoremap' 'z'.i ':set foldlevel='.i.'<CR>'
+  execute "nnoremap" 'z'.i ":set foldlevel=".i.'<CR>'
 endfor
 
 "--- Tab page
@@ -614,21 +614,21 @@ nnoremap <Tab>gf <C-w>gf
 
 " <C-Tab>   : iTerm Sends HEX code for <F11> "[23~"
 " <C-S-Tab> : iTerm Sends HEX code for <F12> "[24~"
-call s:Noremap(['n','i','t'], '<silent> <F11>', ":tabnext<CR>")
-call s:Noremap(['n','i','t'], '<silent> <F12>', ":tabprevious<CR>")
+call s:Noremap(['n','i','t'], "<silent> <F11>", ":tabnext<CR>")
+call s:Noremap(['n','i','t'], "<silent> <F12>", ":tabprevious<CR>")
 
 for i in range(1,6)
-  execute 'nnoremap <Tab>'.i i.'gt'
+  execute "nnoremap" '<Tab>'.i i.'gt'
 endfor
 
 "--- EasyAlign
 nmap ga <Plug>(EasyAlign)
 xmap ga <Plug>(EasyAlign)
 
-"--- open URL
+"--- open URL/file
 if has('mac')
   nnoremap <silent> go :!open <cWORD><CR>
-  vnoremap <silent> go y<Esc>:!open <C-r>0<CR>
+  vnoremap <silent> go :<C-u>!open <SID>getSelectedText()<CR>
 endif
 
 "--- undotree
