@@ -28,6 +28,7 @@ call plug#begin('~/.vim/plugged')
   Plug 'junegunn/vim-easy-align'
   Plug 'mbbill/undotree', { 'on' : 'UndotreeToggle' }
   Plug 'junegunn/vim-peekaboo'
+  Plug '~/.vim/plugged/vim-easy-terminal'
 
   " Colorscheme & Syntax
   Plug 'BeomjoonGoh/vim-desertBJ'
@@ -258,132 +259,6 @@ function! s:iwhiteToggle()
     echo "ignore all white spaces on"
   endif
 endfunction
-
-"--- terminal {{{
-if has('terminal')
-  function! OpenTerminal(type)
-    let l:cmd = a:type
-    let l:rcfile = expand('$HOME/.vim/bin/setup_bash.sh')
-    let l:term_options = {
-          \ "term_finish" : "close",
-          \ "term_name" : "[Terminal] bash",
-          \}
-    if     l:cmd == "botright"
-      let l:term_options["term_rows"] = min([float2nr(0.18*&lines),15])
-    elseif l:cmd == "vertical"
-      let l:term_options["term_cols"] = min([float2nr(0.4*&columns),150])
-    elseif l:cmd == ""
-      let l:term_options["curwin"] = 1
-    elseif l:cmd == "tab"
-    else
-      return 1
-    endif
-    execute l:cmd 'call term_start("bash --rcfile '.l:rcfile.'", l:term_options)'
-    let g:term_bufnr = term_list()[0]
-  endfunction
-
-  autocmd TerminalOpen *
-  \ if &buftype == 'terminal' |
-  \   set winfixheight winfixwidth | 
-  \   wincmd = |
-  \ endif
-
-  function! ChangeDirectoryTerm()
-    if exists("g:term_bufnr") && getbufvar(g:term_bufnr, '&buftype') == 'terminal'
-      let l:cmd = "cd " . fnameescape(getcwd()) . "\<CR>"
-      call term_sendkeys(g:term_bufnr, l:cmd)
-    endif
-  endfunction
-
-  function! ChangeDirectoryVim()
-    let l:oldcwd = getcwd()
-    cd %:p:h
-    if l:oldcwd != getcwd()
-      call ChangeDirectoryTerm()
-    endif
-  endfunction
-
-  function! TextToTerm(text = "")
-    let l:text = (a:text != "") ? a:text : substitute(getline("."), '$', '\n', '')
-
-    let l:ftype = getbufvar("%", '&filetype')
-    if l:ftype == 'vim'
-      let l:text = substitute(l:text, '\n\+', '\n', 'g')
-    elseif l:ftype == 'python'
-      let l:text = s:processPython(l:text)
-    endif
-
-    call term_sendkeys(g:term_bufnr, l:text)
-  endfunction
-
-  function! s:processPython(code)
-    let l:text = ""
-    let l:previous_indent = 0
-    for l:line in split(a:code, '\n')
-      if empty(l:line) || l:line =~ '^\s*#'
-        continue
-      endif
-      let l:current_indent = match(l:line, '\w')
-      if l:previous_indent && !l:current_indent
-        let l:text .= ''.l:line.''
-      else
-        let l:text .= l:line.''
-      endif
-      let l:previous_indent = l:current_indent
-    endfor
-    return l:previous_indent ? l:text.'' : l:text
-  endfunction
-
-  " terminal-api
-  function! Tapi_SetTermBufferNumber(bufnr, arglist)
-    let g:term_bufnr = a:bufnr
-    echomsg "This terminal(" . g:term_bufnr . ") is now set to g:term_bufnr."
-  endfunction
-
-  function! Tapi_ChangeDirectory(bufnr, arglist)
-    let l:cwd = join(a:arglist[:-2], " ")
-    let l:do_cd = a:arglist[-1]
-    if getcwd() != l:cwd
-      execute 'cd' l:cwd
-    endif
-    if l:do_cd
-      call ChangeDirectoryTerm()
-    endif
-  endfunction
-
-  function! Tapi_Split(bufnr, arglist)
-    if a:arglist[0] != 'v' && a:arglist[0] != 's'
-      return
-    endif
-    let l:mode = (a:arglist[0] == 's') ? '' : a:arglist[0]
-    let l:file = a:arglist[1]
-    let l:cmd = (l:file == "new") ? '' : "split "
-    wincmd W
-    execute l:mode.l:cmd.l:file
-  endfunction
-
-  function! Tapi_Make(bufnr, arglist)
-    execute 'make' join(a:arglist, " ")
-    botright cwindow
-  endfunction
-
-  " commands
-  if has("user_commands")
-    command! Bterm call OpenTerminal("botright")
-    command! Vterm call OpenTerminal("vertical")
-    command! Nterm call OpenTerminal("")
-    command! Tterm call OpenTerminal("tab")
-  endif
-
-  " keymap
-  nnoremap <silent> <Leader>cd :call ChangeDirectoryVim()<CR>
-  tnoremap <silent> <Leader>cd <C-w>:call ChangeDirectoryTerm()<CR>
-  tnoremap <Leader>ll 2vim make<CR>
-  nnoremap <Leader>t :call TextToTerm()<CR>
-  vnoremap <Leader>t :<C-u>call TextToTerm(<SID>getSelectedText())<CR>
-  tnoremap :: <C-w>:
-endif
-" }}}
 
 "--- Cheatsheet {{{
 " TODO
@@ -758,4 +633,14 @@ endif
 
 "--- undotree
 nnoremap <Leader>u :UndotreeToggle<CR>
+
+"--- easy-terminal
+nmap <Leader>cd <Plug>EasyTermCdVim
+tmap <Leader>cd <Plug>EasyTermCdTerm
+nmap <Leader>t <Plug>EasyTermSendText
+vmap <Leader>t <Plug>EasyTermSendText
+nmap <Leader>p <Plug>EasyTermPutLast
+tmap <Leader>y <Plug>EasyTermYankLast
+tnoremap <Leader>ll 2vim make<CR>
+tnoremap :: <C-w>:
 " }}}
