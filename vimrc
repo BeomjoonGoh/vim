@@ -408,7 +408,7 @@ if has('mac')
       augroup END
       let g:XkbSwitchEnabled = 0
     else
-      let g:XkbSwitchLib = expand('$HOME/work/bin/libInputSourceSwitcher.dylib')
+      let g:XkbSwitchLib = '/usr/local/lib/libInputSourceSwitcher.dylib'
       EnableXkbSwitch
     endif
   endfunction
