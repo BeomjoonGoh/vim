@@ -28,7 +28,7 @@ call plug#begin('~/.vim/plugged')
   Plug 'junegunn/vim-easy-align'
   Plug 'mbbill/undotree', { 'on' : 'UndotreeToggle' }
   Plug 'junegunn/vim-peekaboo'
-  Plug 'lyokha/vim-xkbswitch', { 'on' : 'ToggleXkbSwitch' }
+  Plug 'lyokha/vim-xkbswitch', { 'on' : 'EnableXkbSwitch' }
   Plug '~/.vim/plugged/vim-easy-terminal'
 
   " Colorscheme & Syntax
