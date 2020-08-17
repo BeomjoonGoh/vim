@@ -28,6 +28,7 @@ call plug#begin('~/.vim/plugged')
   Plug 'junegunn/vim-easy-align'
   Plug 'mbbill/undotree', { 'on' : 'UndotreeToggle' }
   Plug 'junegunn/vim-peekaboo'
+  Plug 'lyokha/vim-xkbswitch', { 'on' : 'ToggleXkbSwitch' }
   Plug '~/.vim/plugged/vim-easy-terminal'
 
   " Colorscheme & Syntax
@@ -171,7 +172,7 @@ set nowrap
 "--- Line number
 set numberwidth=4
 set number
-augroup Numbertoggle
+augroup number_toggle
   "Turn off relativenumber for non focused splits. This has a potential of slowing down scrolling with iTerm2
   autocmd!
   let s:no_number_toggle = [ 'help', 'tagbar', 'netrw', 'cppman', 'man', 'undotree', 'diff' ]
@@ -188,17 +189,17 @@ set complete=.,w,b,u,t
 set completeopt+=menuone,noinsert
 let g:acp_enableAtStartup = 1
 
-function! s:unmapAcp()
+function! s:UnmapAcp()
   nnoremap i <Nop> | nunmap i
   nnoremap a <Nop> | nunmap a
   nnoremap R <Nop> | nunmap R
 endfunction
-augroup UnmapAcp
+augroup unmap_acp
   autocmd!
-  autocmd BufEnter * call s:unmapAcp()
+  autocmd BufEnter * call s:UnmapAcp()
 augroup END
 
-function! s:completeInclude()
+function! s:CompleteInclude()
   if &complete =~ 'i'
     set complete-=i
   else
@@ -208,9 +209,9 @@ function! s:completeInclude()
   let g:acp_completeOption = '&complete'
 endfunction
 if has('user_commands')
-  command! CompleteIncludeToggle call <SID>completeInclude()
+  command! CompleteIncludeToggle call <SID>CompleteInclude()
 endif
-silent call s:completeInclude()
+silent call s:CompleteInclude()
 
 "--- Split
 set splitbelow
@@ -250,7 +251,7 @@ let g:netrw_special_syntax = 1  " file type syntax
 
 "--- vimdiff
 set diffopt=internal,filler,closeoff,context:3
-function! s:iwhiteToggle()
+function! s:IwhiteToggle()
   if &diffopt =~ 'iwhiteall'
     set diffopt-=iwhiteall
     echo "ignore all white spaces off"
@@ -307,11 +308,11 @@ let g:undotree_WindowLayout             = 2
 let g:undotree_SplitWidth               = 24
 let g:undotree_DiffpanelHeight          = 10
 let g:undotree_SetFocusWhenToggle       = 1
-let g:undotree_DiffCommand              = '$HOME/.vim/bin/diff_no_header'
 let g:undotree_ShortIndicators          = 1
 let g:undotree_HighlightChangedText     = 0
 let g:undotree_HighlightChangedWithSign = 0
 let g:undotree_HelpLine                 = 0
+let g:undotree_DiffCommand = 'custom_diff(){ diff -U1 "$@" | tail -n+3;}; custom_diff'
 
 " }}}
 " FUNCTIONS {{{
@@ -352,7 +353,7 @@ function! TogglePasteSafe()
   echo msg
 endfunction
 
-function! s:getSelectedText()
+function! s:GetSelectedText()
   let l:old_reg = getreg('"')
   let l:old_regtype = getregtype('"')
   norm gvy
@@ -362,7 +363,7 @@ function! s:getSelectedText()
   return l:ret
 endfunction
 
-function! s:tildeForNonAlpha(str)
+function! s:TildeForNonAlpha(str)
   let l:pool = '`1234567890-=[]\;,./''~!@#$%^&*()_+{}|:<>?"'
   let l:lines = 0
   for l:c in split(a:str, '\zs')
@@ -377,7 +378,7 @@ function! s:tildeForNonAlpha(str)
   endfor
 endfunction
 
-function! s:manLapack()
+function! s:ManLapack()
   execute "Man" substitute(expand("<cword>"), '_', '','g')
 endfunction
 
@@ -389,40 +390,31 @@ endfunction
 
 if has('mac')
   "--- OpenFinder
-  function! s:openFinder()
+  function! s:OpenFinder()
     let l:cmd = '!open ' . (filereadable(expand("%")) ? '-R '.shellescape("%") : '.')
     execute "silent!" l:cmd
     redraw!
   endfunction
   
   if has('user_commands')
-    command! OpenFinder call <SID>openFinder()
+    command! OpenFinder call <SID>OpenFinder()
   endif
 
-  "--- InsertForeign
-  let g:InsertForeign_IssLib = expand('$HOME/.vim/bin/libInputSourceSwitcher.dylib')
-  let g:InsertForeign_DefaultLayout = 'com.apple.keylayout.US'
-  let g:InsertForeign_InsertLayout = 'com.apple.inputmethod.Korean.2SetKorean'
-  if filereadable(g:InsertForeign_IssLib)
-    function! s:toggleInsertForeign()
-      if !exists('#InsertForeignAu#InsertEnter')
-        augroup InsertForeignAu
-          autocmd!
-          autocmd InsertEnter * call libcall(g:InsertForeign_IssLib, 'Xkb_Switch_setXkbLayout', g:InsertForeign_InsertLayout)
-          autocmd InsertLeave * call libcall(g:InsertForeign_IssLib, 'Xkb_Switch_setXkbLayout', g:InsertForeign_DefaultLayout)
-        augroup END
-        echo "InsertForeign is on"
-      else
-        augroup InsertForeignAu
-          autocmd!
-        augroup END
-        echo "InsertForeign is off"
-      endif
-    endfunction
-
-    if has('user_commands')
-      command! InsertForeign call <SID>toggleInsertForeign()
+  "--- xkbswitch
+  function! s:ToggleXkbSwitch()
+    if get(g:, 'XkbSwitchEnabled')
+      augroup XkbSwitch
+        autocmd!
+      augroup END
+      let g:XkbSwitchEnabled = 0
+    else
+      let g:XkbSwitchLib = expand('$HOME/work/bin/libInputSourceSwitcher.dylib')
+      EnableXkbSwitch
     endif
+  endfunction
+
+  if has('user_commands')
+    command! ToggleXkbSwitch call <SID>ToggleXkbSwitch()
   endif
 endif
 
@@ -435,14 +427,14 @@ colorscheme desertBJ
 " FILETYPE SPECIFIC {{{
 if !exists('user_filetypes')
   let user_filetypes = 1
-  augroup UserFileType
+  augroup user_filetype
     autocmd!
     "--- .tex files
     autocmd FileType tex
     \ setlocal textwidth=120 |
     \ setlocal foldlevel=99
-    let g:Tex_PromptedCommands    = ''
     let g:tex_flavor              = 'latex'
+    let g:Tex_PromptedCommands    = ''
     let g:Tex_DefaultTargetFormat = 'pdf'
     let g:Tex_ViewRule_pdf        = 'open -a Preview'
     let g:Tex_FoldedEnvironments  = ''
@@ -525,11 +517,11 @@ nnoremap gF :w<CR>gf
 inoremap <S-Tab> <C-d>
 
 " Switch case for non-alphabets
-nnoremap <silent> ~ :call <SID>tildeForNonAlpha(getline(".")[col(".")-1])<CR>
-vnoremap <silent> ~ :<C-u>call <SID>tildeForNonAlpha(<SID>getSelectedText())<CR>
+nnoremap <silent> ~ :call <SID>TildeForNonAlpha(getline(".")[col(".")-1])<CR>
+vnoremap <silent> ~ :<C-u>call <SID>TildeForNonAlpha(<SID>GetSelectedText())<CR>
 
-" manLapack
-nnoremap <F2> :call <SID>manLapack()<CR>
+" ManLapack
+nnoremap <F2> :call <SID>ManLapack()<CR>
 
 " Type(i) or show(n) the current date stamp
 imap <F9> <C-R>=strftime('%d %b %Y %T %z')<CR>
@@ -557,7 +549,7 @@ call s:Noremap(['n','i'], '<F6>',  ":call TogglePasteSafe()<CR>")
 call s:Noremap(['n','i'], '<F7>',  ":setlocal spell!<CR>:echo 'Spell Check: '.strpart('OffOn', 3*&spell, 3)<CR>")
 call s:Noremap(['n','i'], '<F10>', ":call ToggleMouse()<CR>")
 call s:Noremap(['n','i'], '<C-\>', ":Lexplore<CR>")
-nnoremap <Leader>iw :call <SID>iwhiteToggle()<CR>
+nnoremap <Leader>iw :call <SID>IwhiteToggle()<CR>
 
 "--- QuickFix window
 nnoremap <Leader>ll :w<CR>:make -s<CR>:botright cwindow<CR>
@@ -569,8 +561,8 @@ nnoremap <Leader>g :.cc<CR>
 
 "--- Search in visual mode (* and #)
 " See https://vim.fandom.com/wiki/Search_for_visually_selected_text
-vnoremap <silent> * :call setreg('/', substitute(<SID>getSelectedText(), '\m\_s\+', '\\_s\\+', 'g'))<Cr>n
-vnoremap <silent> # :call setreg('?', substitute(<SID>getSelectedText(), '\m\_s\+', '\\_s\\+', 'g'))<Cr>n
+vnoremap <silent> * :call setreg('/', substitute(<SID>GetSelectedText(), '\m\_s\+', '\\_s\\+', 'g'))<Cr>n
+vnoremap <silent> # :call setreg('?', substitute(<SID>GetSelectedText(), '\m\_s\+', '\\_s\\+', 'g'))<Cr>n
 
 "--- Moving around
 " Easy window navigation
@@ -628,7 +620,7 @@ xmap ga <Plug>(EasyAlign)
 "--- open URL/file
 if has('mac')
   nnoremap <silent> go :!open <cWORD><CR>
-  vnoremap <silent> go :<C-u>!open <SID>getSelectedText()<CR>
+  vnoremap <silent> go :<C-u>!open <SID>GetSelectedText()<CR>
 endif
 
 "--- undotree
