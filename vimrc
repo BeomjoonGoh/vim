@@ -19,6 +19,7 @@ endif
 let mapleader = '\'
 
 call plug#begin('~/.vim/plugged')
+  Plug 'tpope/vim-fugitive'
   Plug 'othree/vim-autocomplpop' | Plug 'vim-scripts/L9'
   Plug 'majutsushi/tagbar', { 'on' : 'TagbarToggle' }
   Plug 'garbas/vim-snipmate' | Plug 'MarcWeber/vim-addon-mw-utils' | Plug 'tomtom/tlib_vim'
@@ -30,7 +31,6 @@ call plug#begin('~/.vim/plugged')
   Plug 'junegunn/vim-peekaboo'
   Plug 'lyokha/vim-xkbswitch', { 'on' : 'EnableXkbSwitch' }
   Plug 'BeomjoonGoh/vim-easy-terminal'
-  Plug 'tpope/vim-fugitive'
 
   " Colorscheme & Syntax
   Plug 'BeomjoonGoh/vim-desertBJ'
@@ -109,8 +109,15 @@ set wildmenu
 set wildmode=list:longest,full
 set nofileignorecase
 set statusline=%!MyStatusLine()
+function! StatusLineGit()
+  let l:branch = FugitiveHead()
+  if !empty(l:branch)
+    let l:branch = '['.l:branch.'] '
+  endif
+  return l:branch
+endfunction
 function! MyStatusLine()
-  return '%h%f %m%r  cwd: %<' . substitute(getcwd(), $HOME, '~', '') . ' %=%(C: %c%V, L: %l/%L%) %P '
+  return '%{StatusLineGit()}%h%{fnamemodify(expand("%"), ":~:.")} %m%r  cwd: %<%{fnamemodify(getcwd(), ":~:.")} %=%(%c%V, %l/%L%) %P '
 endfunction
 let &fillchars = 'vert: ,fold: ,diff: '
 
@@ -636,4 +643,7 @@ nmap <Leader>p <Plug>EasyTermPutLast
 tmap <Leader>y <Plug>EasyTermYankLast
 tnoremap <Leader>ll 2vim make<CR>
 tnoremap :: <C-w>:
+
+"--- fugitive
+cnoremap <C-g> vertical Git<Space>
 " }}}
