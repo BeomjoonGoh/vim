@@ -30,6 +30,7 @@ call plug#begin('~/.vim/plugged')
   Plug 'junegunn/vim-peekaboo'
   Plug 'lyokha/vim-xkbswitch', { 'on' : 'EnableXkbSwitch' }
   Plug 'BeomjoonGoh/vim-easy-terminal'
+  Plug 'tpope/vim-fugitive'
 
   " Colorscheme & Syntax
   Plug 'BeomjoonGoh/vim-desertBJ'
