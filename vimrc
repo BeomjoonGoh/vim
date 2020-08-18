@@ -29,7 +29,7 @@ call plug#begin('~/.vim/plugged')
   Plug 'mbbill/undotree', { 'on' : 'UndotreeToggle' }
   Plug 'junegunn/vim-peekaboo'
   Plug 'lyokha/vim-xkbswitch', { 'on' : 'EnableXkbSwitch' }
-  Plug '~/.vim/plugged/vim-easy-terminal'
+  Plug 'BeomjoonGoh/vim-easy-terminal'
 
   " Colorscheme & Syntax
   Plug 'BeomjoonGoh/vim-desertBJ'
