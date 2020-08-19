@@ -34,7 +34,7 @@ call plug#begin('~/.vim/plugged')
   " FileType
   Plug 'BeomjoonGoh/vim-cppman',       { 'for' : 'cpp' }
   Plug 'vim-latex/vim-latex',          { 'for' : 'tex' }
-  Plug 'iamcco/markdown-preview.nvim', { 'for': ['markdown', 'vim-plug'], 'do': Function('mkdp#util#install') }
+  Plug 'iamcco/markdown-preview.nvim', { 'for': ['markdown', 'vim-plug'], 'do': { -> mkdp#util#install() } }
 
   " Colorscheme & Syntax
   Plug 'BeomjoonGoh/vim-desertBJ'
