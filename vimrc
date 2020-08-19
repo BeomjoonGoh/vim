@@ -19,18 +19,22 @@ endif
 let mapleader = '\'
 
 call plug#begin('~/.vim/plugged')
+  " General
+  Plug 'BeomjoonGoh/vim-easy-terminal'
   Plug 'tpope/vim-fugitive'
   Plug 'othree/vim-autocomplpop' | Plug 'vim-scripts/L9'
-  Plug 'majutsushi/tagbar', { 'on' : 'TagbarToggle' }
-  Plug 'garbas/vim-snipmate' | Plug 'MarcWeber/vim-addon-mw-utils' | Plug 'tomtom/tlib_vim'
-  Plug 'BeomjoonGoh/vim-cppman', { 'for' : 'cpp' }
-  Plug 'vim-latex/vim-latex', { 'for' : 'tex' }
+  Plug 'garbas/vim-snipmate'     | Plug 'MarcWeber/vim-addon-mw-utils' | Plug 'tomtom/tlib_vim'
   Plug 'michaeljsmith/vim-indent-object'
-  Plug 'junegunn/vim-easy-align'
-  Plug 'mbbill/undotree', { 'on' : 'UndotreeToggle' }
   Plug 'junegunn/vim-peekaboo'
-  Plug 'lyokha/vim-xkbswitch', { 'on' : 'EnableXkbSwitch' }
-  Plug 'BeomjoonGoh/vim-easy-terminal'
+  Plug 'majutsushi/tagbar',             { 'on' : 'TagbarToggle' }
+  Plug 'junegunn/vim-easy-align',       { 'on' : ['<Plug>(EasyAlign)', 'EasyAlign'] }
+  Plug 'mbbill/undotree',               { 'on' : 'UndotreeToggle' }
+  Plug 'lyokha/vim-xkbswitch',          { 'on' : 'EnableXkbSwitch' }
+
+  " FileType
+  Plug 'BeomjoonGoh/vim-cppman',       { 'for' : 'cpp' }
+  Plug 'vim-latex/vim-latex',          { 'for' : 'tex' }
+  Plug 'iamcco/markdown-preview.nvim', { 'for': ['markdown', 'vim-plug'], 'do': Function('mkdp#util#install') }
 
   " Colorscheme & Syntax
   Plug 'BeomjoonGoh/vim-desertBJ'
