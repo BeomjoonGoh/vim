@@ -5,6 +5,7 @@
 
 " List {{{
 "" List creation
+let two = 'two'
 let mylist = [1, two, 3, 'four']
 let emptylist = []
 let nestlist = [[11, 12], [21, 22], [31, 32]]
@@ -18,11 +19,11 @@ let mylist[1] = 2
 """ NOTE: string can do these except negative numbers
 
 "" List concatenation
-let longlist = mylist + [5, 6]  " [1, two, 3, 'four', 5, 6]
-let mylist += [7, 8]            " [1, two, 3, 'four', 5, 6, 7, 8]
+let longlist = mylist + [5, 6]  " [1, 'two', 3, 'four', 5, 6]
+let mylist += [7, 8]            " [1, 'two', 3, 'four', 5, 6, 7, 8]
 
 "" Sublist
-let shortlist = mylist[1:2]	" [two, 3]
+let shortlist = mylist[1:2]	" ['two', 3]
 let shortlist = mylist[2:-1]	" [3, 'four', 5, 6, 7, 8]
 let endlist   = mylist[2:]	" [3, 'four', 5, 6, 7, 8]
 let otherlist = mylist[:]	" make a copy
@@ -37,11 +38,11 @@ echo list2                      '= [1, 2, 3, 4]'
 let list2 = copy(list1)         " same as :let b = a
 let list2 = deepcopy(list1)     " same as :let b = a[:]
 
-echo list1 is list2             'check if two refer to the same List.'
-echo a == b                     'check if two have the same value'
+echo list1 is list2             'checks if two refer to the same List.'
+echo list1 == list2             'checks if two have the same value'
 
 "" List unpack
-let [var1, var2] = mylist
+let [var1, var2] = [0, 1]       " error if length is different
 let [var1, var2; rest] = mylist
 " }}}
 
@@ -55,7 +56,8 @@ let mydict = #{zero: 0, one: 1, two-key: 2, 33: 3, four: 4} " Literal Dictionary
 let val = mydict['one']
 let mydict['four'] = 4
 let mydict.four = 4             " if key is \w\+
-echo dict.key[idx].key
+let mydict['k'] = [ 0, {'key': 'val'} ]
+echo mydict.k[1].key            '= val'
 
 "" Dictionary identity
 let onedict = {'a': 1, 'b': 2}
@@ -65,10 +67,9 @@ echo onedict['a']               '= 11'
 
 "" Dictionary modification
 let i = remove(mydict, 'zero')
-unlet mydict.zero
-unlet mydict['zero']
-call extend(a, b)               " For same keys, values are overwritten.
-call filter(a, 'v:val =~ "x"')
+unlet mydict['k']
+call extend(mydict, {'33':'x'}) " For same keys, values are overwritten.
+call filter(mydict, 'v:val =~ "x"')
 
 "" Dictionary function
 """ with dict attribute
@@ -86,7 +87,7 @@ let mydict = {'data': [0, 1, 2, 3]}
 function mydict.len()
   return len(self.data)
 endfunction
-echo mydict.len()
+echo mydict.len()               '= 4'
 " }}}
 
 " Expression syntax {{{
