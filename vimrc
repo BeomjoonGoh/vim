@@ -114,6 +114,9 @@ set wildmode=list:longest,full
 set nofileignorecase
 set statusline=%!MyStatusLine()
 function! StatusLineGit()
+  if !exists('g:loaded_fugitive')
+    return ''
+  endif
   let l:branch = FugitiveHead()
   if !empty(l:branch)
     let l:branch = '['.l:branch.'] '
