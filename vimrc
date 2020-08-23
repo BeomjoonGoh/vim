@@ -26,10 +26,10 @@ call plug#begin('~/.vim/plugged')
   Plug 'garbas/vim-snipmate'     | Plug 'MarcWeber/vim-addon-mw-utils' | Plug 'tomtom/tlib_vim'
   Plug 'michaeljsmith/vim-indent-object'
   Plug 'junegunn/vim-peekaboo'
-  Plug 'majutsushi/tagbar',             { 'on' : 'TagbarToggle' }
-  Plug 'junegunn/vim-easy-align',       { 'on' : ['<Plug>(EasyAlign)', 'EasyAlign'] }
-  Plug 'mbbill/undotree',               { 'on' : 'UndotreeToggle' }
-  Plug 'lyokha/vim-xkbswitch',          { 'on' : 'EnableXkbSwitch' }
+  Plug 'majutsushi/tagbar',       { 'on' : 'TagbarToggle' }
+  Plug 'junegunn/vim-easy-align', { 'on' : ['<Plug>(EasyAlign)', 'EasyAlign'] }
+  Plug 'mbbill/undotree',         { 'on' : 'UndotreeToggle' }
+  Plug 'lyokha/vim-xkbswitch',    { 'on' : 'EnableXkbSwitch' }
 
   " FileType
   Plug 'BeomjoonGoh/vim-cppman',       { 'for' : 'cpp' }
@@ -124,7 +124,8 @@ function! StatusLineGit()
   return l:branch
 endfunction
 function! MyStatusLine()
-  return '%{StatusLineGit()}%h%{fnamemodify(expand("%"), ":~:.")} %m%r  cwd: %<%{fnamemodify(getcwd(), ":~:.")} %=%(%c%V, %l/%L%) %P '
+  let l:fname = empty(expand("%")) ? '%f' : '%{fnamemodify(expand("%"), ":~:.")}'
+  return '%{StatusLineGit()}%h'.l:fname.' %m%r  cwd: %<%{fnamemodify(getcwd(), ":~:.")} %=%(%c%V, %l/%L%) %P '
 endfunction
 let &fillchars = 'vert: ,fold: ,diff: '
 
@@ -277,6 +278,7 @@ function! s:IwhiteToggle()
 endfunction
 
 "--- Cheatsheet {{{
+" Help <mods> (https://vimways.org/2019/writing-vim-plugin/)
 " TODO
 " [ ] make it a plugin
 " [ ] write doc
@@ -328,6 +330,20 @@ let g:undotree_HighlightChangedText     = 0
 let g:undotree_HighlightChangedWithSign = 0
 let g:undotree_HelpLine                 = 0
 let g:undotree_DiffCommand = 'custom_diff(){ diff -U1 "$@" | tail -n+3;}; custom_diff'
+
+"--- fugitive
+if has('user_commands')
+  command! -bang -nargs=? -range=-1 -complete=customlist,fugitive#Complete Vg   vertical belowright G
+  command! -bang -nargs=? -range=-1 -complete=customlist,fugitive#Complete Vgit vertical belowright Git
+endif
+
+"--- easy-terminal
+if has('user_commands')
+  command! -complete=custom,easy_terminal#Complete Bterm botright Term
+  command! -complete=custom,easy_terminal#Complete Vterm vertical botright Term
+  command! -complete=custom,easy_terminal#Complete Tterm tab Term
+endif
+
 
 " }}}
 " FUNCTIONS {{{
@@ -650,7 +666,4 @@ nmap <Leader>p <Plug>EasyTermPutLast
 tmap <Leader>y <Plug>EasyTermYankLast
 tnoremap <Leader>ll 2vim make<CR>
 tnoremap :: <C-w>:
-
-"--- fugitive
-cnoremap <C-g> vertical Git<Space>
 " }}}
