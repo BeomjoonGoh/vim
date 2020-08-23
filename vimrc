@@ -89,16 +89,14 @@ if has("user_commands")
   command! -bang Wa wa<bang>
   command! -bang WA wa<bang>
   command! -bang Q q<bang>
-  command! -bang QA qa<bang>
   command! -bang Qa qa<bang>
+  command! -bang QA qa<bang>
   command! -nargs=? -complete=file Sp sp <args>
   command! -nargs=? -complete=file Vs vs <args>
   command! -nargs=? -complete=file Vsp vsp <args>
   command! -nargs=? -complete=file_in_path Vfind vnew<bar> find <args>
   command! -nargs=? -complete=file_in_path Sfind sfind <args>
   command! -nargs=? -complete=help Help tab help <args>
-  command! Vn vsp $HOME/.vim/scratchpad.txt
-  command! Sn sp  $HOME/.vim/scratchpad.txt
   command! RemoveTrailingSpaces %s/\m\s\+$//e
   command! Source source $HOME/.vim/vimrc
 endif
@@ -202,7 +200,7 @@ set spellsuggest=best,3         " 'z=' shows 3 best suggestions
 "--- Insert mode completion & AutoComplPop settings
 set complete=.,w,b,u,t
 set completeopt+=menuone,noinsert
-let g:acp_enableAtStartup = 1
+let g:acp_enableAtStartup = 0
 
 function! s:UnmapAcp()
   nnoremap i <Nop> | nunmap i
@@ -401,10 +399,6 @@ function! s:TildeForNonAlpha(str)
   endfor
 endfunction
 
-function! s:ManLapack()
-  execute "Man" substitute(expand("<cword>"), '_', '','g')
-endfunction
-
 function! ClearNamedRegisters()
   for i in split("abcdefghijklmnopqrstuvwxyz",'\zs')
     call setreg(i,'')
@@ -448,46 +442,46 @@ colorscheme desertBJ
 
 " }}}
 " FILETYPE SPECIFIC {{{
-if !exists('user_filetypes')
-  let user_filetypes = 1
+"--- .tex files
+let g:tex_flavor              = 'latex'
+let g:Tex_PromptedCommands    = ''
+let g:Tex_DefaultTargetFormat = 'pdf'
+let g:Tex_ViewRule_pdf        = 'open -a Preview'
+let g:Tex_FoldedEnvironments  = ''
+let g:tex_indent_brace        = 0
+"--- .c, .cpp files
+let g:cpp_class_scope_highlight     = 1
+let g:cpp_class_decl_highlight      = 1
+let g:cpp_member_variable_highlight = 1
+let g:cpp_no_function_highlight     = 1
+"--- .py files
+let python_highlight_all = 1
+"--- .md files
+let g:markdown_fenced_languages = [ 'bash=sh', 'vim', 'python', 'cpp' ]
+let g:markdown_minlines         = 100
+let g:markdown_folding          = 1
+
+if !exists('g:user_filetypes')
+  let g:user_filetypes = 1
   augroup user_filetype
     autocmd!
-    "--- .tex files
     autocmd FileType tex
     \ setlocal textwidth=120 |
     \ setlocal foldlevel=99
-    let g:tex_flavor              = 'latex'
-    let g:Tex_PromptedCommands    = ''
-    let g:Tex_DefaultTargetFormat = 'pdf'
-    let g:Tex_ViewRule_pdf        = 'open -a Preview'
-    let g:Tex_FoldedEnvironments  = ''
-    let g:tex_indent_brace        = 0
 
-    "--- .c, .cpp files
-    let g:cpp_class_scope_highlight     = 1
-    let g:cpp_class_decl_highlight      = 1
-    let g:cpp_member_variable_highlight = 1
-    let g:cpp_no_function_highlight     = 1
     autocmd FileType c,cpp
     \ setlocal cindent |
     \ if !exists('pathset') |
     \   let pathset = 1 |
-    \   set path+=$HOME/work/lib,$HOME/work/lib/specialfunctions,$HOME/work/projectEuler/Library |
+    \   setlocal path+=$HOME/work/lib,$HOME/work/lib/specialfunctions,$HOME/work/projectEuler/Library |
     \ endif |
     \ setlocal formatoptions-=o |
     \ setlocal textwidth=120 |
     \ setlocal foldmethod=syntax
 
-    "--- .py files
-    let python_highlight_all = 1
     autocmd FileType python
     \ setlocal keywordprg=pydoc3 |
     \ setlocal foldmethod=indent
-
-    "--- .md files
-    let g:markdown_fenced_languages = [ 'bash=sh', 'vim', 'python', 'cpp' ]
-    let g:markdown_minlines         = 100
-    let g:markdown_folding          = 1
 
     autocmd FileType vim nnoremap <buffer> K :execute "tab help " . expand("<cword>")<CR>
     autocmd FileType sh,man nnoremap <buffer> K :execute "Man " . expand("<cword>")<CR>
@@ -524,7 +518,7 @@ endfunction
 function! s:Noremap(modelist, key, cmd)
   for l:mode in a:modelist
     if     l:mode == 'i' | let l:cmd = '<C-o>'.a:cmd
-    elseif l:mode == 't' | let l:cmd = '<C-w>:'.a:cmd
+    elseif l:mode == 't' | let l:cmd = '<C-w>'.a:cmd
     else                 | let l:cmd = a:cmd
     endif
     execute l:mode.'noremap' a:key l:cmd
@@ -544,7 +538,7 @@ nnoremap <silent> ~ :call <SID>TildeForNonAlpha(getline(".")[col(".")-1])<CR>
 vnoremap <silent> ~ :<C-u>call <SID>TildeForNonAlpha(<SID>GetSelectedText())<CR>
 
 " ManLapack
-nnoremap <F2> :call <SID>ManLapack()<CR>
+nnoremap <F2> :execute "Man" substitute(expand("<cword>"), '_', '','g')<CR>
 
 " Type(i) or show(n) the current date stamp
 imap <F9> <C-R>=strftime('%d %b %Y %T %z')<CR>
@@ -583,8 +577,8 @@ nnoremap <Leader>g :.cc<CR>
 
 "--- Search in visual mode (* and #)
 " See https://vim.fandom.com/wiki/Search_for_visually_selected_text
-vnoremap <silent> * :call setreg('/', substitute(<SID>GetSelectedText(), '\m\_s\+', '\\_s\\+', 'g'))<Cr>n
-vnoremap <silent> # :call setreg('?', substitute(<SID>GetSelectedText(), '\m\_s\+', '\\_s\\+', 'g'))<Cr>n
+vnoremap <silent> * :call setreg('/', substitute(<SID>GetSelectedText(), '\m\_s\+', '\\_s\\+', 'g'))<CR>n
+vnoremap <silent> # :call setreg('?', substitute(<SID>GetSelectedText(), '\m\_s\+', '\\_s\\+', 'g'))<CR>n
 
 "--- Moving around
 " Easy window navigation
