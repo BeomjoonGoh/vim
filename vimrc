@@ -146,7 +146,6 @@ function! MyTabLine()
     if getbufvar(bufnr, '&buftype') == 'terminal' | let fname .= 'bash'
     elseif ftype == 'help'   | let fname .= '[Help] '.fnamemodify(bufname(bufnr), ':t:r')
     elseif ftype == 'qf'     | let fname .= '[Quickfix]'
-    elseif ftype == 'netrw'  | let fname .= "[Netrw]"
     elseif ftype == 'tagbar' | let fname .= "[TagBar]"
     elseif ftype == 'cppman' | let fname .= "[C++] ".bufname(bufnr)
     else                     | let fname .= fnamemodify(bufname(bufnr), ':t')
@@ -191,7 +190,7 @@ set number
 augroup number_toggle
   "Turn off relativenumber for non focused splits. This has a potential of slowing down scrolling with iTerm2
   autocmd!
-  let s:no_number_toggle = [ 'help', 'tagbar', 'netrw', 'cppman', 'man', 'undotree', 'diff' ]
+  let s:no_number_toggle = [ 'help', 'tagbar', 'cppman', 'man', 'undotree', 'diff' ]
   autocmd BufEnter,FocusGained *
   \ if (index(s:no_number_toggle, &filetype) == -1) | setlocal relativenumber | endif
   autocmd BufLeave,FocusLost * setlocal norelativenumber
@@ -257,13 +256,6 @@ let g:snipMate = get(g:, 'snipMate', {})
 let g:snipMate.no_default_aliases = 1
 let g:snipMate.snippet_version = 1
 let g:snips_author = "Beomjoon Goh"
-
-"--- netrw
-let g:netrw_winsize        = 15 " window size
-let g:netrw_liststyle      = 3  " tree style
-let g:netrw_banner         = 0  " no banner
-let g:netrw_browse_split   = 2  " <CR> :vsp 'selected file'
-let g:netrw_special_syntax = 1  " file type syntax
 
 "--- vimdiff
 set diffopt=internal,filler,closeoff,context:3
@@ -579,7 +571,6 @@ call s:Noremap(['n','i'], '<F5>',  ":call ToggleACP()<CR>")
 call s:Noremap(['n','i'], '<F6>',  ":call TogglePasteSafe()<CR>")
 call s:Noremap(['n','i'], '<F7>',  ":setlocal spell!<CR>:echo 'Spell Check: '.strpart('OffOn', 3*&spell, 3)<CR>")
 call s:Noremap(['n','i'], '<F10>', ":call ToggleMouse()<CR>")
-call s:Noremap(['n','i'], '<C-\>', ":Lexplore<CR>")
 nnoremap <Leader>iw :call <SID>IwhiteToggle()<CR>
 
 "--- QuickFix window
