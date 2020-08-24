@@ -6,7 +6,6 @@
 "   General
 "   User Interfaces
 "   Functions
-"   Color
 "   File type Specific
 "   Folding
 "   Key Mappings
@@ -77,29 +76,31 @@ if has('mouse')
   set mouse=""
 endif
 
+"--- Color
+set t_Co=256
+colorscheme desertBJ
+
 "--- Commands
-if has("user_commands")
-  command! -bang -nargs=? -complete=file E e<bang> <args>
-  command! -bang -nargs=? -complete=file W w<bang> <args>
-  command! -bang -nargs=? -complete=file Wq wq<bang> <args>
-  command! -bang -nargs=? -complete=file WQ wq<bang> <args>
-  command! -bang Wqa wqa<bang>
-  command! -bang WQa wqa<bang>
-  command! -bang WQA wqa<bang>
-  command! -bang Wa wa<bang>
-  command! -bang WA wa<bang>
-  command! -bang Q q<bang>
-  command! -bang Qa qa<bang>
-  command! -bang QA qa<bang>
-  command! -nargs=? -complete=file Sp sp <args>
-  command! -nargs=? -complete=file Vs vs <args>
-  command! -nargs=? -complete=file Vsp vsp <args>
-  command! -nargs=? -complete=file_in_path Vfind vnew<bar> find <args>
-  command! -nargs=? -complete=file_in_path Sfind sfind <args>
-  command! -nargs=? -complete=help Help tab help <args>
-  command! RemoveTrailingSpaces %s/\m\s\+$//e
-  command! Source source $HOME/.vim/vimrc
-endif
+command! -bang -nargs=? -complete=file E e<bang> <args>
+command! -bang -nargs=? -complete=file W w<bang> <args>
+command! -bang -nargs=? -complete=file Wq wq<bang> <args>
+command! -bang -nargs=? -complete=file WQ wq<bang> <args>
+command! -bang Wqa wqa<bang>
+command! -bang WQa wqa<bang>
+command! -bang WQA wqa<bang>
+command! -bang Wa wa<bang>
+command! -bang WA wa<bang>
+command! -bang Q q<bang>
+command! -bang Qa qa<bang>
+command! -bang QA qa<bang>
+command! -nargs=? -complete=file Sp sp <args>
+command! -nargs=? -complete=file Vs vs <args>
+command! -nargs=? -complete=file Vsp vsp <args>
+command! -nargs=? -complete=file_in_path Vfind vnew<bar> find <args>
+command! -nargs=? -complete=file_in_path Sfind sfind <args>
+command! -nargs=? -complete=help Help tab help <args>
+command! RemoveTrailingSpaces %s/\m\s\+$//e
+command! Source source $HOME/.vim/vimrc
 
 " }}}
 " USER INTERFACES {{{
@@ -185,10 +186,10 @@ set nowrap
 "--- Line number
 set numberwidth=4
 set number
+let s:no_number_toggle = [ 'help', 'tagbar', 'cppman', 'man', 'undotree', 'diff' ]
 augroup number_toggle
   "Turn off relativenumber for non focused splits. This has a potential of slowing down scrolling with iTerm2
   autocmd!
-  let s:no_number_toggle = [ 'help', 'tagbar', 'cppman', 'man', 'undotree', 'diff' ]
   autocmd BufEnter,FocusGained *
   \ if (index(s:no_number_toggle, &filetype) == -1) | setlocal relativenumber | endif
   autocmd BufLeave,FocusLost * setlocal norelativenumber
@@ -221,10 +222,8 @@ function! s:CompleteInclude()
   echo 'complete =' &complete
   let g:acp_completeOption = '&complete'
 endfunction
-if has('user_commands')
-  command! CompleteIncludeToggle call <SID>CompleteInclude()
-endif
 silent call s:CompleteInclude()
+command! CompleteIncludeToggle call <SID>CompleteInclude()
 
 "--- Split
 set splitbelow
@@ -304,10 +303,8 @@ function! Cheatsheet_complete(A,L,P)
   return g:cheatsheet_complete
 endfunction
 
-if has('user_commands')
-  command! -bang -nargs=? -complete=custom,Cheatsheet_complete Cheat call Cheatsheet_open('view', <q-args>)
-  command! -bang -nargs=? -complete=custom,Cheatsheet_complete CheatEdit call Cheatsheet_open('edit', <q-args>)
-endif
+command! -bang -nargs=? -complete=custom,Cheatsheet_complete Cheat call Cheatsheet_open('view', <q-args>)
+command! -bang -nargs=? -complete=custom,Cheatsheet_complete CheatEdit call Cheatsheet_open('edit', <q-args>)
 " }}}
 
 "--- undotree
@@ -322,18 +319,13 @@ let g:undotree_HelpLine                 = 0
 let g:undotree_DiffCommand = 'custom_diff(){ diff -U1 "$@" | tail -n+3;}; custom_diff'
 
 "--- fugitive
-if has('user_commands')
-  command! -bang -nargs=? -range=-1 -complete=customlist,fugitive#Complete Vg   vertical belowright G
-  command! -bang -nargs=? -range=-1 -complete=customlist,fugitive#Complete Vgit vertical belowright Git
-endif
+command! -bang -nargs=? -range=-1 -complete=customlist,fugitive#Complete Vg   vertical belowright G
+command! -bang -nargs=? -range=-1 -complete=customlist,fugitive#Complete Vgit vertical belowright Git
 
 "--- easy-terminal
-if has('user_commands')
-  command! -complete=custom,easy_terminal#Complete Bterm botright Term
-  command! -complete=custom,easy_terminal#Complete Vterm vertical botright Term
-  command! -complete=custom,easy_terminal#Complete Tterm tab Term
-endif
-
+command! -complete=custom,easy_terminal#Complete Bterm botright Term
+command! -complete=custom,easy_terminal#Complete Vterm vertical botright Term
+command! -complete=custom,easy_terminal#Complete Tterm tab Term
 
 " }}}
 " FUNCTIONS {{{
@@ -342,17 +334,6 @@ function! ToggleColorcolumn()
     let &colorcolumn = (&colorcolumn == "") ? 120 : ""
     echo "colorcolumn =" &colorcolumn
   endif
-endfunction
-
-function! ToggleMouse()
-  if has('mouse')
-    let &mouse = (&mouse == "") ? "a" : ""
-    echo "mouse =" &mouse
-  endif
-endfunction
-
-function! ToggleACP()
-  execute exists('#AcpGlobalAutoCommand#InsertEnter') ? 'AcpDisable' : 'AcpEnable'
 endfunction
 
 function! TogglePasteSafe()
@@ -413,9 +394,7 @@ if has('mac')
     redraw!
   endfunction
   
-  if has('user_commands')
-    command! OpenFinder call <SID>OpenFinder()
-  endif
+  command! OpenFinder call <SID>OpenFinder()
 
   "--- xkbswitch
   function! s:ToggleXkbSwitch()
@@ -430,15 +409,8 @@ if has('mac')
     endif
   endfunction
 
-  if has('user_commands')
-    command! ToggleXkbSwitch call <SID>ToggleXkbSwitch()
-  endif
+  command! ToggleXkbSwitch call <SID>ToggleXkbSwitch()
 endif
-
-" }}}
-" COLOR {{{
-set t_Co=256
-colorscheme desertBJ
 
 " }}}
 " FILETYPE SPECIFIC {{{
@@ -461,32 +433,29 @@ let g:markdown_fenced_languages = [ 'bash=sh', 'vim', 'python', 'cpp' ]
 let g:markdown_minlines         = 100
 let g:markdown_folding          = 1
 
-if !exists('g:user_filetypes')
-  let g:user_filetypes = 1
-  augroup user_filetype
-    autocmd!
-    autocmd FileType tex
-    \ setlocal textwidth=120 |
-    \ setlocal foldlevel=99
+augroup user_filetype
+  autocmd!
+  autocmd FileType tex
+  \ setlocal textwidth=120 |
+  \ setlocal foldlevel=99
 
-    autocmd FileType c,cpp
-    \ setlocal cindent |
-    \ if !exists('pathset') |
-    \   let pathset = 1 |
-    \   setlocal path+=$HOME/work/lib,$HOME/work/lib/specialfunctions,$HOME/work/projectEuler/Library |
-    \ endif |
-    \ setlocal formatoptions-=o |
-    \ setlocal textwidth=120 |
-    \ setlocal foldmethod=syntax
+  autocmd FileType c,cpp
+  \ setlocal cindent |
+  \ if !exists('pathset') |
+  \   let pathset = 1 |
+  \   setlocal path+=$HOME/work/lib,$HOME/work/lib/specialfunctions,$HOME/work/projectEuler/Library |
+  \ endif |
+  \ setlocal formatoptions-=o |
+  \ setlocal textwidth=120 |
+  \ setlocal foldmethod=syntax
 
-    autocmd FileType python
-    \ setlocal keywordprg=pydoc3 |
-    \ setlocal foldmethod=indent
+  autocmd FileType python
+  \ setlocal keywordprg=pydoc3 |
+  \ setlocal foldmethod=indent
 
-    autocmd FileType vim nnoremap <buffer> K :execute "tab help " . expand("<cword>")<CR>
-    autocmd FileType sh,man nnoremap <buffer> K :execute "Man " . expand("<cword>")<CR>
-  augroup END
-endif
+  autocmd FileType vim nnoremap <buffer> K :execute "tab help " . expand("<cword>")<CR>
+  autocmd FileType sh,man nnoremap <buffer> K :execute "Man " . expand("<cword>")<CR>
+augroup END
 
 " }}}
 " FOLDING {{{
@@ -551,9 +520,6 @@ nmap <silent> <Leader>R :silent!/BruteForceSearchReset_<C-r>=rand()<CR>.<CR>
 " Enter works in normal mode
 nmap <silent> <CR> i<C-m><Esc>
 
-" To the previous buffer
-nnoremap <Leader><Leader><Leader> <C-^>
-
 " Yank to and paste from clipboard
 vnoremap <C-y> "*y
 nnoremap <C-p> "*p
@@ -561,10 +527,10 @@ nnoremap <C-p> "*p
 "--- Toggle
 call s:Noremap(['n','t'], '<F3>',  ":TagbarToggle<CR>")
 call s:Noremap(['n','i'], '<F4>',  ":call ToggleColorcolumn()<CR>")
-call s:Noremap(['n','i'], '<F5>',  ":call ToggleACP()<CR>")
+call s:Noremap(['n','i'], '<F5>',  ":execute exists('#AcpGlobalAutoCommand#InsertEnter') ? 'AcpDisable':'AcpEnable'<Bar>echo 'AcpToggle'<CR>")
 call s:Noremap(['n','i'], '<F6>',  ":call TogglePasteSafe()<CR>")
-call s:Noremap(['n','i'], '<F7>',  ":setlocal spell!<CR>:echo 'Spell Check: '.strpart('OffOn', 3*&spell, 3)<CR>")
-call s:Noremap(['n','i'], '<F10>', ":call ToggleMouse()<CR>")
+call s:Noremap(['n','i'], '<F7>',  ":setlocal spell!<Bar>echo 'Spell Check:' strpart('OffOn', 3*&spell, 3)<CR>")
+call s:Noremap(['n','i'], '<F10>', ":let &mouse = (&mouse == '') ? 'a' : ''<Bar>:echo 'mouse =' &mouse<CR>")
 nnoremap <Leader>iw :call <SID>IwhiteToggle()<CR>
 
 "--- QuickFix window
