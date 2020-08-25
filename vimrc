@@ -186,13 +186,14 @@ set nowrap
 "--- Line number
 set numberwidth=4
 set number
+set relativenumber
 let s:no_number_toggle = [ 'help', 'tagbar', 'cppman', 'man', 'undotree', 'diff' ]
 augroup number_toggle
   "Turn off relativenumber for non focused splits. This has a potential of slowing down scrolling with iTerm2
   autocmd!
-  autocmd BufEnter,FocusGained *
-  \ if (index(s:no_number_toggle, &filetype) == -1) | setlocal relativenumber | endif
-  autocmd BufLeave,FocusLost * setlocal norelativenumber
+  autocmd BufEnter *
+  \ if (index(s:no_number_toggle, &filetype) == -1) | set relativenumber< | endif
+  autocmd BufLeave * setlocal norelativenumber
 augroup END
 
 "--- Spell check
@@ -328,27 +329,20 @@ command! -nargs=? -complete=custom,easy_terminal#Complete Tterm tab Term <args>
 function! ToggleColorcolumn()
   if exists('+colorcolumn')
     let &colorcolumn = (&colorcolumn == "") ? 120 : ""
-    echo "colorcolumn =" &colorcolumn
+    call s:EchoOnOff('colorcolumn', &colorcolumn)
   endif
 endfunction
 
-function! TogglePasteSafe()
-  " see :help pastetoggle
-  if (s:cycleIndentOption == 0)
-    set number relativenumber smartindent autoindent
-    let s:cycleIndentOption = 1
-    let msg = "Back to normal indenting (smart and auto indent)."
-  elseif (s:cycleIndentOption == 1)
-    set nosmartindent noautoindent
-    let s:cycleIndentOption = 2
-    let msg = "Pasting is now safe (no smart nor auto indent)."
-  else "s:cycleIndentOption == 2
-    set nonumber norelativenumber
-    let s:cycleIndentOption = 0
-    let msg = "Copy without line numbers."
+function! ToggleCopyPaste()
+  if &paste
+    setlocal nopaste
+    let [ &l:number, &l:relativenumber ] = b:nurnu_before
+  else
+    setlocal paste
+    let b:nurnu_before = [ &l:number, &l:relativenumber ]
+    setlocal nonumber norelativenumber
   endif
-  redraw
-  echo msg
+  call s:EchoOnOff('CopyPaste:', &paste)
 endfunction
 
 function! s:GetSelectedText()
@@ -374,6 +368,10 @@ function! s:TildeForNonAlpha(str)
       execute 'normal! `<'.l:lines.'j'
     endif
   endfor
+endfunction
+
+function! s:EchoOnOff(str, bool)
+  echo a:str strpart('offon', 3*!empty(a:bool), 3)
 endfunction
 
 function! ClearNamedRegisters()
@@ -403,6 +401,7 @@ if has('mac')
       let g:XkbSwitchLib = '/usr/local/lib/libInputSourceSwitcher.dylib'
       EnableXkbSwitch
     endif
+    call s:EchoOnOff('XkbSwitch:', g:XkbSwitchEnabled)
   endfunction
 
   command! ToggleXkbSwitch call <SID>ToggleXkbSwitch()
@@ -526,9 +525,9 @@ nnoremap <C-p> "*p
 call s:Noremap(['n','t'], '<F3>',  ":TagbarToggle<CR>")
 call s:Noremap(['n','i'], '<F4>',  ":call ToggleColorcolumn()<CR>")
 call s:Noremap(['n','i'], '<F5>',  ":execute exists('#AcpGlobalAutoCommand#InsertEnter') ? 'AcpDisable':'AcpEnable'<Bar>echo 'AcpToggle'<CR>")
-call s:Noremap(['n','i'], '<F6>',  ":call TogglePasteSafe()<CR>")
-call s:Noremap(['n','i'], '<F7>',  ":setlocal spell!<Bar>echo 'Spell Check:' strpart('OffOn', 3*&spell, 3)<CR>")
-call s:Noremap(['n','i'], '<F10>', ":let &mouse = (&mouse == '') ? 'a' : ''<Bar>:echo 'mouse =' &mouse<CR>")
+call s:Noremap(['n','i'], '<F6>',  ":call ToggleCopyPaste()<CR>")
+call s:Noremap(['n','i'], '<F7>',  ':setlocal spell!<Bar>call <SID>EchoOnOff("Spell:", &spell)<CR>')
+call s:Noremap(['n','i'], '<F10>', ":let &mouse = (&mouse == '') ? 'a' : ''<Bar>:call <SID>EchoOnOff('mouse', &mouse)<CR>")
 nnoremap <Leader>iw :call <SID>IwhiteToggle()<CR>
 
 "--- QuickFix window
