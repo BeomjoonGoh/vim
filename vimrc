@@ -199,6 +199,7 @@ augroup END
 set spellsuggest=best,3         " 'z=' shows 3 best suggestions
 
 "--- Insert mode completion & AutoComplPop settings
+set dictionary+=/usr/share/dict/words,~/.vim/spell/en.utf-8.add
 set complete=.,w,b,u,t
 set completeopt+=menuone,noinsert
 let g:acp_enableAtStartup = 0
@@ -214,15 +215,10 @@ augroup unmap_acp
 augroup END
 
 function! s:CompleteInclude()
-  if &complete =~ 'i'
-    set complete-=i
-  else
-    set complete+=i
-  endif
+  execute 'set' 'complete'.((&complete =~ 'i') ? '-=' : '+=').'i'
   echo 'complete =' &complete
   let g:acp_completeOption = '&complete'
 endfunction
-silent call s:CompleteInclude()
 command! CompleteIncludeToggle call <SID>CompleteInclude()
 
 "--- Split
@@ -319,13 +315,13 @@ let g:undotree_HelpLine                 = 0
 let g:undotree_DiffCommand = 'custom_diff(){ diff -U1 "$@" | tail -n+3;}; custom_diff'
 
 "--- fugitive
-command! -bang -nargs=? -range=-1 -complete=customlist,fugitive#Complete Vg   vertical belowright G
-command! -bang -nargs=? -range=-1 -complete=customlist,fugitive#Complete Vgit vertical belowright Git
+command! -bang -nargs=? -range=-1 -complete=customlist,fugitive#Complete Vg   vertical belowright G <args>
+command! -bang -nargs=? -range=-1 -complete=customlist,fugitive#Complete Vgit vertical belowright Git <args>
 
 "--- easy-terminal
-command! -complete=custom,easy_terminal#Complete Bterm botright Term
-command! -complete=custom,easy_terminal#Complete Vterm vertical botright Term
-command! -complete=custom,easy_terminal#Complete Tterm tab Term
+command! -nargs=? -complete=custom,easy_terminal#Complete Bterm botright Term <args>
+command! -nargs=? -complete=custom,easy_terminal#Complete Vterm vertical botright Term <args>
+command! -nargs=? -complete=custom,easy_terminal#Complete Tterm tab Term <args>
 
 " }}}
 " FUNCTIONS {{{
@@ -455,6 +451,8 @@ augroup user_filetype
 
   autocmd FileType vim nnoremap <buffer> K :execute "tab help " . expand("<cword>")<CR>
   autocmd FileType sh,man nnoremap <buffer> K :execute "Man " . expand("<cword>")<CR>
+
+  autocmd FileType gitcommit setlocal spell
 augroup END
 
 " }}}
