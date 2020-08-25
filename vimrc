@@ -237,19 +237,19 @@ let g:tagbar_map_openallfolds = ['_', '<kMultiply>', 'zR']
 let g:tagbar_type_markdown    = {
     \ 'ctagstype' : 'markdown',
     \ 'kinds' : [
-        \ 'h:headings',
-        \ 'l:links',
-        \ 'i:images',
+    \   'h:headings',
+    \   'l:links',
+    \   'i:images',
     \ ],
     \ 'sort' : 0,
-\ }
+    \}
 highlight default link TagbarHighlight Visual
 
 "--- SnipMate settings
+let g:snips_author = "Beomjoon Goh"
 let g:snipMate = get(g:, 'snipMate', {})
 let g:snipMate.no_default_aliases = 1
-let g:snipMate.snippet_version = 1
-let g:snips_author = "Beomjoon Goh"
+let g:snipMate.snippet_version    = 1
 
 "--- vimdiff
 set diffopt=internal,filler,closeoff,context:3
@@ -264,10 +264,8 @@ function! s:IwhiteToggle()
 endfunction
 
 "--- Cheatsheet {{{
-" Help <mods> (https://vimways.org/2019/writing-vim-plugin/)
 " TODO
 " [ ] make it a plugin
-" [ ] write doc
 let g:cheatsheet_filetypeDict = {
       \  "sh"       : "bash",
       \  "markdown" : "md",
@@ -323,6 +321,10 @@ command! -bang -nargs=? -range=-1 -complete=customlist,fugitive#Complete Vgit ve
 command! -nargs=? -complete=custom,easy_terminal#Complete Bterm botright Term <args>
 command! -nargs=? -complete=custom,easy_terminal#Complete Vterm vertical botright Term <args>
 command! -nargs=? -complete=custom,easy_terminal#Complete Tterm tab Term <args>
+
+"--- markdown-preview.nvim
+let g:mkdp_auto_close = 0
+let g:mkdp_refresh_slow = 1
 
 " }}}
 " FUNCTIONS {{{
@@ -391,6 +393,7 @@ if has('mac')
   command! OpenFinder call <SID>OpenFinder()
 
   "--- xkbswitch
+  let g:XkbSwitchLib = '/usr/local/lib/libInputSourceSwitcher.dylib'
   function! s:ToggleXkbSwitch()
     if get(g:, 'XkbSwitchEnabled')
       augroup XkbSwitch
@@ -398,7 +401,6 @@ if has('mac')
       augroup END
       let g:XkbSwitchEnabled = 0
     else
-      let g:XkbSwitchLib = '/usr/local/lib/libInputSourceSwitcher.dylib'
       EnableXkbSwitch
     endif
     call s:EchoOnOff('XkbSwitch:', g:XkbSwitchEnabled)
@@ -599,7 +601,7 @@ xmap ga <Plug>(EasyAlign)
 "--- open URL/file
 if has('mac')
   nnoremap <silent> go :!open <cWORD><CR>
-  vnoremap <silent> go :<C-u>!open <SID>GetSelectedText()<CR>
+  vnoremap <silent> go :<C-u>execute "!open" expand(<SID>GetSelectedText())<CR>
 endif
 
 "--- undotree
