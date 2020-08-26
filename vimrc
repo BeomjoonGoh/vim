@@ -503,7 +503,7 @@ inoremap <S-Tab> <C-d>
 
 " Switch case for non-alphabets
 nnoremap <silent> ~ :call <SID>TildeForNonAlpha(getline(".")[col(".")-1])<CR>
-vnoremap <silent> ~ :<C-u>call <SID>TildeForNonAlpha(<SID>GetSelectedText())<CR>
+xnoremap <silent> ~ :<C-u>call <SID>TildeForNonAlpha(<SID>GetSelectedText())<CR>
 
 " ManLapack
 nnoremap <F2> :execute "Man" substitute(expand("<cword>"), '_', '','g')<CR>
@@ -520,7 +520,7 @@ nmap <silent> <Leader>R :silent!/BruteForceSearchReset_<C-r>=rand()<CR>.<CR>
 nmap <silent> <CR> i<C-m><Esc>
 
 " Yank to and paste from clipboard
-vnoremap <C-y> "*y
+xnoremap <C-y> "*y
 nnoremap <C-p> "*p
 
 "--- Toggle
@@ -542,8 +542,8 @@ nnoremap <Leader>g :.cc<CR>
 
 "--- Search in visual mode (* and #)
 " See https://vim.fandom.com/wiki/Search_for_visually_selected_text
-vnoremap <silent> * :call setreg('/', substitute(<SID>GetSelectedText(), '\m\_s\+', '\\_s\\+', 'g'))<CR>n
-vnoremap <silent> # :call setreg('?', substitute(<SID>GetSelectedText(), '\m\_s\+', '\\_s\\+', 'g'))<CR>n
+xnoremap <silent> * :call setreg('/', substitute(<SID>GetSelectedText(), '\m\_s\+', '\\_s\\+', 'g'))<CR>n
+xnoremap <silent> # :call setreg('?', substitute(<SID>GetSelectedText(), '\m\_s\+', '\\_s\\+', 'g'))<CR>n
 
 "--- Moving around
 " Easy window navigation
@@ -570,7 +570,7 @@ nnoremap j gj
 nnoremap k gk
 
 "--- Folding
-call s:Noremap(['n','v'], '<Space>', "za")
+call s:Noremap(['n','x'], '<Space>', "za")
 nnoremap zR zr
 nnoremap zr zR
 nnoremap zM zm
@@ -601,7 +601,7 @@ xmap ga <Plug>(EasyAlign)
 "--- open URL/file
 if has('mac')
   nnoremap <silent> go :!open <cWORD><CR>
-  vnoremap <silent> go :<C-u>execute "!open" expand(<SID>GetSelectedText())<CR>
+  xnoremap <silent> go :<C-u>execute "!open" expand(<SID>GetSelectedText())<CR>
 endif
 
 "--- undotree
@@ -611,7 +611,7 @@ nnoremap <Leader>u :UndotreeToggle<CR>
 nmap <Leader>cd <Plug>EasyTermCdVim
 tmap <Leader>cd <Plug>EasyTermCdTerm
 nmap <Leader>t <Plug>EasyTermSendText
-vmap <Leader>t <Plug>EasyTermSendText
+xmap <Leader>t <Plug>EasyTermSendText
 nmap <Leader>p <Plug>EasyTermPutLast
 tmap <Leader>y <Plug>EasyTermYankLast
 tnoremap <Leader>ll 2vim make<CR>
