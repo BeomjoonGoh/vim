@@ -608,12 +608,19 @@ endif
 nnoremap <Leader>u :UndotreeToggle<CR>
 
 "--- easy-terminal
-nmap <Leader>cd <Plug>EasyTermCdVim
-tmap <Leader>cd <Plug>EasyTermCdTerm
-nmap <Leader>t <Plug>EasyTermSendText
-xmap <Leader>t <Plug>EasyTermSendText
-nmap <Leader>p <Plug>EasyTermPutLast
-tmap <Leader>y <Plug>EasyTermYankLast
+nmap <Leader>cd <Plug>(EasyTermCdVim)
+tmap <Leader>cd <Plug>(EasyTermCdTerm)
+nmap <Leader>t <Plug>(EasyTermSendText)
+xmap <Leader>t <Plug>(EasyTermSendText)
+nmap <Leader>p <Plug>(EasyTermPutLast)
+tmap <Leader>y <Plug>(EasyTermYankLast)
 tnoremap <Leader>ll 2vim make<CR>
 tnoremap :: <C-w>:
+
+"--- line text-objects
+xnoremap il ^og_
+xnoremap al 0o$
+onoremap <silent> il :normal! v^og_<CR>
+onoremap <silent> al :normal! v0o$<CR>
+
 " }}}
