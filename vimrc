@@ -615,6 +615,7 @@ nmap <Leader>t <Plug>(EasyTermSendText)
 xmap <Leader>t <Plug>(EasyTermSendText)
 nmap <Leader>p <Plug>(EasyTermPutLast)
 tmap <Leader>y <Plug>(EasyTermYankLast)
+tmap <Leader>s <Plug>(EasyTermSet)
 tnoremap <Leader>ll 2vim make<CR>
 tnoremap :: <C-w>:
 
@@ -627,3 +628,11 @@ onoremap <silent> al :normal! v0o$<CR>
 "--- GotoBuffer
 nnoremap gb :B<CR>
 " }}}
+
+"temp
+function! ResetEasyTerm()
+  unlet g:loaded_easy_term_plugin
+  unlet g:loaded_easy_term
+  source ~/.vim/plugged/vim-easy-term/plugin/easy_term.vim
+  source ~/.vim/plugged/vim-easy-term/autoload/easy_term.vim
+endfunction
