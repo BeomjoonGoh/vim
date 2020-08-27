@@ -43,15 +43,6 @@ Commands `:Vg[it]` is defined for `:vertical belowright G[it]`.  A function
 `FugitiveHead()` is used to get the branch name for the `'statusline'`.
 
 
-### [vim-autocomplpop](https://github.com/othree/vim-autocomplpop)
-
-> Auto trigger complete popup menu.
-
-It uses `L9` library.  Global variable `g:acp_enableAtStartup` is off.  `<F5>`
-key toggles `autocomplpop` plugin. For `C`(`C++`) files, complete option is set
-differently.
-
-
 ### [vim-snipmate](https://github.com/garbas/vim-snipmate)
 
 > `SnipMate` aims to provide support for textual snippets, similar to
@@ -325,7 +316,6 @@ mode respectively. See `:help map.txt` for help and `:map` to see defined maps.
   |:-------:|:----:|:------------|
   |`<F3>`   | n    | Toggle the `tagbar` plugin.
   |`<F4>`   | n i  | Toggle `colorcolumn=120`.
-  |`<F5>`   | n i  | Toggle `autocomplpop` plugin.
   |`<F6>`   | n i  | Toggle (clipboard) copy & paste safe mode.
   |`<F7>`   | n i  | Toggle spell checking.
   |`<F10>`  | n    | Toggle mouse on and off.
