@@ -133,8 +133,7 @@ set showtabline=2
 set tabline=%!MyTabLine()
 function! MyTabLine()
   let str = repeat(' ', &numberwidth)
-  for tpn in range(tabpagenr('$'))
-    let ntab = tpn + 1
+  for ntab in range(1, tabpagenr('$'))
     let str .= '%'.ntab.'T'.(ntab == tabpagenr() ? '%1*%#TabNumSel# '.ntab.' %#TabLineSel# ' : '%2*%#TabNum# '.ntab.' %#TabLine# ')
 
     let buflist = tabpagebuflist(ntab)
@@ -142,7 +141,7 @@ function! MyTabLine()
     let ftype = getbufvar(bufnr, '&filetype')
 
     let fname = ''
-    if getbufvar(bufnr, '&buftype') == 'terminal' | let fname .= 'bash'
+    if getbufvar(bufnr, '&buftype') == 'terminal' | let fname .= split(bufname(bufnr))[0]
     elseif ftype == 'help'   | let fname .= '[Help] '.fnamemodify(bufname(bufnr), ':t:r')
     elseif ftype == 'qf'     | let fname .= '[Quickfix]'
     elseif ftype == 'tagbar' | let fname .= "[TagBar]"
@@ -382,6 +381,35 @@ function! ClearNamedRegisters()
   endfor
 endfunction
 
+function! s:GotoBuffer(cmd, pattern) abort
+  let l:colon = getbufvar('%', '&buftype') == 'terminal' ? "\<C-w>:" : ":" 
+  if empty(a:pattern)
+    call feedkeys(l:colon.a:cmd." \<C-d>")
+    return
+  elseif a:pattern is '*'
+    call feedkeys(l:colon."ls\<CR>".l:colon.a:cmd." ")
+    return
+  endif
+
+  let l:globbed = a:pattern =~ '^\d\+$' ? str2nr(a:pattern) : '*'.join(split(a:pattern),'*').'*'
+  try
+    execute 'sbuffer' l:globbed
+    let l:bn = bufnr('%')
+    quit!
+    for l:t in range(1, tabpagenr('$'))
+      if index(tabpagebuflist(l:t), l:bn) != -1
+        execute "tabnext" l:t 
+        execute bufwinnr(l:bn).'wincmd w'
+        return
+      endif
+    endfor
+    execute 'vertical sbuffer' l:bn
+  catch
+    call feedkeys(l:colon.a:cmd." ".l:globbed."\<C-d>\<C-u>".a:cmd." ".a:pattern)
+  endtry
+endfunction
+command! -nargs=? -complete=buffer B call <SID>GotoBuffer("B", <q-args>)
+
 if has('mac')
   "--- OpenFinder
   function! s:OpenFinder()
@@ -389,7 +417,6 @@ if has('mac')
     execute "silent!" l:cmd
     redraw!
   endfunction
-  
   command! OpenFinder call <SID>OpenFinder()
 
   "--- xkbswitch
@@ -405,7 +432,6 @@ if has('mac')
     endif
     call s:EchoOnOff('XkbSwitch:', g:XkbSwitchEnabled)
   endfunction
-
   command! ToggleXkbSwitch call <SID>ToggleXkbSwitch()
 endif
 
@@ -623,4 +649,7 @@ xnoremap al 0o$
 onoremap <silent> il :normal! v^og_<CR>
 onoremap <silent> al :normal! v0o$<CR>
 
+"--- GotoBuffer
+nnoremap gb :B<CR>
 " }}}
+
