@@ -21,8 +21,7 @@ call plug#begin('~/.vim/plugged')
   " General
   Plug 'BeomjoonGoh/vim-easy-term'
   Plug 'tpope/vim-fugitive'
-  Plug 'othree/vim-autocomplpop' | Plug 'vim-scripts/L9'
-  Plug 'garbas/vim-snipmate'     | Plug 'MarcWeber/vim-addon-mw-utils' | Plug 'tomtom/tlib_vim'
+  Plug 'garbas/vim-snipmate' | Plug 'MarcWeber/vim-addon-mw-utils' | Plug 'tomtom/tlib_vim'
   Plug 'michaeljsmith/vim-indent-object'
   Plug 'junegunn/vim-peekaboo'
   Plug 'majutsushi/tagbar',       { 'on' : 'TagbarToggle' }
@@ -57,24 +56,22 @@ set wildignore+=*out*,*inp*,*log*
 set path+=**
 
 runtime! ftplugin/man.vim
-let g:ft_man_open_mode="tab"
-let g:ft_man_folding_enable=1
+let g:ft_man_open_mode      = 'tab'
+let g:ft_man_folding_enable = 1
 
 set synmaxcol=512
 set regexpengine=1
+
+set mouse=""
 
 augroup redhat
   autocmd!
   " When editing a file, always jump to the last cursor position
   autocmd BufReadPost *
-  \ if line("'\"") > 0 && line ("'\"") <= line("$") && $filetype !~# 'commit' |
-  \   exe "normal! g'\"" |
-  \ endif
+      \ if line("'\"") > 0 && line ("'\"") <= line("$") && $filetype !~# 'commit' |
+      \   exe "normal! g'\"" |
+      \ endif
 augroup END
-
-if has('mouse')
-  set mouse=""
-endif
 
 "--- Color
 set t_Co=256
@@ -141,14 +138,13 @@ function! MyTabLine()
     let ftype = getbufvar(bufnr, '&filetype')
 
     let fname = ''
-    if getbufvar(bufnr, '&buftype') == 'terminal' | let fname .= split(bufname(bufnr))[0]
-    elseif ftype == 'help'   | let fname .= '[Help] '.fnamemodify(bufname(bufnr), ':t:r')
+    if     ftype == 'help'   | let fname .= '[Help] '.fnamemodify(bufname(bufnr), ':t:r')
     elseif ftype == 'qf'     | let fname .= '[Quickfix]'
-    elseif ftype == 'tagbar' | let fname .= "[TagBar]"
-    elseif ftype == 'cppman' | let fname .= "[C++] ".bufname(bufnr)
+    elseif ftype == 'tagbar' | let fname .= '[TagBar]'
+    elseif ftype == 'cppman' | let fname .= '[C++] '.bufname(bufnr)
     else                     | let fname .= fnamemodify(bufname(bufnr), ':t')
     endif
-    let str .= (fname != '' ? fname : "[No Name]")
+    let str .= (fname != '' ? fname : '[No Name]')
 
     let modflag = ''
     for b in buflist
@@ -164,19 +160,16 @@ function! MyTabLine()
 endfunction
 
 "--- Indent & tab
-set autoindent smartindent      " When opening a new line and no filetype-specific indenting is enabled, keeps the same
-let s:cycleIndentOption = 1     "   indent as the line you're currently on.
-set tabstop=8                   " Change tab size (set to default for compatibility with others tabbed codes.)
+set autoindent smartindent
+set tabstop=8
 set expandtab
 let s:nSpace     = 2
-let &shiftwidth  = s:nSpace     " Indents width
-let &softtabstop = s:nSpace     " <BS> regards 's:nSpace' spaces as one character
-                                " :%retab replaces all \t's to spaces
+let &shiftwidth  = s:nSpace
+let &softtabstop = s:nSpace     " :%retab replaces all \t's to spaces
 unlet s:nSpace
 
 "--- Search
-set incsearch                   " Show search matches as you type.
-set smartcase                   " ignore case if search pattern is all lowercases, case-sensitive otherwise
+set incsearch
 set hlsearch
 
 "--- Wrap
@@ -196,28 +189,16 @@ augroup number_toggle
 augroup END
 
 "--- Spell check
-set spellsuggest=best,3         " 'z=' shows 3 best suggestions
+set spellsuggest=best,3
 
-"--- Insert mode completion & AutoComplPop settings
+"--- Insert mode completion
 set dictionary+=/usr/share/dict/words,~/.vim/spell/en.utf-8.add
 set complete=.,w,b,u,t
 set completeopt+=menuone,noinsert
-let g:acp_enableAtStartup = 0
-
-function! s:UnmapAcp()
-  nnoremap i <Nop> | nunmap i
-  nnoremap a <Nop> | nunmap a
-  nnoremap R <Nop> | nunmap R
-endfunction
-augroup unmap_acp
-  autocmd!
-  autocmd BufEnter * call s:UnmapAcp()
-augroup END
 
 function! s:CompleteInclude()
   execute 'set' 'complete'.((&complete =~ 'i') ? '-=' : '+=').'i'
   echo 'complete =' &complete
-  let g:acp_completeOption = '&complete'
 endfunction
 command! CompleteIncludeToggle call <SID>CompleteInclude()
 
@@ -245,7 +226,7 @@ let g:tagbar_type_markdown    = {
 highlight default link TagbarHighlight Visual
 
 "--- SnipMate settings
-let g:snips_author = "Beomjoon Goh"
+let g:snips_author = 'Beomjoon Goh'
 let g:snipMate = get(g:, 'snipMate', {})
 let g:snipMate.no_default_aliases = 1
 let g:snipMate.snippet_version    = 1
@@ -253,29 +234,24 @@ let g:snipMate.snippet_version    = 1
 "--- vimdiff
 set diffopt=internal,filler,closeoff,context:3
 function! s:IwhiteToggle()
-  if &diffopt =~ 'iwhiteall'
-    set diffopt-=iwhiteall
-    echo "ignore all white spaces off"
-  else
-    set diffopt+=iwhiteall
-    echo "ignore all white spaces on"
-  endif
+  execute 'set' 'diffopt'.((&diffopt =~ 'iwhiteall') ? '-=' : '+=').'iwhiteall'
+  echo 'diffopt =' &diffopt
 endfunction
 
 "--- Cheatsheet {{{
 " TODO
 " [ ] make it a plugin
 let g:cheatsheet_filetypeDict = {
-      \  "sh"       : "bash",
-      \  "markdown" : "md",
-      \  "make"     : "makefile",
+      \  'sh'       : 'bash',
+      \  'markdown' : 'md',
+      \  'make'     : 'makefile',
       \} "filetype  : extension
 let g:cheatsheet_path = '~/.vim/cheatsheets' " ??? global? automatically find path?
-let g:cheatsheet_complete = system("ls " . g:cheatsheet_path . " | sed 's/cs.//g'")
+let g:cheatsheet_complete = system('ls ' . g:cheatsheet_path . " | sed 's/cs.//g'")
 let g:cheatsheet_split = 'vsp' " or 'sp'
 
 function! Cheatsheet_getfile(ft)
-  let l:file_type = (a:ft == "") ? &filetype : a:ft
+  let l:file_type = empty(a:ft) ? &filetype : a:ft
   if has_key(g:cheatsheet_filetypeDict, l:file_type)
     let l:file_type = g:cheatsheet_filetypeDict[l:file_type]
   endif
@@ -327,14 +303,14 @@ let g:mkdp_refresh_slow = 1
 
 " }}}
 " FUNCTIONS {{{
-function! ToggleColorcolumn()
+function! ColorcolumnToggle()
   if exists('+colorcolumn')
     let &colorcolumn = (&colorcolumn == "") ? 120 : ""
     call s:EchoOnOff('colorcolumn', &colorcolumn)
   endif
 endfunction
 
-function! ToggleCopyPaste()
+function! CopyPasteToggle()
   if &paste
     setlocal nopaste
     let [ &l:number, &l:relativenumber ] = b:nurnu_before
@@ -349,10 +325,10 @@ endfunction
 function! s:GetSelectedText()
   let l:old_reg = getreg('"')
   let l:old_regtype = getregtype('"')
-  norm gvy
+  normal! gvy
   let l:ret = getreg('"')
   call setreg('"', l:old_reg, l:old_regtype)
-  exe "norm \<Esc>"
+  execute "norm \<Esc>"
   return l:ret
 endfunction
 
@@ -376,7 +352,7 @@ function! s:EchoOnOff(str, bool)
 endfunction
 
 function! ClearNamedRegisters()
-  for i in split("abcdefghijklmnopqrstuvwxyz",'\zs')
+  for i in split('abcdefghijklmnopqrstuvwxyz','\zs')
     call setreg(i,'')
   endfor
 endfunction
@@ -408,20 +384,20 @@ function! s:GotoBuffer(cmd, pattern) abort
     call feedkeys(l:colon.a:cmd." ".l:globbed."\<C-d>\<C-u>".a:cmd." ".a:pattern)
   endtry
 endfunction
-command! -nargs=? -complete=buffer B call <SID>GotoBuffer("B", <q-args>)
+command! -nargs=? -complete=buffer B call <SID>GotoBuffer('B', <q-args>)
 
 if has('mac')
   "--- OpenFinder
   function! s:OpenFinder()
-    let l:cmd = '!open ' . (filereadable(expand("%")) ? '-R '.shellescape("%") : '.')
-    execute "silent!" l:cmd
+    let l:cmd = '!open ' . (filereadable(expand('%')) ? '-R '.shellescape('%') : '.')
+    execute 'silent!' l:cmd
     redraw!
   endfunction
   command! OpenFinder call <SID>OpenFinder()
 
   "--- xkbswitch
   let g:XkbSwitchLib = '/usr/local/lib/libInputSourceSwitcher.dylib'
-  function! s:ToggleXkbSwitch()
+  function! s:XkbSwitchToggle()
     if get(g:, 'XkbSwitchEnabled')
       augroup XkbSwitch
         autocmd!
@@ -432,7 +408,7 @@ if has('mac')
     endif
     call s:EchoOnOff('XkbSwitch:', g:XkbSwitchEnabled)
   endfunction
-  command! ToggleXkbSwitch call <SID>ToggleXkbSwitch()
+  command! XkbSwitchToggle call <SID>XkbSwitchToggle()
 endif
 
 " }}}
@@ -476,8 +452,8 @@ augroup user_filetype
   \ setlocal keywordprg=pydoc3 |
   \ setlocal foldmethod=indent
 
-  autocmd FileType vim nnoremap <buffer> K :execute "tab help " . expand("<cword>")<CR>
-  autocmd FileType sh,man nnoremap <buffer> K :execute "Man " . expand("<cword>")<CR>
+  autocmd FileType vim nnoremap <buffer> K :execute 'tab help' expand("<cword>")<CR>
+  autocmd FileType sh,man nnoremap <buffer> K :execute 'Man' expand("<cword>")<CR>
 
   autocmd FileType gitcommit setlocal spell
 augroup END
@@ -493,18 +469,18 @@ set foldminlines=1
 set foldopen=block,hor,insert,jump,mark,percent,quickfix,search,tag,undo
 
 let s:char = matchstr(split(&fillchars,','), 'fold:.')
-let g:foldchar = (s:char == "") ? '-' : s:char[-1:]
+let g:foldchar = empty(s:char) ? '-' : s:char[-1:]
 unlet s:char
 
 set foldtext=MyFoldText()
 function! MyFoldText()
-  let line = substitute(getline(v:foldstart), '\t', repeat(' ', &tabstop), 'g')
-  let nfolded = v:foldend - v:foldstart
+  let l:line = substitute(getline(v:foldstart), '\t', repeat(' ', &tabstop), 'g')
+  let l:nfolded = v:foldend - v:foldstart
 
-  let windowwidth = winwidth(0) - &foldcolumn - &number * &numberwidth
-  let maxline = windowwidth - len(nfolded) - len(' lines ') - 1 
-  let line = strpart(line, 0, maxline)
-  return line . repeat(g:foldchar, maxline-len(line)+1) . nfolded . ' lines '
+  let l:windowwidth = winwidth(0) - &foldcolumn - &number * &numberwidth
+  let l:maxline = l:windowwidth - len(l:nfolded) - len(' lines ') - 1 
+  let l:line = strpart(l:line, 0, l:maxline)
+  return l:line . repeat(g:foldchar, l:maxline-len(l:line)+1) . l:nfolded . ' lines '
 endfunction
 
 " }}}
@@ -536,7 +512,7 @@ nnoremap <F2> :execute "Man" substitute(expand("<cword>"), '_', '','g')<CR>
 
 " Type(i) or show(n) the current date stamp
 imap <F9> <C-R>=strftime('%d %b %Y %T %z')<CR>
-nnoremap <F9> :echo 'Current time is ' . strftime('%d %b %Y %T %z')<CR>
+nnoremap <F9> :echo 'Current time is' strftime('%d %b %Y %T %z')<CR>
 
 " Reset searches
 nmap <silent> <Leader>r :nohlsearch<CR>
@@ -551,10 +527,9 @@ nnoremap <C-p> "*p
 
 "--- Toggle
 call s:Noremap(['n','t'], '<F3>',  ":TagbarToggle<CR>")
-call s:Noremap(['n','i'], '<F4>',  ":call ToggleColorcolumn()<CR>")
-call s:Noremap(['n','i'], '<F5>',  ":execute exists('#AcpGlobalAutoCommand#InsertEnter') ? 'AcpDisable':'AcpEnable'<Bar>echo 'AcpToggle'<CR>")
-call s:Noremap(['n','i'], '<F6>',  ":call ToggleCopyPaste()<CR>")
-call s:Noremap(['n','i'], '<F7>',  ':setlocal spell!<Bar>call <SID>EchoOnOff("Spell:", &spell)<CR>')
+call s:Noremap(['n','i'], '<F4>',  ":call ColorcolumnToggle()<CR>")
+call s:Noremap(['n','i'], '<F6>',  ":call CopyPasteToggle()<CR>")
+call s:Noremap(['n','i'], '<F7>',  ":setlocal spell!<Bar>call <SID>EchoOnOff('Spell:', &spell)<CR>")
 call s:Noremap(['n','i'], '<F10>', ":let &mouse = (&mouse == '') ? 'a' : ''<Bar>:call <SID>EchoOnOff('mouse', &mouse)<CR>")
 nnoremap <Leader>iw :call <SID>IwhiteToggle()<CR>
 
@@ -596,13 +571,13 @@ nnoremap j gj
 nnoremap k gk
 
 "--- Folding
-call s:Noremap(['n','x'], '<Space>', "za")
+call s:Noremap(['n','x'], '<Space>', 'za')
 nnoremap zR zr
 nnoremap zr zR
 nnoremap zM zm
 nnoremap zm zM
 for i in range(10)
-  execute "nnoremap" 'z'.i ":set foldlevel=".i.'<CR>'
+  execute 'nnoremap' 'z'.i ':set foldlevel='.i.'<CR>'
 endfor
 
 "--- Tab page
@@ -613,11 +588,11 @@ nnoremap <Tab>gf <C-w>gf
 
 " <C-Tab>   : iTerm Sends HEX code for <F11> "[23~"
 " <C-S-Tab> : iTerm Sends HEX code for <F12> "[24~"
-call s:Noremap(['n','i','t'], "<silent> <F11>", ":tabnext<CR>")
-call s:Noremap(['n','i','t'], "<silent> <F12>", ":tabprevious<CR>")
+call s:Noremap(['n','i','t'], '<silent> <F11>', ':tabnext<CR>')
+call s:Noremap(['n','i','t'], '<silent> <F12>', ':tabprevious<CR>')
 
 for i in range(1,6)
-  execute "nnoremap" '<Tab>'.i i.'gt'
+  execute 'nnoremap' '<Tab>'.i i.'gt'
 endfor
 
 "--- EasyAlign
@@ -627,7 +602,7 @@ xmap ga <Plug>(EasyAlign)
 "--- open URL/file
 if has('mac')
   nnoremap <silent> go :!open <cWORD><CR>
-  xnoremap <silent> go :<C-u>execute "!open" expand(<SID>GetSelectedText())<CR>
+  xnoremap <silent> go :<C-u>execute '!open' expand(<SID>GetSelectedText())<CR>
 endif
 
 "--- undotree
@@ -652,4 +627,3 @@ onoremap <silent> al :normal! v0o$<CR>
 "--- GotoBuffer
 nnoremap gb :B<CR>
 " }}}
-
