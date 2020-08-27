@@ -19,7 +19,7 @@ let mapleader = '\'
 
 call plug#begin('~/.vim/plugged')
   " General
-  Plug 'BeomjoonGoh/vim-easy-terminal'
+  Plug 'BeomjoonGoh/vim-easy-term'
   Plug 'tpope/vim-fugitive'
   Plug 'othree/vim-autocomplpop' | Plug 'vim-scripts/L9'
   Plug 'garbas/vim-snipmate'     | Plug 'MarcWeber/vim-addon-mw-utils' | Plug 'tomtom/tlib_vim'
@@ -316,13 +316,13 @@ let g:undotree_DiffCommand = 'custom_diff(){ diff -U1 "$@" | tail -n+3;}; custom
 command! -bang -nargs=? -range=-1 -complete=customlist,fugitive#Complete Vg   vertical belowright G <args>
 command! -bang -nargs=? -range=-1 -complete=customlist,fugitive#Complete Vgit vertical belowright Git <args>
 
-"--- easy-terminal
-command! -nargs=? -complete=custom,easy_terminal#Complete Bterm botright Term <args>
-command! -nargs=? -complete=custom,easy_terminal#Complete Vterm vertical botright Term <args>
-command! -nargs=? -complete=custom,easy_terminal#Complete Tterm tab Term <args>
+"--- easy-term
+command! -nargs=? -complete=custom,easy_term#Complete Bterm botright Term <args>
+command! -nargs=? -complete=custom,easy_term#Complete Vterm vertical botright Term <args>
+command! -nargs=? -complete=custom,easy_term#Complete Tterm tab Term <args>
 
 "--- markdown-preview.nvim
-let g:mkdp_auto_close = 0
+let g:mkdp_auto_close   = 0
 let g:mkdp_refresh_slow = 1
 
 " }}}
@@ -633,7 +633,7 @@ endif
 "--- undotree
 nnoremap <Leader>u :UndotreeToggle<CR>
 
-"--- easy-terminal
+"--- easy-term
 nmap <Leader>cd <Plug>(EasyTermCdVim)
 tmap <Leader>cd <Plug>(EasyTermCdTerm)
 nmap <Leader>t <Plug>(EasyTermSendText)
