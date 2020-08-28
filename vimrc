@@ -290,10 +290,12 @@ let g:undotree_HelpLine                 = 0
 let g:undotree_DiffCommand = 'custom_diff(){ diff -U1 "$@" | tail -n+3;}; custom_diff'
 
 "--- fugitive
-command! -bang -nargs=? -range=-1 -complete=customlist,fugitive#Complete Vg   vertical belowright G <args>
+command! -bang -nargs=? -range=-1 -complete=customlist,fugitive#Complete Vg vertical belowright G <args>
 command! -bang -nargs=? -range=-1 -complete=customlist,fugitive#Complete Vgit vertical belowright Git <args>
 
 "--- easy-term
+let g:easy_term_rows = '15,18%'
+let g:easy_term_cols = '100,40%'
 command! -nargs=? -complete=custom,easy_term#Complete Bterm botright Term <args>
 command! -nargs=? -complete=custom,easy_term#Complete Vterm vertical botright Term <args>
 command! -nargs=? -complete=custom,easy_term#Complete Tterm tab Term <args>
