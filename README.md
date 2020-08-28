@@ -98,11 +98,12 @@ link `TagbarHighlight` to `Visual`
   let g:tagbar_map_openallfolds = ['_', '<kMultiply>', 'zR']
   let g:tagbar_type_markdown    = {
       \ 'ctagstype' : 'markdown',
-      \ 'kinds' : [
-      \   'h:headings',
-      \   'l:links',
-      \   'i:images',
-      \ ],
+      \ 'kinds' : [ 'h:Headings', 'l:Links', 'i:Images' ],
+      \ 'sort' : 0,
+      \}
+  let g:tagbar_type_help = {
+      \ 'ctagstype' : 'help',
+      \ 'kinds' : [ 't:Tags' ],
       \ 'sort' : 0,
       \}
   ```
@@ -251,6 +252,16 @@ For builtin commands `:e`, `:q`, `:qa`, `:w`, `:wa`, `:wq`, `:wqa`, `:sp`, and
   buffer.
 * `:ToggleXkbSwitch`<sup>[[1]](#MacOS)</sup> toggles `xkbswitch` plugin.
 
+Additionally, it sources the builtin `man.vim` script, and related options
+```vim
+runtime! ftplugin/man.vim
+```
+so that a man page is opened inside vim (on a new buffer) by `:Man` command.
+For example to open bash's man page,
+```vim
+:Man bash
+```
+
 
 ## User Interfaces
 
@@ -280,6 +291,15 @@ Tabline: `{tab}`  = `{tab_num} {file} ([+],[*]) (({tot_win}))`
 * `X` : Close button for mouse
 
 See `:help statusline, :help tabline`
+
+
+### Relativenumber toggle
+
+If 'relativenumber' is on, for the file types `help`, `tagbar`, `cppman`,
+`man`, `undotree`, and `diff`, turn off 'relativenumber' when focus is lost
+where relative number doesn't make a lot of sense.  Motivation is that vim help
+files typically set nonumber but does not care about relativenumber.  Note also
+that setting relativenumber on may slow down scrolling.
 
 
 ## Key maps

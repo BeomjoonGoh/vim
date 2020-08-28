@@ -216,7 +216,7 @@ let g:tagbar_map_togglefold   = ['<Space>', 'za']
 let g:tagbar_map_openallfolds = ['_', '<kMultiply>', 'zR']
 let g:tagbar_type_markdown    = {
     \ 'ctagstype' : 'markdown',
-    \ 'kinds' : [ 'h:headings', 'l:links', 'i:images' ],
+    \ 'kinds' : [ 'h:Headings', 'l:Links', 'i:Images' ],
     \ 'sort' : 0,
     \}
 let g:tagbar_type_help = {
