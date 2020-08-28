@@ -1,91 +1,65 @@
-snippet #!
-	#!/usr/bin/python
+# python.snippets
 
-snippet im
+# Header
+snippet #! | Shebang
+	#!/usr/bin/env ${1:python}${0}
+snippet imp | import A
+	import ${1:module}${0}
+snippet from | from A import B
+	from ${1} import ${0}
+snippet Imp | Imports common
 	import numpy
 	import sys, os, re, shutil, glob
 	from math import *
 	from subprocess import Popen, PIPE
-snippet imp
-	import ${1:module}
-# Module Docstring
-snippet docs
-	'''
-	File: ${1:`Filename('$1.py', 'foo.py')`}
-	Author: ${2:`g:snips_author`}
-	Description: ${3}
-	'''
-snippet wh
-	while ${1:condition}:
-		${2}
-snippet for
-	for ${1:needle} in ${2:haystack}:
-		${3}
-# New Class
-snippet cl
-	class ${1:ClassName}(${2}):
-		"""${3:docstring for $1}"""
-		def __init__(self, ${4:arg}):
-			${5:super($1, self).__init__()}
-			self.${4} = ${4}
-			${6}
-# New Function
-snippet def
-	def ${1:fname}(${2:`indent('.') ? 'self' : ''`}):
-		"""${3:docstring for $1}"""
-		${4}
-snippet deff
-	def ${1:fname}(${2:`indent('.') ? 'self' : ''`}):
-		${3}
-# New Method
-snippet defs
-	def ${1:mname}(self, ${2:arg}):
-		${3:pass}
-# New Property
-snippet property
-	def ${1:foo}():
-		doc = "${2:The $1 property.}"
-		def fget(self):
-			${3:return self._$1}
-		def fset(self, value):
-			${4:self._$1 = value}
-# Lambda
-snippet ld
-	${1:var} = lambda ${2:vars} : ${3:action}
-snippet .
-	self.
-snippet try Try/Except
-	try:
-		${1:pass}
-	except ${2:Exception}, ${3:e}:
-		${4:raise $3}
-snippet try Try/Except/Else
-	try:
-		${1:pass}
-	except ${2:Exception}, ${3:e}:
-		${4:raise $3}
-	else:
-		${5:pass}
-snippet try Try/Except/Finally
-	try:
-		${1:pass}
-	except ${2:Exception}, ${3:e}:
-		${4:raise $3}
-	finally:
-		${5:pass}
-snippet try Try/Except/Else/Finally
-	try:
-		${1:pass}
-	except ${2:Exception}, ${3:e}:
-		${4:raise $3}
-	else:
-		${5:pass}
-	finally:
-		${6:pass}
-# if __name__ == '__main__':
-snippet ifmain
+	${0}
+
+# Class
+snippet cl | class A(B): def __init__(self):
+	class ${1}(${2}):
+		def __init__(self,${3}):
+			${5:super($1, self).__init__()}${0}
+snippet . | self.
+	self.${0}
+snippet _ | __A__
+	__${1}__${0}
+
+# Function
+snippet ifmain | if __name__ == '__main__':
 	if __name__ == '__main__':
 		${1:main()}
-# __magic__
-snippet _
-	__${1:init}__${2}
+snippet def | def A(B):
+	def ${1}(${2:`indent('.') ? 'self' : ''`}):${0}
+snippet ld | A = lambda B : C
+	${1} = lambda ${2} : ${0}
+snippet re | return A
+	return${0}
+
+# Condition
+snippet if | if A:
+	if ${1}:${0}
+snippet ei | else if A:
+	else if ${1}:${0}
+snippet el | else:
+	else:${0}
+snippet t | A if B else C
+	${1} if ${2} else ${3}
+
+# Loop
+snippet wh | while A:
+	while ${1:condition}:${2}
+snippet for | for A in B:
+	for ${1} in ${2}:${0}
+
+# Exception
+snippet try | try: A except B,C: D
+	try:
+		${1:pass}
+	except ${2:Exception}, ${3:e}:
+		${4:raise $3}
+
+# Others
+snippet doc | """A"""
+	"""${1}"""${0}
+snippet with | with open(A,'B') as C:
+	with open(${1}, '${2:r}') as ${3:f}:${0}

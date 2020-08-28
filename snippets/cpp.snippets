@@ -1,180 +1,166 @@
-################################################################################
-### Preprocessor directives
-# #include <...>
-snippet inc
-	#include <${1:iostream}>${0}
-# #include "..."
-snippet Inc
-	#include "${1}.h"${0}
-# #ifndef ... #define ... #endif
-snippet Def
-	#ifndef $1
-		#define ${1:SYMBOL} ${2:value}
-	#endif
-snippet def
-	#define${0}
-snippet ifdef
-	#ifdef ${1:FOO}
-		${0:#define }
-	#endif
-snippet #if
-	#if ${1:FOO}
-		${0}
-	#endif
-# Header Include-Guard
-# (the randomizer code is taken directly from TextMate; it could probably be
-# cleaner, I don't know how to do it in vim script)
-snippet once
-	#ifndef ${1:`toupper(Filename('', 'UNTITLED').'_'.system("/usr/bin/ruby -e 'print (rand * 2821109907455).round.to_s(36)'"))`}
+# cpp.snippets
+
+# Header Include Guard
+snippet once | Include guard
+	#ifndef ${1:`toupper(expand('%:t')->substitute('\.','_',''))`}
 	#define $1
 
 	${0}
 	#endif /* end of include guard: $1 */
-################################################################################
-### Object oriented
+
+# Preprocessor directives
+snippet inc | #include <A>
+	#include <${1:iostream}>${0}
+snippet Inc | #include "A.h"
+	#include "${1}.h"${0}
+snippet def | #define
+	#define ${0}
+snippet Def | #ifndef A #define A #endif
+	#ifndef $1
+		#define ${1:} ${0}
+	#endif
+snippet ifdef | #ifdef A #endif
+	#ifdef ${1}
+		${0}
+	#endif
+snippet #if | #if A #endif
+	#if ${1}
+		${0}
+	#endif
+
 # Namespace
-snippet nsh
-	namespace ${1:`Filename('', 'my')`} {
-		${2}
+snippet nsh | namespace A { }
+	namespace ${1} {
+		${0}
 	} // $1
-snippet ns
+snippet ns | namespace A = B;
 	namespace ${1:shortName} = ${2:fullName};${0}
-snippet usn
+snippet uns | using namespace A;
 	using namespace ${1:std};${0}
-# Class
-snippet cl
-	class ${1:Name}
+
+# Template
+snippet temp | template <typenane A>
+	template <${1:typename} ${2:T}>${0}
+
+# Class, Struct, Template	
+snippet cl | class A { };
+	class ${1:Name} ${2::}
 	{
-		private:
-			${0}
+		private:${0}
 		public:
 			$1() { }
-			virtual ~$1() { }
+			~$1() { }
 	};
-# Struct
-snippet st
+snippet st | struct A { };
 	struct ${1} {
 		${0}
 	};
-################################################################################
-### Functions
-# main()
-snippet main
+snippet en
+	enum ${1:foo} {
+		${0}
+	};
+snippet pu | public
+	public${0}
+snippet pr | private
+	private${0}
+snippet po | protected
+	protected${0}
+
+# Function
+snippet main | int main(A) { return 0; }
 	int main(${1:int argc, const char *argv[]})
 	{
 		${0}
 
 		return 0;
 	}
-# function
-snippet fun
+snippet fun | A B(C) { }
 	${1:void} ${2}(${3})
 	{${0}
 	}
-# function declaration
-snippet fund
+snippet fund | A B(C);
 	${1:void} ${2}(${3});${0}
-snippet re
+snippet ld
+	[${1}](${2}) -> ${3} {${0}};
+snippet re | return A;
 	return ${1:0};${0}
-################################################################################
-### Conditions
-# if
-snippet if
+
+# Condition
+snippet if | if (A)
 	if (${1})${0}
-# else if
-snippet ei
+snippet ei | else if (A)
 	else if (${1})${0}
-# else
-snippet el
+snippet el | else
 	else${0}
-# Tertiary conditional
-snippet t
+snippet t | (A) ? B : C
 	(${1}) ? ${2} : ${0}
-# switch
-snippet sw
-	switch (${1:val}) {
-		case ${2:key}:${0}
+snippet sw | switch (A) { case B: }
+	switch (${1}) {
+		case ${2}:${0}
 	}
-snippet de
-	default: ${0}
-################################################################################
-### Loops
-# do while
-snippet do
+snippet de | default:
+	default:${0}
+
+# Loop
+snippet do | do { A } while (B);
 	do {
 		${0}
 	} while (${1});
-# while
-snippet wh
+snippet wh | while (A) { }
 	while (${1}) {
 		${0}
 	}
-# for
-snippet for
+snippet for | for (A B=C; B<D; B++)
 	for (${1:size_t} ${2:i} = ${3:0}; $2 < ${4:Imax}; $2${5:++})${0}
-# for back
-snippet ford
+snippet ford | for (A B=C; B-->D;)
 	for (${1:size_t} ${2:i} = ${3:Imax}; $2-->${4:0};)${0}
-# for iterator
-snippet fori
+snippet fori | for (auto A=B.begin(); A!=B.end(); A++)
 	for (auto ${1:i} = ${2:container}.begin(); $1 != $2.end(); $1++)${0}
-# for each
-snippet fore
+snippet fore | for (auto &A : B)
 	for (auto &${1:i} : ${2:container})${0}
-# continue & break
-snippet co
+snippet co | continue;
 	continue;${0}
-snippet br
+snippet br | break;
 	break;${0}
-################################################################################
-### Type definition
-# Typedef using
-snippet us
-	using ${1:customType} = ${2:int};${0}
-# Typedef
-snippet td
-	typedef ${1:int} ${2:MyCustomType};${0}
-################################################################################
-### Others
-# Scope
-snippet {
+
+# Type definition
+snippet us | using A = B;
+	using ${1:CustomType} = ${2:int};${0}
+snippet td | typedef A B;
+	typedef ${1:int} ${2:CustomType};${0}
+
+# Type casting
+snippet sc | static_cast<A>(B)
+	static_cast<${1:double}>(${2})${0}
+snippet dc | dynamic_cast<A>(B)
+	dynamic_cast<${1:double}>(${2})${0}
+snippet rc | reinterpret_cast<A>(B)
+	reinterpret_cast<${1:double}>(${2})${0}
+
+# IO
+snippet cout | cout << A << endl;
+	${1:}cout << ${2} << $1endl;${0}
+snippet clog | clog << A << endl;
+	${1:}clog << ${2} << $1endl;${0}
+snippet cerr | cerr << A << endl;
+	${1:}cerr << ${2} << $1endl;${0}
+snippet pr | printf("A\n"B);
+	printf("${1:%s}\n"${2});${0}
+snippet fpr | fprintf(A, "B\n"C);
+	fprintf(${1:stderr}, "${2:%s}\n"${3});${0}
+
+# STL container
+snippet map | map<A, B>
+	${1:}map<${2}, ${3}>${0}
+snippet vec | vector<A>
+	${1:}vector<${2}>${0}
+
+# Others
+snippet { | { }
 	{
 		${0}
 	}
-# Subscript
-snippet [
-	[${1}]${0}
-snippet un
+snippet un | unsigned
 	unsigned ${0}
-# Const reference
-snippet conr
+snippet conr | const A &B
 	const ${1} &${0}
-# Template
-snippet temp
-	template <${1:typename} ${2:T}>${0}
-# Type casting
-snippet sc
-	static_cast<${1:double}>(${2})${0}
-snippet dc
-	dynamic_cast<${1:double}>(${2})${0}
-snippet rc
-	reinterpret_cast<${1:double}>(${2})${0}
-# cout
-snippet cout
-	${1:}cout << ${2} << $1endl;${0}
-# cout
-snippet clog
-	${1:}clog << ${2} << $1endl;${0}
-# cout
-snippet cerr
-	${1:}cerr << ${2} << $1endl;${0}
-# STL container
-snippet map
-	${1:}map<${2}, ${3}>${0}
-snippet vec
-	${1:}vector<${2}>${0}
-# Enumeration
-snippet en
-	enum ${1:foo} {
-		${0}
-	};
