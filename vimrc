@@ -216,11 +216,12 @@ let g:tagbar_map_togglefold   = ['<Space>', 'za']
 let g:tagbar_map_openallfolds = ['_', '<kMultiply>', 'zR']
 let g:tagbar_type_markdown    = {
     \ 'ctagstype' : 'markdown',
-    \ 'kinds' : [
-    \   'h:headings',
-    \   'l:links',
-    \   'i:images',
-    \ ],
+    \ 'kinds' : [ 'h:headings', 'l:links', 'i:images' ],
+    \ 'sort' : 0,
+    \}
+let g:tagbar_type_help = {
+    \ 'ctagstype' : 'help',
+    \ 'kinds' : [ 't:Tags' ],
     \ 'sort' : 0,
     \}
 highlight default link TagbarHighlight Visual
