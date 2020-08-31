@@ -21,19 +21,19 @@
 # }}}
 
 # Default values {{{
-                   | unset FOO    | FOO=''       | FOO='new'
-  -----------------+--------------+--------------+--------------
-  echo ${FOO:-val} | val          | val          | new          # $FOO, 'val' if unset/empty
-  echo ${FOO:=val} | val (stored) | val (stored) | new          # $FOO, FOO='val' if unset/empty
-  echo ${FOO:+val} | ''           | ''           | val          # 'val' if $FOO is set
-  echo ${FOO:?err} | err (exit)   | err (exit)   | new          # show 'err' and exit if $FOO is unset/empty
+               | unset F | F=''      | F='new'
+  -------------+----------+----------+----------
+  echo ${F:-v} | v        | v        | new      # $F, 'v' if unset/empty
+  echo ${F:=v} | v (set)  | v (set)  | new      # $F, F='v' if unset/empty
+  echo ${F:+v} | ''       | ''       | val      # 'v' if $F is set
+  echo ${F:?e} | e (exit) | e (exit) | new      # 'e' and exit if $F is unset/empty
 
-                   | unset FOO    | FOO=''       | FOO='new'
-  -----------------+--------------+--------------+--------------
-  echo ${FOO-val}  | val          | ''           | new          # $FOO, 'val' if unset
-  echo ${FOO=val}  | val (stored) | ''           | new          # $FOO, FOO='val' if unset
-  echo ${FOO+val}  | ''           | val          | val          # 'val' if $FOO is set
-  echo ${FOO?err}  | err (exit)   | ''           | new          # show 'err' and exit if $FOO is unset
+               | unset F   | F=''    | F='n'
+  -------------+----------+----------+----------
+  echo ${F-v}  | v        | ''       | n        # $F, 'v' if unset
+  echo ${F=v}  | v (set)  | ''       | n        # $F, F='v' if unset
+  echo ${F+v}  | ''       | v        | v        # 'v' if $F is set
+  echo ${F?e}  | e (exit) | ''       | n        # 'err' and exit if $FOO is unset
 # }}}
 
 # Conditionals {{{

@@ -252,31 +252,26 @@ let g:cheatsheet_filetypeDict = {
       \  'markdown' : 'md',
       \  'make'     : 'makefile',
       \} "filetype  : extension
-let g:cheatsheet_path = '~/.vim/cheatsheets' " ??? global? automatically find path?
-let g:cheatsheet_complete = system('ls ' . g:cheatsheet_path . " | sed 's/cs.//g'")
-let g:cheatsheet_split = 'vsp' " or 'sp'
+let g:cheatsheet_command = 'vertical 90 new'
 
 function! Cheatsheet_getfile(ft)
-  let l:file_type = empty(a:ft) ? &filetype : a:ft
-  if has_key(g:cheatsheet_filetypeDict, l:file_type)
-    let l:file_type = g:cheatsheet_filetypeDict[l:file_type]
-  endif
-  return expand(g:cheatsheet_path . '/cs.' . l:file_type)
+  let l:ext = get(g:cheatsheet_filetypeDict, a:ft, a:ft)
+  let l:path = expand("<sfile>:p:h").'/cheatsheets'
+  return l:path . '/cs.' . l:ext
 endfunction
 
 function! Cheatsheet_open(cmd, ft)
-  let l:file = Cheatsheet_getfile(a:ft)
+  let l:file = Cheatsheet_getfile(empty(a:ft) ? &filetype : a:ft)
   if a:cmd == 'view' && !filereadable(l:file)
     echomsg 'cheatsheet does not exist:' l:file
     return
   endif
-  execute g:cheatsheet_split
+  execute g:cheatsheet_command
   execute a:cmd l:file
-  "silent! %foldclose!
 endfunction
 
 function! Cheatsheet_complete(A,L,P)
-  return g:cheatsheet_complete
+  return "bash\ngit\ngpi\nmakefile\nmd\nregex\nvim"
 endfunction
 
 command! -bang -nargs=? -complete=custom,Cheatsheet_complete Cheat call Cheatsheet_open('view', <q-args>)
@@ -300,7 +295,7 @@ command! -bang -nargs=? -range=-1 -complete=customlist,fugitive#Complete Vgit ve
 
 "--- easy-term
 let g:easy_term_rows = '15,18%'
-let g:easy_term_cols = '100,40%'
+let g:easy_term_cols = '100,33%'
 command! -nargs=? -complete=custom,easy_term#Complete Bterm botright Term <args>
 command! -nargs=? -complete=custom,easy_term#Complete Vterm vertical botright Term <args>
 command! -nargs=? -complete=custom,easy_term#Complete Tterm tab Term <args>
