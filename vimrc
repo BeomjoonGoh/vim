@@ -1,7 +1,7 @@
 " vimrc file
 " Languague:    vim
 " Maintainer:   Beomjoon Goh
-" Last Change:  14 Jul 2020 19:52:10 +0900
+" Last Change:  31 Aug 2020 18:09:09 +0900
 " Contents:
 "   General
 "   User Interfaces
@@ -178,15 +178,25 @@ set nowrap
 "--- Line number
 set numberwidth=4
 set number
-set relativenumber
-let s:no_number_toggle = [ 'help', 'tagbar', 'cppman', 'man', 'undotree', 'diff' ]
-augroup number_toggle
-  "Turn off relativenumber for non focused splits. This has a potential of slowing down scrolling with iTerm2
-  autocmd!
-  autocmd BufEnter *
-  \ if (index(s:no_number_toggle, &filetype) == -1) | set relativenumber< | endif
-  autocmd BufLeave * setlocal norelativenumber
-augroup END
+set relativenumber              " it may slow down scrolling.
+function! s:ToggleNoRnuWinLeave(...)
+  if exists('#no_rnu#WinLeave') || !get(a:,1,0)
+    augroup no_rnu
+      autocmd!
+    augroup END
+  else
+    augroup no_rnu
+      "Turn off relativenumber for not-current windows.
+      autocmd!
+      autocmd WinLeave * setlocal norelativenumber
+      autocmd WinEnter *
+          \ if &filetype !~ '\vhelp|man|diff|tagbar|undotree' |
+          \   set relativenumber< |
+          \ endif
+    augroup END
+  endif
+endfunction
+call s:ToggleNoRnuWinLeave(1)
 
 "--- Spell check
 set spellsuggest=best,3
@@ -638,4 +648,11 @@ function! ResetEasyTerm()
   unlet g:loaded_easy_term
   source ~/.vim/plugged/vim-easy-term/plugin/easy_term.vim
   source ~/.vim/plugged/vim-easy-term/autoload/easy_term.vim
+endfunction
+
+function! SmallScreen()
+  set nonu nornu
+  set laststatus=0
+  set showtabline=0
+  call s:ToggleNoRnuWinLeave(0)
 endfunction
