@@ -120,8 +120,8 @@ function! StatusLineGit()
   return l:branch
 endfunction
 function! MyStatusLine()
-  let l:fname = empty(expand("%")) ? '%f' : '%{fnamemodify(expand("%"), ":~:.")}'
-  return '%{StatusLineGit()}%h'.l:fname.' %m%r  cwd: %<%{fnamemodify(getcwd(), ":~:.")} %=%(%c%V, %l/%L%) %P '
+  let l:f = empty(expand("%")) ? '%f' : '%{fnamemodify(expand("%"), ":~:.")}'
+  return '%{StatusLineGit()}%h'.l:f.' %m%r  cwd: %<%{fnamemodify(getcwd(), ":~:.")} %=%(%c%V, %l/%L%) %P '
 endfunction
 let &fillchars = 'vert: ,fold: ,diff: '
 
@@ -129,34 +129,29 @@ let &fillchars = 'vert: ,fold: ,diff: '
 set showtabline=2
 set tabline=%!MyTabLine()
 function! MyTabLine()
-  let str = repeat(' ', &numberwidth)
-  for ntab in range(1, tabpagenr('$'))
-    let str .= '%'.ntab.'T'.(ntab == tabpagenr() ? '%1*%#TabNumSel# '.ntab.' %#TabLineSel# ' : '%2*%#TabNum# '.ntab.' %#TabLine# ')
+  let l:line = repeat(' ', &numberwidth+&foldcolumn)
+  for l:t in range(1, tabpagenr('$'))
+    let l:s = l:t == tabpagenr() ? 'Sel' : ''
+    let l:line .= '%'.l:t.'T%#TabNum'.l:s.'# '.l:t.' %#TabLine'.l:s.'#'
 
-    let buflist = tabpagebuflist(ntab)
-    let bufnr = buflist[tabpagewinnr(ntab) - 1]
-    let ftype = getbufvar(bufnr, '&filetype')
-
-    let fname = ''
-    if     ftype == 'help'   | let fname .= '[Help] '.fnamemodify(bufname(bufnr), ':t:r')
-    elseif ftype == 'qf'     | let fname .= '[Quickfix]'
-    elseif ftype == 'tagbar' | let fname .= '[TagBar]'
-    elseif ftype == 'cppman' | let fname .= '[C++] '.bufname(bufnr)
-    else                     | let fname .= fnamemodify(bufname(bufnr), ':t')
+    let l:bn = tabpagebuflist(l:t)[tabpagewinnr(l:t) - 1]
+    let l:f = fnamemodify(bufname(l:bn), ':t')
+    if getbufvar(l:bn, '&filetype') =~ 'help\|man\|qf'
+      let l:f = '['.getbufvar(l:bn, '&filetype').'] '.fnamemodify(l:f, ':r')
     endif
-    let str .= (fname != '' ? fname : '[No Name]')
+    let l:line .= empty(l:f) ? '[No Name]' : l:f
 
-    let modflag = ''
-    for b in buflist
-      if getbufvar(b, '&modified') && getbufvar(b, '&buftype') != 'terminal'
-        let modflag .= (b == bufnr ? ' [+]' : ' [*]')
+    let l:m = ''
+    for l:b in tabpagebuflist(l:t)
+      if getbufvar(l:b, '&modified') && getbufvar(l:b, '&buftype') != 'terminal'
+        let l:m = l:b == l:bn ? ' [+]' : ' [*]'
         break
       endif
     endfor
-    let nwins = tabpagewinnr(ntab, '$')
-    let str .= modflag. (nwins > 1 ? ' ('.nwins.') ' : ' ')
+    let l:nwin = tabpagewinnr(l:t, '$')
+    let l:line .= l:m. (l:nwin > 1 ? ' ('.l:nwin.') ' : ' ')
   endfor
-  return str.'%T%#TabLineFill#%=%999XX'
+  return l:line.'%T%#TabLineFill#%=%999XX'
 endfunction
 
 "--- Indent & tab
@@ -277,7 +272,7 @@ function! Cheatsheet_open(cmd, ft)
   endif
   execute g:cheatsheet_split
   execute a:cmd l:file
-  silent! %foldclose!
+  "silent! %foldclose!
 endfunction
 
 function! Cheatsheet_complete(A,L,P)
@@ -341,7 +336,7 @@ function! s:GetSelectedText()
   normal! gvy
   let l:ret = getreg('"')
   call setreg('"', l:old_reg, l:old_regtype)
-  execute "norm \<Esc>"
+  execute "normal! \<Esc>"
   return l:ret
 endfunction
 
