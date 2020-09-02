@@ -40,6 +40,8 @@ call plug#begin('~/.vim/plugged')
   Plug 'BeomjoonGoh/vim-aftersyntax'
   Plug 'octol/vim-cpp-enhanced-highlight'
   Plug 'shiracamus/vim-syntax-x86-objdump-d'
+
+  Plug 'jmckiern/vim-venter'
 call plug#end()
 
 set nocompatible
@@ -253,11 +255,11 @@ let g:cheatsheet_filetypeDict = {
       \  'make'     : 'makefile',
       \} "filetype  : extension
 let g:cheatsheet_command = 'vertical 90 new'
+let g:cheatsheet_path = expand("<sfile>:p:h").'/cheatsheets'
 
 function! Cheatsheet_getfile(ft)
   let l:ext = get(g:cheatsheet_filetypeDict, a:ft, a:ft)
-  let l:path = expand("<sfile>:p:h").'/cheatsheets'
-  return l:path . '/cs.' . l:ext
+  return g:cheatsheet_path . '/cs.' . l:ext
 endfunction
 
 function! Cheatsheet_open(cmd, ft)
@@ -630,6 +632,18 @@ onoremap <silent> al :normal! v0o$<CR>
 
 "--- GotoBuffer
 nnoremap gb :B<CR>
+
+"--- venter
+function! VenterToggleCustom()
+  if exists("t:venter_tabid")
+    call VenterClose()
+    tabclose
+  else
+    tab split
+    call venter#Venter()
+  endif
+endfunction
+nnoremap <Leader>f :call VenterToggleCustom()<CR>
 " }}}
 
 "temp
