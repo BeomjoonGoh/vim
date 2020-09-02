@@ -447,7 +447,7 @@ augroup user_filetype
   \ setlocal cindent |
   \ if !exists('pathset') |
   \   let pathset = 1 |
-  \   setlocal path+=$HOME/work/lib,$HOME/work/lib/specialfunctions,$HOME/work/projectEuler/Library |
+  \   set path+=$HOME/work/lib,$HOME/work/lib/specialfunctions,$HOME/work/projectEuler/Library |
   \ endif |
   \ setlocal formatoptions-=o |
   \ setlocal textwidth=120 |
