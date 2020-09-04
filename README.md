@@ -66,12 +66,6 @@ disabled.
 </details>
 
 
-### [vim-indent-object](https://github.com/michaeljsmith/vim-indent-object)
-
-> Vim plugin that defines a new text object representing lines of code at the
-> same indent level. Useful for python/vim scripts, etc.
-
-
 ### [vim-peekaboo](https://github.com/junegunn/vim-peekaboo)
 
 > Peekaboo extends `"` and `@` in normal mode and `<CTRL-R>` in insert mode so
@@ -150,6 +144,13 @@ It uses the dynamic library of [input source switcher][issw], a command line
 tool for switching the keyboard layout by Vladimir Timofeev.
 
 [issw]: https://github.com/vovkasm/input-source-switcher
+
+
+### [vim-venter](https://github.com/jmckiern/vim-venter)
+
+> Vim plugin that horizontally centers the current window(s)
+
+Mapped to `<Leader>f` with custom toggle function which does `tab split` first.
 
 
 ### [vim-cppman](https://github.com/BeomjoonGoh/vim-cppman)
@@ -247,10 +248,12 @@ For builtin commands `:e`, `:q`, `:qa`, `:w`, `:wa`, `:wq`, `:wqa`, `:sp`, and
 * `:Help` opens help page in new tab not in split
 * `:RemoveTrailingSpaces` does want it sounds like.
 * `:Source` sources `vimrc`.
-* `:CompleteIncludeToggle` toggle `i` flag for `'complete'` option.
+* `:CompleteIncludeToggle` toggles `i` flag for `'complete'` option.
 * `:OpenFinder`<sup>[[1]](#MacOS)</sup> opens a `Finder` window of the current
   buffer.
 * `:ToggleXkbSwitch`<sup>[[1]](#MacOS)</sup> toggles `xkbswitch` plugin.
+* `:B` calls `GoToBuffer()` that moves cursor to or split opens a buffer in the
+  buffer list with an automatic globbing of given arguments.
 
 Additionally, it sources the builtin `man.vim` script, and related options
 ```vim
@@ -295,18 +298,19 @@ See `:help statusline, :help tabline`
 
 ### Relativenumber toggle
 
-If 'relativenumber' is on, for the file types `help`, `tagbar`, `cppman`,
-`man`, `undotree`, and `diff`, turn off 'relativenumber' when focus is lost
-where relative number doesn't make a lot of sense.  Motivation is that vim help
-files typically set nonumber but does not care about relativenumber.  Note also
-that setting relativenumber on may slow down scrolling.
+If 'relativenumber' is on, for the file types `help`, `man`, `diff`, `tagbar`,
+and `undotree`, turn off 'relativenumber' when focus is lost where relative
+number doesn't make a lot of sense.  Motivation is that vim help files
+typically set nonumber but does not care about relativenumber.  Note also that
+setting relativenumber on may slow down scrolling.
 
 
 ## Key maps
 
 The backslash key (`\`) is used as The "mapleader" variable. The characters n,
-i, v, and t stand for normal, insert, visual, and terminal
-mode respectively. See `:help map.txt` for help and `:map` to see defined maps.
+i, x, o, and t stand for normal, insert, visual only, operator pending, and
+terminal mode respectively.  See `:help map.txt` for help and `:map` to see
+defined maps.
 
 <details open>
   <summary>General</summary>
@@ -315,34 +319,36 @@ mode respectively. See `:help map.txt` for help and `:map` to see defined maps.
   |:--------:|:----:|:------------|
   |`gf`, `gF`| n    | Open a file under cursor in vertical split (current window).
   |`<S-Tab>` | i    | Tab backwards.
-  |`~`       | n v  | The `~` key works for non-alphabets as well.
+  |`~`       | n x  | The `~` key works for non-alphabets as well.
   |`<F2>`    | n    | Manual page for `Lapack` library functions.
   |`<F9>`    | n i  | Show(n) or insert(i) the current date and time stamp.
   |`\r`      | n    | Stop highlighting search result.
   |`\R`      | n    | Clear search result with some random text.
   |`<CR>`    | n    | Enter works in normal mode.
-  |`<C-y>`   | v    | Yank to clipboard (register `"\*`).
+  |`<C-y>`   | x    | Yank to clipboard (register `"\*`).
   |`<C-p>`   | n    | Paste from clipboard (register `"\*`).
-  |`*`, `#`  | v    | Search in visual mode.
+  |`*`, `#`  | x    | Search in visual mode.
   |`ga`      | n x  | Start interactive EasyAlign.
-  |`K`       | n    | if filetype is `vim`, do `:tab help`, if `sh` or `man`, do `:Man`.
-  |`go`<sup>[[1]](#MacOS)</sup>| n v  | Open URL/file under cursor.
+  |`K`       | n    | If filetype is `vim`, do `:tab help`, if `sh` or `man`, do `:Man`.
+  |`go`<sup>[[1]](#MacOS)</sup>| n x  | Open URL/file under cursor.
+  |`gb`      | n    | Call `:B` command.
 </details>
 
 <details open>
-  <summary>Toggle stuff </summary>
+  <summary>Toggle stuff</summary>
   
   | Key     | Mode | Description |
   |:-------:|:----:|:------------|
-  |`<F3>`   | n    | Toggle the `tagbar` plugin.
+  |`<F3>`   | n t  | Toggle the `tagbar` plugin.
   |`<F4>`   | n i  | Toggle `colorcolumn=120`.
   |`<F6>`   | n i  | Toggle (clipboard) copy & paste safe mode.
   |`<F7>`   | n i  | Toggle spell checking.
   |`<F10>`  | n    | Toggle mouse on and off.
   |`\iw`    | n    | In diff mode, toggle ignore white spaces.
-  |`<Space>`| n v  | Open/close folds.
+  |`<Space>`| n x  | Open/close folds.
   |`z[N]`   | n    | Set fold level to `[N]` = 0 ~ 9.
   |`\u`     | n    | Toggle `undotree` plugin.
+  |`\f`     | n    | Toggle `vim-venter` plugin in a new tab.
 </details>
 
 <details open>
@@ -377,10 +383,22 @@ mode respectively. See `:help map.txt` for help and `:map` to see defined maps.
   |`<Tab>e`   | n       | Type `:tabedit` in command-line.
   |`<Tab>n`   | n       | Open the current buffer in a new tab page.
   |`<Tab>gf`  | n       | Open a file under cursor in a new tab page.
-  |`<C-Tab>`  | n i v t | Go to the next tab page (`iTerm` sends `<F11>`).
-  |`<C-S-Tab>`| n i v t | Go to the previous tab page (`iTerm` sends `<F12>`).
+  |`<C-Tab>`  | n i x t | Go to the next tab page (`iTerm` sends `<F11>`).
+  |`<C-S-Tab>`| n i x t | Go to the previous tab page (`iTerm` sends `<F12>`).
   |`<Tab>[N]` | n       | Go to `[N]`th tab page, `[N]` = 1 ~ 6.
 </details>
+
+<details open>
+  <summary>Text object</summary>
+  
+  | Key     | Mode | Description |
+  |:-------:|:----:|:------------|
+  |`il`,`al`| x o  | Current line (`a` with surrounding whitespaces)
+  |`ii`,`ai`| x o  | Indent
+  |`in`,`an`| x o  | Number (`a` with surrounding whitespaces)
+  |`i/`,`i?`| x o  | Search pattern
+</details>
+
 
 ## Todo
 - [ ] Make plugin
