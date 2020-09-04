@@ -22,12 +22,12 @@ call plug#begin('~/.vim/plugged')
   Plug 'BeomjoonGoh/vim-easy-term'
   Plug 'tpope/vim-fugitive'
   Plug 'garbas/vim-snipmate' | Plug 'MarcWeber/vim-addon-mw-utils' | Plug 'tomtom/tlib_vim'
-  Plug 'michaeljsmith/vim-indent-object'
   Plug 'junegunn/vim-peekaboo'
   Plug 'majutsushi/tagbar',       { 'on' : 'TagbarToggle' }
   Plug 'junegunn/vim-easy-align', { 'on' : ['<Plug>(EasyAlign)', 'EasyAlign'] }
   Plug 'mbbill/undotree',         { 'on' : 'UndotreeToggle' }
   Plug 'lyokha/vim-xkbswitch',    { 'on' : 'EnableXkbSwitch' }
+  Plug 'jmckiern/vim-venter'
 
   " FileType
   Plug 'BeomjoonGoh/vim-cppman',       { 'for' : 'cpp' }
@@ -40,8 +40,6 @@ call plug#begin('~/.vim/plugged')
   Plug 'BeomjoonGoh/vim-aftersyntax'
   Plug 'octol/vim-cpp-enhanced-highlight'
   Plug 'shiracamus/vim-syntax-x86-objdump-d'
-
-  Plug 'jmckiern/vim-venter'
 call plug#end()
 
 set nocompatible
@@ -176,7 +174,7 @@ set nowrap
 set numberwidth=4
 set number
 set relativenumber              " it may slow down scrolling.
-function! s:ToggleNoRnuWinLeave(...)
+function! s:NoRnuWinLeaveToggle(...)
   if exists('#no_rnu#WinLeave') || !get(a:,1,0)
     augroup no_rnu
       autocmd!
@@ -193,7 +191,7 @@ function! s:ToggleNoRnuWinLeave(...)
     augroup END
   endif
 endfunction
-call s:ToggleNoRnuWinLeave(1)
+call s:NoRnuWinLeaveToggle()
 
 "--- Spell check
 set spellsuggest=best,3
@@ -203,15 +201,12 @@ set dictionary+=/usr/share/dict/words,~/.vim/spell/en.utf-8.add
 set complete=.,w,b,u,t
 set completeopt+=menuone,noinsert
 
-function! s:CompleteInclude()
-  execute 'set' 'complete'.((&complete =~ 'i') ? '-=' : '+=').'i'
-  echo 'complete =' &complete
-endfunction
-command! CompleteIncludeToggle call <SID>CompleteInclude()
-
 "--- Split
 set splitbelow
 set splitright
+
+"--- vimdiff
+set diffopt=internal,filler,closeoff,context:3
 
 "--- tagbar settings
 let g:tagbar_width            = 30
@@ -239,12 +234,31 @@ let g:snipMate = get(g:, 'snipMate', {})
 let g:snipMate.no_default_aliases = 1
 let g:snipMate.snippet_version    = 1
 
-"--- vimdiff
-set diffopt=internal,filler,closeoff,context:3
-function! s:IwhiteToggle()
-  execute 'set' 'diffopt'.((&diffopt =~ 'iwhiteall') ? '-=' : '+=').'iwhiteall'
-  echo 'diffopt =' &diffopt
-endfunction
+"--- undotree
+let g:undotree_WindowLayout             = 2
+let g:undotree_SplitWidth               = 24
+let g:undotree_DiffpanelHeight          = 10
+let g:undotree_SetFocusWhenToggle       = 1
+let g:undotree_ShortIndicators          = 1
+let g:undotree_HighlightChangedText     = 0
+let g:undotree_HighlightChangedWithSign = 0
+let g:undotree_HelpLine                 = 0
+let g:undotree_DiffCommand = 'custom_diff(){ diff -U1 "$@" | tail -n+3;}; custom_diff'
+
+"--- fugitive
+command! -bang -nargs=? -range=-1 -complete=customlist,fugitive#Complete Vg vertical belowright G <args>
+command! -bang -nargs=? -range=-1 -complete=customlist,fugitive#Complete Vgit vertical belowright Git <args>
+
+"--- easy-term
+let g:easy_term_rows = '15,18%'
+let g:easy_term_cols = '100,33%'
+command! -nargs=? -complete=custom,easy_term#Complete Bterm botright Term <args>
+command! -nargs=? -complete=custom,easy_term#Complete Vterm vertical botright Term <args>
+command! -nargs=? -complete=custom,easy_term#Complete Tterm tab Term <args>
+
+"--- markdown-preview.nvim
+let g:mkdp_auto_close   = 0
+let g:mkdp_refresh_slow = 1
 
 "--- Cheatsheet {{{
 " TODO
@@ -280,42 +294,17 @@ command! -bang -nargs=? -complete=custom,Cheatsheet_complete Cheat call Cheatshe
 command! -bang -nargs=? -complete=custom,Cheatsheet_complete CheatEdit call Cheatsheet_open('edit', <q-args>)
 " }}}
 
-"--- undotree
-let g:undotree_WindowLayout             = 2
-let g:undotree_SplitWidth               = 24
-let g:undotree_DiffpanelHeight          = 10
-let g:undotree_SetFocusWhenToggle       = 1
-let g:undotree_ShortIndicators          = 1
-let g:undotree_HighlightChangedText     = 0
-let g:undotree_HighlightChangedWithSign = 0
-let g:undotree_HelpLine                 = 0
-let g:undotree_DiffCommand = 'custom_diff(){ diff -U1 "$@" | tail -n+3;}; custom_diff'
-
-"--- fugitive
-command! -bang -nargs=? -range=-1 -complete=customlist,fugitive#Complete Vg vertical belowright G <args>
-command! -bang -nargs=? -range=-1 -complete=customlist,fugitive#Complete Vgit vertical belowright Git <args>
-
-"--- easy-term
-let g:easy_term_rows = '15,18%'
-let g:easy_term_cols = '100,33%'
-command! -nargs=? -complete=custom,easy_term#Complete Bterm botright Term <args>
-command! -nargs=? -complete=custom,easy_term#Complete Vterm vertical botright Term <args>
-command! -nargs=? -complete=custom,easy_term#Complete Tterm tab Term <args>
-
-"--- markdown-preview.nvim
-let g:mkdp_auto_close   = 0
-let g:mkdp_refresh_slow = 1
-
 " }}}
 " FUNCTIONS {{{
-function! ColorcolumnToggle()
+"--- Key mapped
+function! s:ColorcolumnToggle()
   if exists('+colorcolumn')
     let &colorcolumn = (&colorcolumn == "") ? 120 : ""
     call s:EchoOnOff('colorcolumn', &colorcolumn)
   endif
 endfunction
 
-function! CopyPasteToggle()
+function! s:CopyPasteToggle()
   if &paste
     setlocal nopaste
     let [ &l:number, &l:relativenumber ] = b:nurnu_before
@@ -327,14 +316,9 @@ function! CopyPasteToggle()
   call s:EchoOnOff('CopyPaste:', &paste)
 endfunction
 
-function! s:GetSelectedText()
-  let l:old_reg = getreg('"')
-  let l:old_regtype = getregtype('"')
-  normal! gvy
-  let l:ret = getreg('"')
-  call setreg('"', l:old_reg, l:old_regtype)
-  execute "normal! \<Esc>"
-  return l:ret
+function! s:IwhiteToggle()
+  execute 'set' 'diffopt'.((&diffopt =~ 'iwhiteall') ? '-=' : '+=').'iwhiteall'
+  echo 'diffopt =' &diffopt
 endfunction
 
 function! s:TildeForNonAlpha(str)
@@ -352,15 +336,79 @@ function! s:TildeForNonAlpha(str)
   endfor
 endfunction
 
-function! s:EchoOnOff(str, bool)
-  echo a:str strpart('offon', 3*!empty(a:bool), 3)
+function! s:VenterCustomToggle()
+  if exists("t:venter_tabid")
+    call VenterClose()
+    tabclose
+  else
+    tab split
+    call venter#Venter()
+  endif
 endfunction
 
-function! ClearNamedRegisters()
+"--- Text object
+function! s:TextObjectIndent(mode, begin, end, around)
+  let l:bound = [a:begin, a:end]
+  let l:indent = min(map(l:bound[:], 'indent(v:val)'))
+  let l:last = line('$')
+  if l:indent == 0 && empty(getline(l:bound[0])) && empty(getline(l:bound[1]))
+    let [l:b, l:e] = l:bound[:]
+    while l:indent == 0 && l:b > 0 && l:e <= l:last
+      let l:b -= 1
+      let l:e += 1
+      let l:indent = min(filter(map([l:b, l:e], 'indent(v:val)'), 'v:val != 0'))
+    endwhile
+  endif
+
+  for [l:i, l:expr, l:step] in [[0, '> 1', -1], [1, '< l:last', +1]]
+    while eval('l:bound[l:i]'.l:expr) && (indent(l:bound[l:i]+l:step) >= l:indent || empty(getline(l:bound[l:i]+l:step)))
+      let l:bound[l:i] += l:step
+    endwhile
+  endfor
+  let l:vis = a:mode == 'v' ? 'V' : a:mode
+  execute 'normal!' max([1, l:bound[0] - a:around]).'G'.l:vis.(l:bound[1] + a:around).'G'
+endfunction
+
+function! s:TextObjectNumber(around)
+  let l:re_num = ['0b[01]\+', '0x\x\+', '[+-]\?\(\d\+\(\.\d*\)\?\|\.\d\+\)\%([eE][+-]\?\d\+\)\?']
+  let l:pattern = join(a:around ? map(l:re_num, '''\s*''.v:val.''\s*''') : l:re_num, '\|')
+  let l:p0 = getpos(".")[1:2]
+  let l:p1 = searchpos(l:pattern, 'cb', l:p0[0])
+  if l:p1[0]
+    let l:p2 = searchpos(l:pattern, 'cne', l:p0[0])
+    if l:p1[1] <= l:p0[1] && l:p0[1] <= l:p2[1]
+      call cursor(l:p1)
+      normal! v
+      call cursor(l:p2)
+    else
+      call cursor(l:p0)
+    endif
+  endif
+endfunction
+
+function! s:TextObjectSearch(forward)
+  let l:p = searchpos(@/, 'ce'.(a:forward == v:searchforward ? '' : 'b'))
+  if l:p[0] == 0
+    return
+  endif
+  call search(@/, 'cb')
+  normal! v
+  call cursor(l:p)
+endfunction
+
+"--- Command mapped
+function! s:CompleteIncludeToggle()
+  execute 'set' 'complete'.((&complete =~ 'i') ? '-=' : '+=').'i'
+  echo 'complete =' &complete
+endfunction
+command! CompleteIncludeToggle call <SID>CompleteIncludeToggle()
+
+function! s:ClearNamedRegisters()
   for i in split('abcdefghijklmnopqrstuvwxyz','\zs')
     call setreg(i,'')
   endfor
 endfunction
+command! ClearNamedRegisters call <SID>ClearNamedRegisters()
 
 function! s:GotoBuffer(cmd, pattern) abort
   let l:colon = getbufvar('%', '&buftype') == 'terminal' ? "\<C-w>:" : ":" 
@@ -392,7 +440,6 @@ endfunction
 command! -nargs=? -complete=buffer B call <SID>GotoBuffer('B', <q-args>)
 
 if has('mac')
-  "--- OpenFinder
   function! s:OpenFinder()
     let l:cmd = '!open ' . (filereadable(expand('%')) ? '-R '.shellescape('%') : '.')
     execute 'silent!' l:cmd
@@ -400,7 +447,6 @@ if has('mac')
   endfunction
   command! OpenFinder call <SID>OpenFinder()
 
-  "--- xkbswitch
   let g:XkbSwitchLib = '/usr/local/lib/libInputSourceSwitcher.dylib'
   function! s:XkbSwitchToggle()
     if get(g:, 'XkbSwitchEnabled')
@@ -415,6 +461,31 @@ if has('mac')
   endfunction
   command! XkbSwitchToggle call <SID>XkbSwitchToggle()
 endif
+
+"--- Helper
+function! s:GetSelectedText()
+  let l:old_reg = getreg('"')
+  let l:old_regtype = getregtype('"')
+  normal! gvy
+  let l:ret = getreg('"')
+  call setreg('"', l:old_reg, l:old_regtype)
+  execute "normal! \<Esc>"
+  return l:ret
+endfunction
+
+function! s:EchoOnOff(str, bool)
+  echo a:str strpart('offon', 3*!empty(a:bool), 3)
+endfunction
+
+function! s:Noremap(modelist, key, cmd)
+  for l:mode in a:modelist
+    if     l:mode == 'i' | let l:cmd = '<C-o>'.a:cmd
+    elseif l:mode == 't' | let l:cmd = '<C-w>'.a:cmd
+    else                 | let l:cmd = a:cmd
+    endif
+    execute l:mode.'noremap' a:key l:cmd
+  endfor
+endfunction 
 
 " }}}
 " FILETYPE SPECIFIC {{{
@@ -490,16 +561,6 @@ endfunction
 
 " }}}
 " KEY MAPPINGS {{{
-function! s:Noremap(modelist, key, cmd)
-  for l:mode in a:modelist
-    if     l:mode == 'i' | let l:cmd = '<C-o>'.a:cmd
-    elseif l:mode == 't' | let l:cmd = '<C-w>'.a:cmd
-    else                 | let l:cmd = a:cmd
-    endif
-    execute l:mode.'noremap' a:key l:cmd
-  endfor
-endfunction 
-
 "--- General
 " goto file
 nnoremap gf :vertical wincmd f<CR>
@@ -516,7 +577,7 @@ xnoremap <silent> ~ :<C-u>call <SID>TildeForNonAlpha(<SID>GetSelectedText())<CR>
 nnoremap <F2> :execute "Man" substitute(expand("<cword>"), '_', '','g')<CR>
 
 " Type(i) or show(n) the current date stamp
-imap <F9> <C-R>=strftime('%d %b %Y %T %z')<CR>
+inoremap <expr> <F9> strftime('%d %b %Y %T %z')
 nnoremap <F9> :echo 'Current time is' strftime('%d %b %Y %T %z')<CR>
 
 " Reset searches
@@ -532,8 +593,8 @@ nnoremap <C-p> "*p
 
 "--- Toggle
 call s:Noremap(['n','t'], '<F3>',  ":TagbarToggle<CR>")
-call s:Noremap(['n','i'], '<F4>',  ":call ColorcolumnToggle()<CR>")
-call s:Noremap(['n','i'], '<F6>',  ":call CopyPasteToggle()<CR>")
+call s:Noremap(['n','i'], '<F4>',  ":call <SID>ColorcolumnToggle()<CR>")
+call s:Noremap(['n','i'], '<F6>',  ":call <SID>CopyPasteToggle()<CR>")
 call s:Noremap(['n','i'], '<F7>',  ":setlocal spell!<Bar>call <SID>EchoOnOff('Spell:', &spell)<CR>")
 call s:Noremap(['n','i'], '<F10>', ":let &mouse = (&mouse == '') ? 'a' : ''<Bar>:call <SID>EchoOnOff('mouse', &mouse)<CR>")
 nnoremap <Leader>iw :call <SID>IwhiteToggle()<CR>
@@ -587,7 +648,7 @@ endfor
 
 "--- Tab page
 nnoremap <Tab>: :tab
-nnoremap <Tab>n :tabedit %<CR>
+nnoremap <Tab>n :tab split<CR>
 nnoremap <Tab>e :tabedit<Space>
 nnoremap <Tab>gf <C-w>gf
 
@@ -624,26 +685,26 @@ tmap <Leader>s <Plug>(EasyTermSet)
 tnoremap <Leader>ll 2vim make<CR>
 tnoremap :: <C-w>:
 
-"--- line text-objects
-xnoremap il ^og_
-xnoremap al 0o$
-onoremap <silent> il :normal! v^og_<CR>
-onoremap <silent> al :normal! v0o$<CR>
+"--- Text Objects
+call s:Noremap(['x','o'], '<silent> il', ':<C-u>normal! ^vg_<CR>')
+call s:Noremap(['x','o'], '<silent> al', ':<C-u>normal! 0v$<CR>')
+
+xnoremap <silent> ii :<C-u>call <SID>TextObjectIndent(visualmode(), line("'<"), line("'>"), 0)<CR>
+onoremap <silent> ii :<C-u>call <SID>TextObjectIndent('V', line('.'),  line('.'),  0)<CR>
+xnoremap <silent> ai :<C-u>call <SID>TextObjectIndent(visualmode(), line("'<"), line("'>"), 1)<CR>
+onoremap <silent> ai :<C-u>call <SID>TextObjectIndent('V', line('.'),  line('.'),  1)<CR>
+
+call s:Noremap(['x','o'], '<silent> in', ':<C-u>call <SID>TextObjectNumber(0)<CR>')
+call s:Noremap(['x','o'], '<silent> an', ':<C-u>call <SID>TextObjectNumber(1)<CR>')
+
+call s:Noremap(['x','o'], '<silent> i/', ':<C-u>call <SID>TextObjectSearch(1)<CR>')
+call s:Noremap(['x','o'], '<silent> i?', ':<C-u>call <SID>TextObjectSearch(0)<CR>')
 
 "--- GotoBuffer
 nnoremap gb :B<CR>
 
 "--- venter
-function! VenterToggleCustom()
-  if exists("t:venter_tabid")
-    call VenterClose()
-    tabclose
-  else
-    tab split
-    call venter#Venter()
-  endif
-endfunction
-nnoremap <Leader>f :call VenterToggleCustom()<CR>
+nnoremap <Leader>f :call <SID>VenterCustomToggle()<CR>
 " }}}
 
 "temp
@@ -658,5 +719,5 @@ function! SmallScreen()
   set nonu nornu
   set laststatus=0
   set showtabline=0
-  call s:ToggleNoRnuWinLeave(0)
+  call s:NoRnuWinLeaveToggle(0)
 endfunction
