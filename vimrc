@@ -682,7 +682,7 @@ xmap <Leader>t <Plug>(EasyTermSendText)
 nmap <Leader>p <Plug>(EasyTermPutLast)
 tmap <Leader>y <Plug>(EasyTermYankLast)
 tmap <Leader>s <Plug>(EasyTermSet)
-tnoremap <Leader>ll 2vim make<CR>
+tnoremap <Leader>ll tovim make<CR>
 tnoremap :: <C-w>:
 
 "--- Text Objects

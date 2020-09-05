@@ -34,6 +34,22 @@ repository.
 
 ### [vim-easy-terminal](https://github.com/BeomjoonGoh/vim-easy-terminal)
 
+> Easy Term - vim plugin that makes using vim's :terminal feature easier to
+> use.
+
+Commands `:Bterm`, `:Vterm`, and `:Tterm` are defined with `botright`,
+`vertical botright`, and `tab` modes respectively. See [Key maps](#key-maps)
+for `<Plug>` mappings.
+
+<details open>
+  <summary>Settings</summary>
+
+  ```vim
+  let g:easy_term_rows = '15,18%'
+  let g:easy_term_cols = '100,33%'
+  ```
+</details>
+
 
 ### [vim-fugitive](https://github.com/tpope/vim-fugitive)
 
@@ -320,7 +336,7 @@ defined maps.
   |`gf`, `gF`| n    | Open a file under cursor in vertical split (current window).
   |`<S-Tab>` | i    | Tab backwards.
   |`~`       | n x  | The `~` key works for non-alphabets as well.
-  |`<F2>`    | n    | Manual page for `Lapack` library functions.
+  |`<F2>`    | n    | Manual page for `LAPACK` library functions.
   |`<F9>`    | n i  | Show(n) or insert(i) the current date and time stamp.
   |`\r`      | n    | Stop highlighting search result.
   |`\R`      | n    | Clear search result with some random text.
@@ -328,10 +344,10 @@ defined maps.
   |`<C-y>`   | x    | Yank to clipboard (register `"\*`).
   |`<C-p>`   | n    | Paste from clipboard (register `"\*`).
   |`*`, `#`  | x    | Search in visual mode.
-  |`ga`      | n x  | Start interactive EasyAlign.
   |`K`       | n    | If filetype is `vim`, do `:tab help`, if `sh` or `man`, do `:Man`.
   |`go`<sup>[[1]](#MacOS)</sup>| n x  | Open URL/file under cursor.
   |`gb`      | n    | Call `:B` command.
+  |`::`      | t    | Switch mode from terminal to cmdline
 </details>
 
 <details open>
@@ -339,7 +355,6 @@ defined maps.
   
   | Key     | Mode | Description |
   |:-------:|:----:|:------------|
-  |`<F3>`   | n t  | Toggle the `tagbar` plugin.
   |`<F4>`   | n i  | Toggle `colorcolumn=120`.
   |`<F6>`   | n i  | Toggle (clipboard) copy & paste safe mode.
   |`<F7>`   | n i  | Toggle spell checking.
@@ -347,8 +362,6 @@ defined maps.
   |`\iw`    | n    | In diff mode, toggle ignore white spaces.
   |`<Space>`| n x  | Open/close folds.
   |`z[N]`   | n    | Set fold level to `[N]` = 0 ~ 9.
-  |`\u`     | n    | Toggle `undotree` plugin.
-  |`\f`     | n    | Toggle `vim-venter` plugin in a new tab.
 </details>
 
 <details open>
@@ -399,10 +412,24 @@ defined maps.
   |`i/`,`i?`| x o  | Search pattern
 </details>
 
+<details open>
+  <summary>Plugins</summary>
+
+  | Key  | Mode | Description |
+  |:-----:|:----:|:------------|
+  |`<F3>`| n t  | Toggle `tagbar`.
+  |`\u`  | n    | Toggle `undotree`.
+  |`\f`  | n    | Toggle `vim-venter` in a new tab.
+  |`ga`  | n x  | Start interactive EasyAlign.
+  |`\cd` | n t  | `easy-term`'s cd related mappings.
+  |`\t`  | n x  | `easy-term`'s send text mapping.
+  |`\p`  | n    | `easy-term`'s put last output mapping.
+  |`\y`  | t    | `easy-term`'s yank last output mapping.
+  |`\s`  | s    | `easy-term`'s set primary terminal mapping.
+  |`\ll` | t    | Call `tovim make` from terminal.
+</details>
 
 ## Todo
-- [ ] Make plugin
-  - [ ] cheatsheet
-- [ ] add easy-terminal plugin info
+- [ ] Make plugin: cheatsheet
 
 <b name="MacOS">[1]</b>: Defined for MacOS only.
