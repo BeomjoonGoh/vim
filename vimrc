@@ -386,16 +386,6 @@ function! s:TextObjectNumber(around)
   endif
 endfunction
 
-function! s:TextObjectSearch(forward)
-  let l:p = searchpos(@/, 'ce'.(a:forward == v:searchforward ? '' : 'b'))
-  if l:p[0] == 0
-    return
-  endif
-  call search(@/, 'cb')
-  normal! v
-  call cursor(l:p)
-endfunction
-
 "--- Command mapped
 function! s:CompleteIncludeToggle()
   execute 'set' 'complete'.((&complete =~ 'i') ? '-=' : '+=').'i'
@@ -616,21 +606,21 @@ xnoremap <silent> # :call setreg('?', substitute(<SID>GetSelectedText(), '\m\_s\
 " Easy window navigation
 " Note: Karabiner maps <C-hjkl> to Arrows
 "       iTerm2    maps <A-hjkl> to <C-hjkl>
-nnoremap <left> <C-w>h
-nnoremap <down> <C-w>j
-nnoremap <up> <C-w>k
-nnoremap <right> <C-w>l
+nnoremap <Left> <C-w>h
+nnoremap <Down> <C-w>j
+nnoremap <Up> <C-w>k
+nnoremap <Right> <C-w>l
 
-tnoremap <left> <C-w>h
-tnoremap <down> <C-w>j
-tnoremap <up> <C-w>k
-tnoremap <right> <C-w>l
+tnoremap <Left> <C-w>h
+tnoremap <Down> <C-w>j
+tnoremap <Up> <C-w>k
+tnoremap <Right> <C-w>l
 
 " For completeness. Use readline's normal mode instead
-tnoremap <C-h> <left>
-tnoremap <C-j> <down>
-tnoremap <C-k> <up>
-tnoremap <C-l> <right>
+tnoremap <C-h> <Left>
+tnoremap <C-j> <Down>
+tnoremap <C-k> <Up>
+tnoremap <C-l> <Right>
 
 " Go up and down to the next row for wrapped lines
 nnoremap j gj
@@ -690,15 +680,15 @@ call s:Noremap(['x','o'], '<silent> il', ':<C-u>normal! ^vg_<CR>')
 call s:Noremap(['x','o'], '<silent> al', ':<C-u>normal! 0v$<CR>')
 
 xnoremap <silent> ii :<C-u>call <SID>TextObjectIndent(visualmode(), line("'<"), line("'>"), 0)<CR>
-onoremap <silent> ii :<C-u>call <SID>TextObjectIndent('V', line('.'),  line('.'),  0)<CR>
+onoremap <silent> ii :<C-u>call <SID>TextObjectIndent('V',          line('.'),  line('.'),  0)<CR>
 xnoremap <silent> ai :<C-u>call <SID>TextObjectIndent(visualmode(), line("'<"), line("'>"), 1)<CR>
-onoremap <silent> ai :<C-u>call <SID>TextObjectIndent('V', line('.'),  line('.'),  1)<CR>
+onoremap <silent> ai :<C-u>call <SID>TextObjectIndent('V',          line('.'),  line('.'),  1)<CR>
 
 call s:Noremap(['x','o'], '<silent> in', ':<C-u>call <SID>TextObjectNumber(0)<CR>')
 call s:Noremap(['x','o'], '<silent> an', ':<C-u>call <SID>TextObjectNumber(1)<CR>')
 
-call s:Noremap(['x','o'], '<silent> i/', ':<C-u>call <SID>TextObjectSearch(1)<CR>')
-call s:Noremap(['x','o'], '<silent> i?', ':<C-u>call <SID>TextObjectSearch(0)<CR>')
+call s:Noremap(['x','o'], '<silent> i/', ':<C-u>execute "normal!" "g".(v:searchforward ? "n":"N")<CR>')
+call s:Noremap(['x','o'], '<silent> i?', ':<C-u>execute "normal!" "g".(v:searchforward ? "N":"n")<CR>')
 
 "--- GotoBuffer
 nnoremap gb :B<CR>
