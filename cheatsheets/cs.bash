@@ -12,6 +12,7 @@
   $0 # script name
 
   cmd < file      # stdin file to cmd
+  cmd <<< word    # here strings
   cmd > file      # stdout to file
   cmd >> file     # append stdout to file
   cmd 2> err      # stderr to file
