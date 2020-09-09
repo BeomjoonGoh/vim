@@ -2,7 +2,7 @@
 
 # Header Include Guard
 snippet once | Include guard
-	#ifndef ${1:`toupper(expand('%:t')->substitute('\.','_',''))`}
+	#ifndef ${1:`toupper(expand('%:t')->substitute('\\.','_',''))`}
 	#define $1
 
 	${0}
