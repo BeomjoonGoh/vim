@@ -52,8 +52,6 @@ set lazyredraw ttyfast                " Not sure but it makes scrolling faster
 set formatoptions+=rnlj
 set timeoutlen=500
 set updatetime=500
-set wildignore+=*out*,*inp*,*log*
-set path+=**
 
 runtime! ftplugin/man.vim
 let g:ft_man_open_mode      = 'tab'
@@ -64,12 +62,11 @@ set regexpengine=1
 
 set mouse=""
 
-augroup redhat
+augroup last_cursor                   " Open file at the last cursor position
   autocmd!
-  " When editing a file, always jump to the last cursor position
   autocmd BufReadPost *
-      \ if line("'\"") > 0 && line ("'\"") <= line("$") && $filetype !~# 'commit' |
-      \   exe "normal! g'\"" |
+      \ if line("'\"") > 0 && line ("'\"") <= line("$") && &filetype !~# 'commit' |
+      \   execute 'normal!' "g'\"" |
       \ endif
 augroup END
 
@@ -93,7 +90,7 @@ command! -bang QA qa<bang>
 command! -nargs=? -complete=file Sp sp <args>
 command! -nargs=? -complete=file Vs vs <args>
 command! -nargs=? -complete=file Vsp vsp <args>
-command! -nargs=? -complete=file_in_path Vfind vnew<bar> find <args>
+command! -nargs=? -complete=file_in_path Vfind vertical sfind <args>
 command! -nargs=? -complete=file_in_path Sfind sfind <args>
 command! -nargs=? -complete=help Help tab help <args>
 command! RemoveTrailingSpaces %s/\m\s\+$//e
@@ -568,7 +565,7 @@ nnoremap <F2> :execute "Man" substitute(expand("<cword>"), '_', '','g')<CR>
 
 " Type(i) or show(n) the current date stamp
 inoremap <expr> <F9> strftime('%d %b %Y %T %z')
-nnoremap <F9> :echo 'Current time is' strftime('%d %b %Y %T %z')<CR>
+nnoremap <F9> :echo strftime('%d %b %Y %T %z')<CR>
 
 " Reset searches
 nmap <silent> <Leader>r :nohlsearch<CR>
@@ -696,6 +693,10 @@ nnoremap gb :B<CR>
 "--- venter
 nnoremap <Leader>f :call <SID>VenterCustomToggle()<CR>
 " }}}
+
+"--- latexthis
+xnoremap <Leader>lt :write !latexthis<CR>
+nnoremap <Leader>lt :%write !latexthis<CR>
 
 "temp
 function! ResetEasyTerm()
