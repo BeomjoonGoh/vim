@@ -30,6 +30,16 @@ git branch -d ${branch}
 git fetch --all --prune     # on other machines.
 # }}}
 
+# Tag {{{
+git tag -a ${tagname}
+git tag -a -f ${tagname} ${commit}
+git push origin ${tagname}
+git push origin --tags
+
+git tag -d ${tagname}
+git push origin --delete ${tagname}
+# }}}
+
 # Commonly used commands {{{
 # }}}
 
