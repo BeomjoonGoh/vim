@@ -172,7 +172,7 @@ set numberwidth=4
 set number
 set relativenumber              " it may slow down scrolling.
 function! s:NoRnuWinLeaveToggle(...)
-  if exists('#no_rnu#WinLeave') || !get(a:,1,0)
+  if exists('#no_rnu#WinLeave') || get(a:,1,0)
     augroup no_rnu
       autocmd!
     augroup END
@@ -710,5 +710,5 @@ function! SmallScreen()
   set nonu nornu
   set laststatus=0
   set showtabline=0
-  call s:NoRnuWinLeaveToggle(0)
+  call s:NoRnuWinLeaveToggle(1)
 endfunction
