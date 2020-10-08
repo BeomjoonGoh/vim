@@ -66,7 +66,7 @@ augroup last_cursor                   " Open file at the last cursor position
   autocmd!
   autocmd BufReadPost *
       \ if line("'\"") > 0 && line ("'\"") <= line("$") && &filetype !~# 'commit' |
-      \   execute 'normal!' "g'\"" |
+      \   execute 'normal! g`"' |
       \ endif
 augroup END
 
