@@ -203,7 +203,7 @@ set splitbelow
 set splitright
 
 "--- vimdiff
-set diffopt=internal,filler,closeoff,context:3
+set diffopt=internal,filler,context:3 ",closeoff
 
 "--- tagbar settings
 let g:tagbar_width            = 30
