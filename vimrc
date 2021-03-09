@@ -671,6 +671,7 @@ tmap <Leader>y <Plug>(EasyTermYankLast)
 tmap <Leader>s <Plug>(EasyTermSet)
 tnoremap <Leader>ll tovim make<CR>
 tnoremap :: <C-w>:
+tnoremap <S-Space> <Space>
 
 "--- Text Objects
 call s:Noremap(['x','o'], '<silent> il', ':<C-u>normal! ^vg_<CR>')
