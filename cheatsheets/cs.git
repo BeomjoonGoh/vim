@@ -22,6 +22,7 @@ if [ -n ${merge_confict} ]; then
   git mergetool ${unmerged}
   git commit 
 fi
+git push
 # }}}
 
 # Delete branch {{{
