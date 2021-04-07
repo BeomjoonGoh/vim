@@ -19,7 +19,7 @@ let mapleader = '\'
 
 call plug#begin('~/.vim/plugged')
   " General
-  Plug 'BeomjoonGoh/vim-easy-term', { 'branch' : 'feature' }
+  Plug 'BeomjoonGoh/vim-easy-term'
   Plug 'tpope/vim-fugitive'
   Plug 'garbas/vim-snipmate' | Plug 'MarcWeber/vim-addon-mw-utils' | Plug 'tomtom/tlib_vim'
   Plug 'junegunn/vim-peekaboo'
