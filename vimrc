@@ -21,6 +21,7 @@ call plug#begin('~/.vim/plugged')
   " General
   Plug 'BeomjoonGoh/vim-easy-term'
   Plug 'tpope/vim-fugitive'
+  Plug 'othree/vim-autocomplpop' | Plug 'vim-scripts/L9'
   Plug 'garbas/vim-snipmate' | Plug 'MarcWeber/vim-addon-mw-utils' | Plug 'tomtom/tlib_vim'
   Plug 'junegunn/vim-peekaboo'
   Plug 'majutsushi/tagbar',       { 'on' : 'TagbarToggle' }
@@ -205,6 +206,13 @@ set splitright
 "--- vimdiff
 set diffopt=internal,filler,context:3 ",closeoff
 
+"--- autocomplpop settings
+let g:acp_enableAtStartup        = 1
+let g:acp_completeOption         = '&complete'
+let g:acp_completeoptPreview     = 1
+let g:acp_behaviorSnipmateLength = -1
+let g:acp_behaviorKeywordLength  = 3
+
 "--- tagbar settings
 let g:tagbar_width            = 30
 let g:tagbar_compact          = 1
@@ -230,6 +238,7 @@ let g:snips_author = 'Beomjoon Goh'
 let g:snipMate = get(g:, 'snipMate', {})
 let g:snipMate.no_default_aliases = 1
 let g:snipMate.snippet_version    = 1
+let g:snipMate.description_in_completion = 1
 
 "--- undotree
 let g:undotree_WindowLayout             = 2
@@ -581,6 +590,7 @@ nnoremap <C-p> "*p
 "--- Toggle
 call s:Noremap(['n','t'], '<F3>',  ":TagbarToggle<CR>")
 call s:Noremap(['n','i'], '<F4>',  ":call <SID>ColorcolumnToggle()<CR>")
+call s:Noremap(['n','i'], '<F5>',  ":execute exists('#AcpGlobalAutoCommand#InsertEnter') ? 'AcpDisable' : 'AcpEnable'<Bar>echo 'AcpToggle'<CR>")
 call s:Noremap(['n','i'], '<F6>',  ":call <SID>CopyPasteToggle()<CR>")
 call s:Noremap(['n','i'], '<F7>',  ":setlocal spell!<Bar>call <SID>EchoOnOff('Spell:', &spell)<CR>")
 call s:Noremap(['n','i'], '<F10>', ":let &mouse = (&mouse == '') ? 'a' : ''<Bar>:call <SID>EchoOnOff('mouse', &mouse)<CR>")
@@ -698,6 +708,11 @@ nnoremap <Leader>f :call <SID>VenterCustomToggle()<CR>
 "--- latexthis
 xnoremap <Leader>lt :write !latexthis<CR>
 nnoremap <Leader>lt :%write !latexthis<CR>
+
+"--- autocomplpop
+nnoremap i <Nop> | nunmap i
+nnoremap a <Nop> | nunmap a
+nnoremap R <Nop> | nunmap R
 
 "temp
 function! ResetEasyTerm()

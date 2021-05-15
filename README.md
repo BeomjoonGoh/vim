@@ -59,6 +59,33 @@ Commands `:Vg[it]` is defined for `:vertical belowright G[it]`.  A function
 `FugitiveHead()` is used to get the branch name for the `'statusline'`.
 
 
+### [vim-autocomplpop](https://github.com/othree/vim-autocomplpop)
+
+> Auto trigger complete popup menu.
+
+It depends on `L9`.
+
+When the complete popup menu is open, hit `<CR>` to insert the first suggestion
+or use `<C-n>` (down arrow) to select next or `<C-p>` (up arrow) to select
+previous suggestion.  The `<F5>` key toggles `autocomplpop` plugin.  The
+variable `g:acp_completeOption` follows the vim's `'complete'` option.
+
+Note the following default mapping is disabled:
+* `i`, `a`, `R` keys in the normal mode.
+
+<details open>
+  <summary>Settings</summary>
+
+  ```vim
+  let g:acp_enableAtStartup        = 1
+  let g:acp_completeOption         = '&complete'
+  let g:acp_completeoptPreview     = 1
+  let g:acp_behaviorSnipmateLength = -1
+  let g:acp_behaviorKeywordLength  = 3
+  ```
+</details>
+
+
 ### [vim-snipmate](https://github.com/garbas/vim-snipmate)
 
 > `SnipMate` aims to provide support for textual snippets, similar to
@@ -70,6 +97,10 @@ Snippets are stored in `snippets` directory and triggered with `<Tab>` key.
 `g:snipMate.no_default_aliases` is set so that aliases such as `C++` -> `C` are
 disabled.
 
+Note the following default mappings:
+* `<Tab>` inserts the snippets in the insert mode.
+* `<C-R><Tab>` shows the snippets in the insert mode.
+
 <details open>
   <summary>Settings</summary>
 
@@ -78,6 +109,7 @@ disabled.
   let g:snipMate = get(g:, 'snipMate', {})
   let g:snipMate.no_default_aliases = 1
   let g:snipMate.snippet_version    = 1
+  let g:snipMate.description_in_completion = 1
   ```
 </details>
 
@@ -356,6 +388,7 @@ defined maps.
   | Key     | Mode | Description |
   |:-------:|:----:|:------------|
   |`<F4>`   | n i  | Toggle `colorcolumn=120`.
+  |`<F5>`   | n i  | Toggle `autocomplpop` plugin.
   |`<F6>`   | n i  | Toggle (clipboard) copy & paste safe mode.
   |`<F7>`   | n i  | Toggle spell checking.
   |`<F10>`  | n    | Toggle mouse on and off.
