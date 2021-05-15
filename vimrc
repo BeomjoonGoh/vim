@@ -1,7 +1,7 @@
 " vimrc file
 " Languague:    vim
 " Maintainer:   Beomjoon Goh
-" Last Change:  31 Aug 2020 18:09:09 +0900
+" Last Change:  28 Apr 2021 17:24:09 +0900
 " Contents:
 "   General
 "   User Interfaces
@@ -119,7 +119,8 @@ function! StatusLineGit()
 endfunction
 function! MyStatusLine()
   let l:f = empty(expand("%")) ? '%f' : '%{fnamemodify(expand("%"), ":~:.")}'
-  return '%{StatusLineGit()}%h'.l:f.' %m%r  cwd: %<%{fnamemodify(getcwd(), ":~:.")} %=%(%c%V, %l/%L%) %P '
+  let l:m = empty($MACHINE_NAME) ? 'cwd' : $MACHINE_NAME
+  return '%{StatusLineGit()}%h'.l:f.' %m%r  '.l:m.': %<%{fnamemodify(getcwd(), ":~:.")} %=%(%c%V, %l/%L%) %P '
 endfunction
 let &fillchars = 'vert: ,fold: ,diff: '
 
