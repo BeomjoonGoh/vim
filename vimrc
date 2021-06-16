@@ -274,6 +274,7 @@ let g:cheatsheet_filetypeDict = {
       \  'sh'       : 'bash',
       \  'markdown' : 'md',
       \  'make'     : 'makefile',
+      \  'gnuplot'  : 'gpi',
       \} "filetype  : extension
 let g:cheatsheet_command = 'vertical 90 new'
 let g:cheatsheet_path = expand("<sfile>:p:h").'/cheatsheets'
