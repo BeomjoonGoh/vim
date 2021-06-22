@@ -92,3 +92,9 @@ set ytic 0.1
 plot sin(x) title "sin(x)" , x title "x"
 
 unset multiplot
+
+# XYZ Mapped Surface
+set view map
+set palette defined (0 "white", 1 "blue", 2 "black")
+set cbrange [0:2]
+splot 'a.out' using 1:2:3 with points palette
