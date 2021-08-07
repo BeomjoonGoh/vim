@@ -213,6 +213,7 @@ let g:acp_completeOption         = '&complete'
 let g:acp_completeoptPreview     = 1
 let g:acp_behaviorSnipmateLength = -1
 let g:acp_behaviorKeywordLength  = 3
+let g:acp_behaviorKeywordCommand = "\<C-p>"
 
 "--- tagbar settings
 let g:tagbar_width            = 30
