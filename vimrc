@@ -111,9 +111,9 @@ function! StatusLineFile()
 endfunction
 
 function! MyStatusLine()
-  let l:git  = '%{%StatusLineGit()%}'
-  let l:file = '%{%StatusLineFile()%}'
-  let l:path = '%{%StatusLinePath()%}'
+  let l:git  = '%{StatusLineGit()}'
+  let l:file = '%{StatusLineFile()}'
+  let l:path = '%{StatusLinePath()}'
   let l:machine = empty($MACHINE_NAME) ? 'cwd' : $MACHINE_NAME
   return l:git.'%h'.l:file.' %m%r  '.l:machine.':%<'.l:path.' %=%(%c%V, %l/%L%) %P'
 endfunction
