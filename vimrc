@@ -1,7 +1,7 @@
 " vimrc file
 " Languague:    vim
 " Maintainer:   Beomjoon Goh
-" Last Change:  28 Apr 2021 17:24:09 +0900
+" Last Change:  09 Aug 2021 11:16:43 +0900
 " Contents:
 "   General
 "   User Interfaces
@@ -106,23 +106,36 @@ set laststatus=2
 set wildmenu
 set wildmode=list:longest,full
 set nofileignorecase
+let &fillchars = 'vert: ,fold: ,diff: '
 set statusline=%!MyStatusLine()
 function! StatusLineGit()
-  if !exists('g:loaded_fugitive')
+  if !exists('g:loaded_fugitive') || getbufvar('%', '&buftype') == 'terminal' 
     return ''
   endif
   let l:branch = FugitiveHead()
-  if !empty(l:branch)
-    let l:branch = '['.l:branch.'] '
+  return empty(l:branch) ? '' : '['.l:branch.'] '
+endfunction
+
+function! StatusLinePath()
+  let l:path = fnamemodify(getcwd(), ":~:.")
+  return len(l:path) > winwidth(0)/3 ? pathshorten(l:path) : l:path
+endfunction
+
+function! StatusLineFile()
+  if empty(expand("%"))
+    return '%f'
   endif
-  return l:branch
+  let l:file = fnamemodify(expand("%"), ":~:.")
+  return len(l:file) > winwidth(0)/2 ? pathshorten(l:file) : l:file
 endfunction
+
 function! MyStatusLine()
-  let l:f = empty(expand("%")) ? '%f' : '%{fnamemodify(expand("%"), ":~:.")}'
-  let l:m = empty($MACHINE_NAME) ? 'cwd' : $MACHINE_NAME
-  return '%{StatusLineGit()}%h'.l:f.' %m%r  '.l:m.': %<%{fnamemodify(getcwd(), ":~:.")} %=%(%c%V, %l/%L%) %P '
+  let l:git  = '%{%StatusLineGit()%}'
+  let l:file = '%{%StatusLineFile()%}'
+  let l:path = '%{%StatusLinePath()%}'
+  let l:machine = empty($MACHINE_NAME) ? 'cwd' : $MACHINE_NAME
+  return l:git.'%h'.l:file.' %m%r  '.l:machine.':%<'.l:path.' %=%(%c%V, %l/%L%) %P'
 endfunction
-let &fillchars = 'vert: ,fold: ,diff: '
 
 "--- Tab page
 set showtabline=2
