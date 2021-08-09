@@ -44,4 +44,21 @@ git push origin --delete ${tagname}
 # Commonly used commands {{{
 # }}}
 
+# Commit {{{
+## Undo and redo a local commit
+git commit -m "Accident"
+git reset HEAD~         # Undo last commit while leaving working tree untouched
+[ edit and add as necessary ]
+git commit -c ORIG_HEAD # Start new commit reusing old commit message
+
+## Edit a local commit message
+git commit -m "done"
+git add forgotten_file
+git commit --amend
+
+## Fix already pushed commit
+git revert HEAD         # Make new commit which reverts the changes made in the (pushed) commit
+git commit -m "fix accidental commit"
+# }}}
+
 # vim:ft=bash
