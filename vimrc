@@ -58,7 +58,7 @@ set formatoptions+=rnlj
 set timeoutlen=500
 set updatetime=500
 set synmaxcol=512
-set regexpengine=1
+set regexpengine=0
 set mouse=""
 set nowrap
 set diffopt=internal,filler,context:3 ",closeoff
@@ -104,7 +104,12 @@ endfunction
 
 function! StatusLineFile()
   if empty(expand("%"))
-    return '%f'
+    let l:bt = getbufvar('%', '&buftype')
+    if     l:bt == 'nofile' | return '[Scratch]'
+    elseif l:bt == 'prompt' | return '[Prompt]'
+    elseif l:bt == 'popup'  | return '[Popup]'
+    else                    | return '[No Name]'
+    endif
   endif
   let l:file = fnamemodify(expand("%"), ":~:.")
   return len(l:file) > winwidth(0)/2 ? pathshorten(l:file) : l:file
@@ -132,7 +137,7 @@ function! MyTabLine()
     if getbufvar(l:bn, '&filetype') =~ 'help\|man\|qf'
       let l:f = '['.getbufvar(l:bn, '&filetype').'] '.fnamemodify(l:f, ':r')
     endif
-    let l:line .= empty(l:f) ? '[No Name]' : l:f
+    let l:line .= empty(l:f) ? '%f' : l:f
 
     let l:m = ''
     for l:b in tabpagebuflist(l:t)
@@ -621,6 +626,9 @@ tnoremap <Leader>ll tovim make<CR>
 "--- vim-fugitive
 command! -bang -nargs=? -range=-1 -complete=customlist,fugitive#Complete Vg vertical belowright G <args>
 command! -bang -nargs=? -range=-1 -complete=customlist,fugitive#Complete Vgit vertical belowright Git <args>
+
+"--- vim-peekaboo
+let g:peekaboo_window = 'vertical botright 20new'
 
 "--- vim-snipmate
 let g:snips_author = 'Beomjoon Goh'

@@ -328,6 +328,14 @@ Note the following default mappings:
 > Peekaboo extends `"` and `@` in normal mode and `<CTRL-R>` in insert mode so
 > you can see the contents of the registers.
 
+<details close>
+  <summary>Settings</summary>
+
+  ```vim
+  let g:peekaboo_window = 'vertical botright 20new'
+  ```
+</details>
+
 
 #### [vim-venter](https://github.com/jmckiern/vim-venter)
 
