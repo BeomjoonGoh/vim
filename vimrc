@@ -1,7 +1,7 @@
 " vimrc file
 " Languague:    vim
 " Maintainer:   Beomjoon Goh
-" Last Change:  09 Aug 2021 14:40:28 +0900
+" Last Change:  14 Aug 2021 10:32:09 +0900
 
 " GENERAL {{{
 set nocompatible
@@ -46,11 +46,8 @@ augroup last_cursor                   " Open file at the last cursor position
       \ endif
 augroup END
 
-colorscheme desertBJ
-
 set history=100
 set viminfo='50,\"50,n$HOME/.vim/.viminfo " read/write a .viminfo file, don't store more
-set t_Co=256
 set backspace=indent,eol,start        " backspacing over everything in insert mode
 set scrolloff=1 sidescroll=5
 set clipboard=exclude:.*              " Fixes slow startup with ssh!! Same as $ vim -X
@@ -118,12 +115,7 @@ endfunction
 
 function! StatusLineFile() abort
   if empty(expand("%"))
-    let l:bt = getbufvar('%', '&buftype')
-    if     l:bt == 'nofile' | return '[Scratch]'
-    elseif l:bt == 'prompt' | return '[Prompt]'
-    elseif l:bt == 'popup'  | return '[Popup]'
-    else                    | return '[No Name]'
-    endif
+    return s:EmptyFileName('%')
   endif
   let l:file = fnamemodify(expand("%"), ":~:.")
   return len(l:file) > winwidth(0)/2 ? pathshorten(l:file) : l:file
@@ -151,7 +143,7 @@ function! MyTabLine() abort
     if getbufvar(l:bn, '&filetype') =~ 'help\|man\|qf'
       let l:f = '['.getbufvar(l:bn, '&filetype').'] '.fnamemodify(l:f, ':r')
     endif
-    let l:line .= empty(l:f) ? '%f' : l:f
+    let l:line .= empty(l:f) ? s:EmptyFileName(l:bn) : l:f
 
     let l:m = ''
     for l:b in tabpagebuflist(l:t)
@@ -215,7 +207,52 @@ function! MyFoldText() abort
   return l:line . repeat(empty(l:char) ? '-' : l:char, l:maxline-len(l:line)+1) . l:nfolded . ' lines '
 endfunction
 
+"--- GUI
+if has("gui_running")
+  set guicursor=a:block,a:blinkon0
+  set guitablabel=%!MyGuiTabLabel()
+  function! MyGuiTabLabel() abort
+    let l:line = '%N '
+  
+    let l:bn = tabpagebuflist(v:lnum)[tabpagewinnr(v:lnum) - 1]
+    let l:f = fnamemodify(bufname(l:bn), ':t')
+    if getbufvar(l:bn, '&filetype') =~ 'help\|man\|qf'
+      let l:f = '['.getbufvar(l:bn, '&filetype').'] '.fnamemodify(l:f, ':r')
+    endif
+    let l:line .= empty(l:f) ? s:EmptyFileName(l:bn) : l:f
+  
+    let l:m = ''
+    for l:b in tabpagebuflist(v:lnum)
+      if getbufvar(l:b, '&modified') && getbufvar(l:b, '&buftype') != 'terminal'
+        let l:m = l:b == l:bn ? ' [+]' : ' [*]'
+        break
+      endif
+    endfor
+    let l:nwin = tabpagewinnr(v:lnum, '$')
+    let l:line .= l:m. (l:nwin > 1 ? ' ('.l:nwin.') ' : ' ')
+    return l:line
+  endfunction
+
+  call s:Noremap(['n','i','t'], '<silent> <C-Tab>', ':tabnext<CR>')
+  call s:Noremap(['n','i','t'], '<silent> <C-S-Tab>', ':tabprevious<CR>')
+
+  if has("gui_macvim")
+    set guifont=Monaco:h14
+    highlight Normal guibg=black
+    set transparency=20
+  endif
+endif
+
 "--- Helper functions
+function! s:EmptyFileName(bufnr) abort
+    let l:bt = getbufvar(a:bufnr, '&buftype')
+    if     l:bt == 'nofile' | return '[Scratch]'
+    elseif l:bt == 'prompt' | return '[Prompt]'
+    elseif l:bt == 'popup'  | return '[Popup]'
+    else                    | return '[No Name]'
+    endif
+endfunction
+
 function! s:Noremap(modelist, key, cmd) abort
   for l:mode in a:modelist
     if l:mode == 'i'
@@ -757,4 +794,8 @@ let g:cpp_class_scope_highlight     = 1
 let g:cpp_class_decl_highlight      = 1
 let g:cpp_member_variable_highlight = 1
 let g:cpp_no_function_highlight     = 1
+
+"--- vim-desertBJ
+colorscheme desertBJ
+let g:desertBJ_terminal = 1
 " }}}
