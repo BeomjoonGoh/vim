@@ -509,6 +509,15 @@ It depends on `vim-cpp-enhanced-highlight` plugin.  Modified syntaxes are: `C`,
 
 > color scheme based on the default desert.vim, motivated by `desertEx` by Mingbai.
 
+<details close>
+  <summary>Settings</summary>
+
+  ```vim
+  colorscheme desertBJ
+  let g:desertBJ_terminal = 1
+  ```
+</details>
+
 
 #### [vim-syntax-x86-objdump-d](https://github.com/shiracamus/vim-syntax-x86-objdump-d)
 
