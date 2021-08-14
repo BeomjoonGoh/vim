@@ -233,24 +233,21 @@ if has("gui_running")
     return l:line
   endfunction
 
-  call s:Noremap(['n','i','t'], '<silent> <C-Tab>', ':tabnext<CR>')
-  call s:Noremap(['n','i','t'], '<silent> <C-S-Tab>', ':tabprevious<CR>')
-
   if has("gui_macvim")
     set guifont=Monaco:h14
     highlight Normal guibg=black
     set transparency=20
+    set macmeta
+    let macvim_skip_cmd_opt_movement = 1
+    let macvim_skip_colorscheme = 1
+    let g:macvim_default_touchbar_characterpicker = 0
   endif
 endif
 
 "--- Helper functions
 function! s:EmptyFileName(bufnr) abort
-    let l:bt = getbufvar(a:bufnr, '&buftype')
-    if     l:bt == 'nofile' | return '[Scratch]'
-    elseif l:bt == 'prompt' | return '[Prompt]'
-    elseif l:bt == 'popup'  | return '[Popup]'
-    else                    | return '[No Name]'
-    endif
+  let l:special_names = { 'nofile':'[Scratch]', 'prompt':'[Prompt]', 'popup':'[Popup]' }
+  return get(l:special_names, getbufvar(a:bufnr,'&buftype'), '[No Name]')
 endfunction
 
 function! s:Noremap(modelist, key, cmd) abort
@@ -610,22 +607,27 @@ nnoremap <Leader>lt :%write !latexthis<CR>
 "--- Moving around
 " Easy window navigation
 " Note: Karabiner maps <C-hjkl> to Arrows
-"       iTerm2    maps <A-hjkl> to <C-hjkl>
 nnoremap <Left> <C-w>h
 nnoremap <Down> <C-w>j
 nnoremap <Up> <C-w>k
 nnoremap <Right> <C-w>l
-
 if has('terminal')
   tnoremap <Left> <C-w>h
   tnoremap <Down> <C-w>j
   tnoremap <Up> <C-w>k
   tnoremap <Right> <C-w>l
   " For completeness. Use readline's normal mode instead
-  tnoremap <C-h> <Left>
-  tnoremap <C-j> <Down>
-  tnoremap <C-k> <Up>
-  tnoremap <C-l> <Right>
+  if has('gui_running')
+    tnoremap <A-h> <Left>
+    tnoremap <A-j> <Down>
+    tnoremap <A-k> <Up>
+    tnoremap <A-l> <Right>
+  else " iTerm2 maps <A-hjkl> to <C-hjkl>
+    tnoremap <C-h> <Left>
+    tnoremap <C-j> <Down>
+    tnoremap <C-k> <Up>
+    tnoremap <C-l> <Right>
+  endif
 endif
 
 " Go up and down to the next row for wrapped lines
@@ -658,8 +660,13 @@ nnoremap <Tab>gf <C-w>gf
 
 " <C-Tab>   : iTerm Sends HEX code for <F11> "[23~"
 " <C-S-Tab> : iTerm Sends HEX code for <F12> "[24~"
-call s:Noremap(['n','i','t'], '<silent> <F11>', ':tabnext<CR>')
-call s:Noremap(['n','i','t'], '<silent> <F12>', ':tabprevious<CR>')
+if has('gui_running')
+  call s:Noremap(['n','i','t'], '<silent> <C-Tab>',   ':tabnext<CR>')
+  call s:Noremap(['n','i','t'], '<silent> <C-S-Tab>', ':tabprevious<CR>')
+else
+  call s:Noremap(['n','i','t'], '<silent> <F11>', ':tabnext<CR>')
+  call s:Noremap(['n','i','t'], '<silent> <F12>', ':tabprevious<CR>')
+endif
 
 for i in range(1,6)
   execute 'nnoremap' '<Tab>'.i i.'gt'
