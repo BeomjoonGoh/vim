@@ -122,38 +122,39 @@ function! StatusLineFile() abort
 endfunction
 
 function! MyStatusLine() abort
-  let l:git  = '%{StatusLineGit()}'
-  let l:file = '%{StatusLineFile()}'
-  let l:path = '%{StatusLinePath()}'
   let l:machine = empty($MACHINE_NAME) ? 'cwd' : $MACHINE_NAME
-  return l:git.'%h'.l:file.' %m%r  '.l:machine.':%<'.l:path.' %=%(%c%V, %l/%L%) %P'
+  return '%{StatusLineGit()}%h%{StatusLineFile()} %m%r  '.l:machine.':%<%{StatusLinePath()} %=%(%c%V, %l/%L%) %P'
 endfunction
 
 "--- Tabline
 set showtabline=2
 set tabline=%!MyTabLine()
+
+function! TabLineLabel(t) abort
+  let l:bn = tabpagebuflist(a:t)[tabpagewinnr(a:t) - 1]
+  let l:f = fnamemodify(bufname(l:bn), ':t')
+  if getbufvar(l:bn, '&filetype') =~ 'help\|man\|qf'
+    let l:f = '['.getbufvar(l:bn, '&filetype').'] '.fnamemodify(l:f, ':r')
+  endif
+  let l:line = empty(l:f) ? s:EmptyFileName(l:bn) : l:f
+
+  let l:m = ''
+  for l:b in tabpagebuflist(a:t)
+    if getbufvar(l:b, '&modified') && getbufvar(l:b, '&buftype') != 'terminal'
+      let l:m = l:b == l:bn ? ' [+]' : ' [*]'
+      break
+    endif
+  endfor
+  let l:nwin = tabpagewinnr(a:t, '$')
+  return l:line . l:m . (l:nwin > 1 ? ' ('.l:nwin.') ' : ' ')
+endfunction
+
 function! MyTabLine() abort
   let l:line = repeat(' ', &numberwidth+&foldcolumn)
   for l:t in range(1, tabpagenr('$'))
     let l:s = l:t == tabpagenr() ? 'Sel' : ''
     let l:line .= '%'.l:t.'T%#TabNum'.l:s.'# '.l:t.' %#TabLine'.l:s.'#'
-
-    let l:bn = tabpagebuflist(l:t)[tabpagewinnr(l:t) - 1]
-    let l:f = fnamemodify(bufname(l:bn), ':t')
-    if getbufvar(l:bn, '&filetype') =~ 'help\|man\|qf'
-      let l:f = '['.getbufvar(l:bn, '&filetype').'] '.fnamemodify(l:f, ':r')
-    endif
-    let l:line .= empty(l:f) ? s:EmptyFileName(l:bn) : l:f
-
-    let l:m = ''
-    for l:b in tabpagebuflist(l:t)
-      if getbufvar(l:b, '&modified') && getbufvar(l:b, '&buftype') != 'terminal'
-        let l:m = l:b == l:bn ? ' [+]' : ' [*]'
-        break
-      endif
-    endfor
-    let l:nwin = tabpagewinnr(l:t, '$')
-    let l:line .= l:m. (l:nwin > 1 ? ' ('.l:nwin.') ' : ' ')
+    let l:line .= TabLineLabel(l:t)
   endfor
   return l:line.'%T%#TabLineFill#%=%999XX'
 endfunction
@@ -198,11 +199,8 @@ set foldtext=MyFoldText()
 function! MyFoldText() abort
   let l:line = substitute(getline(v:foldstart), '\t', repeat(' ', &tabstop), 'g')
   let l:nfolded = v:foldend - v:foldstart
-
-  let l:windowwidth = winwidth(0) - &foldcolumn - &number * &numberwidth
-  let l:maxline = l:windowwidth - len(l:nfolded) - len(' lines ') - 1 
+  let l:maxline = winwidth(0) - &foldcolumn - &number * &numberwidth - len(l:nfolded) - len(' lines ') - 1 
   let l:line = strpart(l:line, 0, l:maxline)
-
   let l:char = matchstr(split(&fillchars,','), 'fold:.')[-1:]
   return l:line . repeat(empty(l:char) ? '-' : l:char, l:maxline-len(l:line)+1) . l:nfolded . ' lines '
 endfunction
@@ -212,25 +210,7 @@ if has("gui_running")
   set guicursor=a:block,a:blinkon0
   set guitablabel=%!MyGuiTabLabel()
   function! MyGuiTabLabel() abort
-    let l:line = '%N '
-  
-    let l:bn = tabpagebuflist(v:lnum)[tabpagewinnr(v:lnum) - 1]
-    let l:f = fnamemodify(bufname(l:bn), ':t')
-    if getbufvar(l:bn, '&filetype') =~ 'help\|man\|qf'
-      let l:f = '['.getbufvar(l:bn, '&filetype').'] '.fnamemodify(l:f, ':r')
-    endif
-    let l:line .= empty(l:f) ? s:EmptyFileName(l:bn) : l:f
-  
-    let l:m = ''
-    for l:b in tabpagebuflist(v:lnum)
-      if getbufvar(l:b, '&modified') && getbufvar(l:b, '&buftype') != 'terminal'
-        let l:m = l:b == l:bn ? ' [+]' : ' [*]'
-        break
-      endif
-    endfor
-    let l:nwin = tabpagewinnr(v:lnum, '$')
-    let l:line .= l:m. (l:nwin > 1 ? ' ('.l:nwin.') ' : ' ')
-    return l:line
+    return '%N '. TabLineLabel(v:lnum)
   endfunction
 
   if has("gui_macvim")
@@ -251,18 +231,11 @@ function! s:EmptyFileName(bufnr) abort
 endfunction
 
 function! s:Noremap(modelist, key, cmd) abort
+  if !has('terminal')
+    call filter(a:modelist, 'v:val != "t"')
+  endif
   for l:mode in a:modelist
-    if l:mode == 'i'
-      let l:cmd = '<C-o>'.a:cmd
-    elseif l:mode == 't'
-      if !has('terminal')
-        continue
-      endif
-      let l:cmd = '<C-w>'.a:cmd
-    else
-      let l:cmd = a:cmd
-    endif
-    execute l:mode.'noremap' a:key l:cmd
+    execute l:mode.'noremap' a:key get({'i':'<C-o>', 't':'<C-w>'}, l:mode, '').a:cmd
   endfor
 endfunction 
 
@@ -305,11 +278,12 @@ augroup user_filetype
   \ setlocal cindent |
   \ if !exists('pathset') |
   \   let pathset = 1 |
-  \   set path+=$HOME/work/lib,$HOME/work/lib/specialfunctions,$HOME/work/projectEuler/Library |
+  \   set path+=$HOME/work/lib,$HOME/work/lib/specialfunctions |
   \ endif |
   \ setlocal formatoptions-=o |
   \ setlocal textwidth=120 |
-  \ setlocal foldmethod=syntax
+  \ setlocal foldmethod=syntax |
+  \ nnoremap <F2> :execute "Man" substitute(expand("<cword>"), '_', '','g')<CR>
 
   autocmd FileType python
   \ setlocal keywordprg=pydoc3 |
@@ -340,9 +314,11 @@ command! -nargs=? -complete=file Vs vs <args>
 command! -nargs=? -complete=file Vsp vsp <args>
 if v:version >= 704
   command! -nargs=? -complete=file_in_path Vfind vertical sfind <args>
+  command! -nargs=? -complete=file_in_path Tfind tab sfind <args>
   command! -nargs=? -complete=file_in_path Sfind sfind <args>
 else
   command! -nargs=? -complete=file Vfind vertical sfind <args>
+  command! -nargs=? -complete=file Tfind tab sfind <args>
   command! -nargs=? -complete=file Sfind sfind <args>
 endif
 command! -nargs=? -complete=help Help tab help <args>
@@ -372,7 +348,7 @@ function! s:GotoBuffer(cmd, pattern) abort
     return
   endif
 
-  let l:globbed = a:pattern =~ '^\d\+$' ? str2nr(a:pattern) : '*'.join(split(a:pattern),'*').'*'
+  let l:globbed = a:pattern =~ '^\d\+$' ? str2nr(a:pattern) : '*'. substitute( substitute(a:pattern,'\s','*','g'), '\\\*','\\ ','g') . '*'
   try
     execute 'sbuffer' l:globbed
     let l:bn = bufnr('%')
@@ -390,14 +366,6 @@ function! s:GotoBuffer(cmd, pattern) abort
   endtry
 endfunction
 command! -nargs=? -complete=buffer B call <SID>GotoBuffer('B', <q-args>)
-
-function! s:SmallScreen() abort
-  set nonu nornu
-  set laststatus=0
-  set showtabline=0
-  call s:NoRnuWinLeaveToggle(1)
-endfunction
-command! SmallScreen call <SID>SmallScreen()
 
 if has('mac')
   function! s:OpenFinder() abort
@@ -419,8 +387,7 @@ let g:cheatsheet_command = 'vertical 90 new'
 let g:cheatsheet_path = expand("<sfile>:p:h").'/cheatsheets'
 
 function! Cheatsheet_getfile(ft) abort
-  let l:ext = get(g:cheatsheet_filetypeDict, a:ft, a:ft)
-  return g:cheatsheet_path . '/cs.' . l:ext
+  return g:cheatsheet_path . '/cs.' . get(g:cheatsheet_filetypeDict, a:ft, a:ft)
 endfunction
 
 function! Cheatsheet_open(cmd, ft) abort
@@ -561,9 +528,6 @@ if has('terminal')
   tnoremap <S-Space> <Space>
 endif
 
-" Man for Lapack
-nnoremap <F2> :execute "Man" substitute(expand("<cword>"), '_', '','g')<CR>
-
 " ColorcolumnToggle
 function! s:ColorcolumnToggle() abort
   if exists('+colorcolumn')
@@ -675,15 +639,16 @@ endfor
 " }}}
 " PLUGIN {{{
 "--- vim-autocomplpop
-let g:acp_enableAtStartup        = 1
+let g:acp_enableAtStartup        = 0
 let g:acp_completeOption         = '&complete'
 let g:acp_completeoptPreview     = 1
 let g:acp_behaviorSnipmateLength = -1
-let g:acp_behaviorKeywordLength  = 3
+let g:acp_behaviorKeywordLength  = 2
 let g:acp_behaviorKeywordCommand = "\<C-p>"
-nnoremap i <Nop> | nunmap i
-nnoremap a <Nop> | nunmap a
-nnoremap R <Nop> | nunmap R
+augroup acp_startup
+  autocmd!
+  autocmd VimEnter * execute 'nnoremap i <NOP>' | execute 'nnoremap a <NOP>' | execute 'nnoremap R <NOP>' | execute 'nunmap i' | execute 'nunmap a' | execute 'nunmap R'
+augroup END
 call s:Noremap(['n','i'], '<F5>',  ":execute exists('#AcpGlobalAutoCommand#InsertEnter') ? 'AcpDisable' : 'AcpEnable'<Bar>echo 'AcpToggle'<CR>")
 
 "--- vim-easy-align
@@ -708,7 +673,7 @@ if has('terminal')
 endif
 
 "--- vim-fugitive
-command! -bang -nargs=? -range=-1 -complete=customlist,fugitive#Complete Vg vertical belowright G <args>
+command! -bang -nargs=? -range=-1 -complete=customlist,fugitive#Complete Vg   vertical belowright G <args>
 command! -bang -nargs=? -range=-1 -complete=customlist,fugitive#Complete Vgit vertical belowright Git <args>
 
 "--- vim-peekaboo
