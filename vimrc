@@ -260,7 +260,7 @@ let g:tex_flavor = 'latex'
 "--- .py files
 let python_highlight_all = 1
 "--- .md files
-let g:markdown_fenced_languages = [ 'bash=sh', 'vim', 'python', 'cpp' ]
+let g:markdown_fenced_languages = [ 'bash=sh', 'vim', 'python', 'cpp', 'calendar' ]
 let g:markdown_minlines         = 100
 let g:markdown_folding          = 1
 "--- man page
@@ -288,6 +288,13 @@ augroup user_filetype
   autocmd FileType python
   \ setlocal keywordprg=pydoc3 |
   \ setlocal foldmethod=indent
+
+  autocmd FileType markdown
+  \ syntax match markdownTime display '\<\%([01]\=\d\|2[0-3]\):[0-5]\d\%(:[0-5]\d\)\=' |
+  \ syntax match markdownTime display '\<\%(0\=[1-9]\|1[0-2]\):[0-5]\d\%(:[0-5]\d\)\=\s*[AaPp][Mm]' |
+  \ syntax match markdownDayDate "\<\(Mon\|Tue\|Wed\|Thu\|Fri\|Sat\|Sun\)\s\+\d\{1,2}\>" |
+  \ highlight link markdownTime Type |
+  \ highlight link markdownDayDate Identifier
 
   autocmd FileType vim nnoremap <buffer> K :execute 'tab help' expand("<cword>")<CR>
   autocmd FileType sh,man nnoremap <buffer> K :execute 'Man' expand("<cword>")<CR>
@@ -404,8 +411,72 @@ function! Cheatsheet_complete(A,L,P) abort
   return "bash\ngit\ngpi\nmakefile\nmd\nregex\nvim"
 endfunction
 
-command! -bang -nargs=? -complete=custom,Cheatsheet_complete Cheat call Cheatsheet_open('view', <q-args>)
+command! -bang -nargs=? -complete=custom,Cheatsheet_complete Cheat     call Cheatsheet_open('view', <q-args>)
 command! -bang -nargs=? -complete=custom,Cheatsheet_complete CheatEdit call Cheatsheet_open('edit', <q-args>)
+
+"--- Plan
+function! s:PlanGoto(time_pattern)
+  if fnamemodify(expand("%"),':t') != "planner.md"
+    return
+  endif
+  normal! gg 
+  execute 'normal!' search('^'.strftime('## %Y').'$')
+  execute 'normal!' search('^'.strftime('### %B').'$')
+  execute 'normal!' search('^'.a:time_pattern.'$')
+  normal! zOzt
+endfunction
+command! PlanMonth call <SID>PlanGoto(strftime('### %B'))
+command! PlanWeek  call <SID>PlanGoto(strftime('Week %V, %b'))
+command! PlanDay   call <SID>PlanGoto(strftime('%a %e'))
+
+function! s:PlanCalBox(n)
+  let l:res = []
+  let l:emptyline = repeat('.'.repeat(' ',23), a:n).'.'
+  for l:j in range(5)
+    call add(l:res, l:emptyline)
+  endfor
+  return add(l:res, repeat('. ', 12*a:n).'.')
+endfunction
+
+function! PlanMakeMonth(y, m) abort
+  if fnamemodify(expand("%"),':t') != "planner.md"
+    return
+  endif
+  let l:ym = printf('%4d%02d', a:y, a:m)
+  let [ l:month, l:day, l:week, l:startday ] = split(strftime('%B-%w-%V-%u', strptime('%Y%m%d', l:ym.'01')),'-')
+
+  "Overview
+  let l:days = [ "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" ]
+  let l:line = '.'.join(map([l:days[-1]]+l:days[:-2], 'repeat(" ",10).v:val.repeat(" ",10)'),'.').'.'
+  let l:res = [ "### ".l:month, '', '#### Overview', '', '```calendar', repeat('. ',84).'.', l:line, repeat('. ',84).'.' ]
+
+  let l:last = l:ym[-2:] == 12 ? 31 : strftime('%d', strptime('%Y%m%d',(l:ym+1).'00'))
+  let [ l:line, l:tracker ] = [ repeat('.'.repeat(' ',23), l:day), 'TRACKER      |' ]
+  for l:i in range(1, l:last)
+    let [ l:line, l:tracker ] .= [ printf('.%23d', l:i), printf('%3d', l:i) ]
+    let l:day = (l:day+1)%7
+    if !l:day
+      let l:res += [ l:line.'.' ] + s:PlanCalBox(7)
+      let l:line = ''
+    endif
+  endfor
+  let l:res += [ l:line.'.' ] + s:PlanCalBox(l:day) + [ '', l:tracker, repeat('-',13).'+'.repeat('-',3*l:last), '```', '', 'Goals', '',]
+
+  "Week
+  let l:res += [ '#### Week', '' ]
+  let l:day = 0
+  let l:prevlast = strftime('%d',strptime('%Y%m%d',l:ym.'00'))
+  for l:date in range(l:prevlast-l:startday+2, l:prevlast) + range(1, l:last - ((l:last+l:startday-1)%7))
+    if !l:day
+      let l:res += [ repeat('_',80), printf("Week%3d, %s", l:week, l:month[:2]), '' ]
+      let l:week = l:week > 51 ? 1 : l:week + 1
+    endif
+    let l:res += [ printf('%s%3d', l:days[l:day], l:date), '' ]
+    let l:day = (l:day+1)%7
+  endfor
+
+  call append('.', l:res)
+endfunction
 
 " }}}
 " TEXT OBJECT {{{
