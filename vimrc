@@ -431,11 +431,11 @@ command! PlanDay   call <SID>PlanGoto(strftime('%a %e'))
 
 function! s:PlanCalBox(n)
   let l:res = []
-  let l:emptyline = repeat('.'.repeat(' ',23), a:n).'.'
+  let l:emptyline = repeat('.'.repeat(' ',19), a:n).'.'
   for l:j in range(5)
     call add(l:res, l:emptyline)
   endfor
-  return add(l:res, repeat('. ', 12*a:n).'.')
+  return add(l:res, repeat('. ', 10*a:n).'.')
 endfunction
 
 function! PlanMakeMonth(y, m) abort
@@ -447,13 +447,13 @@ function! PlanMakeMonth(y, m) abort
 
   "Overview
   let l:days = [ "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" ]
-  let l:line = '.'.join(map([l:days[-1]]+l:days[:-2], 'repeat(" ",10).v:val.repeat(" ",10)'),'.').'.'
-  let l:res = [ "### ".l:month, '', '#### Overview', '', '```calendar', repeat('. ',84).'.', l:line, repeat('. ',84).'.' ]
+  let l:line = '.'.join(map([l:days[-1]]+l:days[:-2], 'repeat(" ",8).v:val.repeat(" ",8)'),'.').'.'
+  let l:res = [ "### ".l:month, '', '#### Overview', '', '```calendar', repeat('. ',70).'.', l:line, repeat('. ',70).'.' ]
 
   let l:last = l:ym[-2:] == 12 ? 31 : strftime('%d', strptime('%Y%m%d',(l:ym+1).'00'))
-  let [ l:line, l:tracker ] = [ repeat('.'.repeat(' ',23), l:day), 'TRACKER      |' ]
+  let [ l:line, l:tracker ] = [ repeat('.'.repeat(' ',19), l:day), 'TRACKER      |' ]
   for l:i in range(1, l:last)
-    let [ l:line, l:tracker ] .= [ printf('.%23d', l:i), printf('%3d', l:i) ]
+    let [ l:line, l:tracker ] .= [ printf('.%19d', l:i), printf('%3d', l:i) ]
     let l:day = (l:day+1)%7
     if !l:day
       let l:res += [ l:line.'.' ] + s:PlanCalBox(7)
