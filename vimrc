@@ -425,9 +425,11 @@ function! s:PlanGoto(time_pattern)
   execute 'normal!' search('^'.a:time_pattern.'$')
   normal! zOzt
 endfunction
+command! PlanTrack call <SID>PlanGoto('TRACKER\s*|.\+')
 command! PlanMonth call <SID>PlanGoto(strftime('### %B'))
 command! PlanWeek  call <SID>PlanGoto(strftime('Week %V, %b'))
 command! PlanDay   call <SID>PlanGoto(strftime('%a %e'))
+command! Plan      vsplit ~/.local/share/planner.md
 
 function! s:PlanCalBox(n)
   let l:res = []
@@ -535,9 +537,15 @@ call s:Noremap(['x','o'], '<silent> an', ':<C-u>call <SID>TextObjectNumber(1)<CR
 " }}}
 " KEY MAPPING {{{
 "--- General
-" Goto file
+" Goto
 nnoremap gf :vertical wincmd f<CR>
 nnoremap gF :w<CR>gf
+nnoremap gb :B<CR>
+nnoremap gl yiw:execute (@" =~ '^\d\+$' ? 'normal! @"G' : '')<CR>
+if has('mac')
+  nnoremap <silent> go :!open <cWORD><CR>
+  xnoremap <silent> go :<C-u>execute '!open' expand(<SID>GetSelectedText())<CR>
+endif
 
 " Tab backwards!
 inoremap <S-Tab> <C-d>
@@ -573,7 +581,7 @@ nmap <silent> <Leader>R :silent!/BruteForceSearchReset_<C-r>=rand()<CR>.<CR>
 
 " Search in visual mode (https://vim.fandom.com/wiki/Search_for_visually_selected_text)
 xnoremap <silent> * :call setreg('/', substitute(<SID>GetSelectedText(), '\m\_s\+', '\\_s\\+', 'g'))<CR>n
-xnoremap <silent> # :call setreg('?', substitute(<SID>GetSelectedText(), '\m\_s\+', '\\_s\\+', 'g'))<CR>n
+xnoremap <silent> # :call setreg('/', substitute(<SID>GetSelectedText(), '\m\_s\+', '\\_s\\+', 'g'))<Bar>let v:searchforward = 0<CR>n
 
 " Toggle vimdiff iwhiteall
 if v:version >= 802
@@ -582,15 +590,6 @@ if v:version >= 802
     echo 'diffopt =' &diffopt
   endfunction
   nnoremap <Leader>iw :call <SID>IwhiteToggle()<CR>
-endif
-
-" GotoBuffer
-nnoremap gb :B<CR>
-
-" Open URL/file
-if has('mac')
-  nnoremap <silent> go :!open <cWORD><CR>
-  xnoremap <silent> go :<C-u>execute '!open' expand(<SID>GetSelectedText())<CR>
 endif
 
 " Terminal
