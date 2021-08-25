@@ -30,19 +30,28 @@ Last Change: 08 Mar 2020 03:33:12 +0900
 
 * Unordered
 * Item 1
-  * Item 1a
+    * Item 1a
 - This too
 + Or this
 
 1. Ordered
+    1. Sub list
+    > Use four spaces for any nested structe
 1. Can use other numbers.
-   1. Sub list
+1. Back to order
+
+<!-- break the ordered list and start new-->
+
+1. With any one newline in between list items,
+
+1. it gets larger spaces
+1. Wierd.
 
 # Todo Lists
 
-- [ ] Do this
-- [x] Done
-- [ ] Any list syntax will do
+* [ ] Do this
+* [x] Done
+* [ ] Any list syntax will do
 
 # Links
 

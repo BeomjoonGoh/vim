@@ -261,7 +261,7 @@ let g:tex_flavor = 'latex'
 let python_highlight_all = 1
 "--- .md files
 let g:markdown_fenced_languages = [ 'bash=sh', 'vim', 'python', 'cpp', 'calendar' ]
-let g:markdown_minlines         = 100
+let g:markdown_minlines         = 200
 let g:markdown_folding          = 1
 "--- man page
 runtime! ftplugin/man.vim
@@ -415,23 +415,18 @@ command! -bang -nargs=? -complete=custom,Cheatsheet_complete Cheat     call Chea
 command! -bang -nargs=? -complete=custom,Cheatsheet_complete CheatEdit call Cheatsheet_open('edit', <q-args>)
 
 "--- Plan
-function! s:PlanGoto(time_pattern)
+function! s:PlanGoto(time_pattern) abort
   if fnamemodify(expand("%"),':t') != "planner.md"
     return
   endif
   normal! gg 
-  execute 'normal!' search('^'.strftime('## %Y').'$')
-  execute 'normal!' search('^'.strftime('### %B').'$')
-  execute 'normal!' search('^'.a:time_pattern.'$')
-  normal! zOzt
+  call search('^'.strftime('## %Y').'$')
+  call search('^'.strftime('### %B').'$')
+  call search('^'.a:time_pattern.'$', 'c')
+  silent! normal! zOzt
 endfunction
-command! PlanTrack call <SID>PlanGoto('TRACKER\s*|.\+')
-command! PlanMonth call <SID>PlanGoto(strftime('### %B'))
-command! PlanWeek  call <SID>PlanGoto(strftime('Week %V, %b'))
-command! PlanDay   call <SID>PlanGoto(strftime('%a %e'))
-command! Plan      vsplit ~/.local/share/planner.md
 
-function! s:PlanCalBox(n)
+function! s:PlanCalBox(n) abort
   let l:res = []
   let l:emptyline = repeat('.'.repeat(' ',19), a:n).'.'
   for l:j in range(5)
@@ -479,6 +474,33 @@ function! PlanMakeMonth(y, m) abort
 
   call append('.', l:res)
 endfunction
+
+function! PlanReindex() abort
+  if fnamemodify(expand("%"),':t') != "planner.md"
+    return
+  endif
+  normal! gg 
+  call search('^#### Index$')
+  normal! 4j
+  if !empty(getline('.'))
+    normal! d}
+  endif
+  silent! write
+  let l:index = systemlist('grep -n "^#\{2,3\}\s.*$" '.expand("%"))
+  for l:i in range(len(l:index))
+    let [l:n, l:t] = split(l:index[l:i],':')
+    let l:index[l:i] = printf("%5d | %s", str2nr(l:n)+len(l:index), l:t)
+  endfor
+  normal! k
+  call append('.', l:index)
+  normal! ``
+endfunction
+
+command! PlanTrack call <SID>PlanGoto('TRACKER\s*|.\+')
+command! PlanMonth call <SID>PlanGoto(strftime('### %B'))
+command! PlanWeek  call <SID>PlanGoto(strftime('Week %V, %b'))
+command! PlanDay   call <SID>PlanGoto(strftime('%a %e'))
+command! Plan      vsplit ~/.local/share/planner.md
 
 " }}}
 " TEXT OBJECT {{{
