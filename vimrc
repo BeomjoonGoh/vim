@@ -294,7 +294,8 @@ augroup user_filetype
   \ syntax match markdownTime display '\<\%(0\=[1-9]\|1[0-2]\):[0-5]\d\%(:[0-5]\d\)\=\s*[AaPp][Mm]' |
   \ syntax match markdownDayDate "\<\(Mon\|Tue\|Wed\|Thu\|Fri\|Sat\|Sun\)\s\+\d\{1,2}\>" |
   \ highlight link markdownTime Type |
-  \ highlight link markdownDayDate Identifier
+  \ highlight link markdownDayDate Identifier |
+  \ set foldtext=MyFoldText()
 
   autocmd FileType vim nnoremap <buffer> K :execute 'tab help' expand("<cword>")<CR>
   autocmd FileType sh,man nnoremap <buffer> K :execute 'Man' expand("<cword>")<CR>
@@ -731,16 +732,12 @@ endfor
 " }}}
 " PLUGIN {{{
 "--- vim-autocomplpop
-let g:acp_enableAtStartup        = 0
+let g:acp_enableAtStartup        = 1
 let g:acp_completeOption         = '&complete'
 let g:acp_completeoptPreview     = 1
 let g:acp_behaviorSnipmateLength = -1
 let g:acp_behaviorKeywordLength  = 2
 let g:acp_behaviorKeywordCommand = "\<C-p>"
-augroup acp_startup
-  autocmd!
-  autocmd VimEnter * execute 'nnoremap i <NOP>' | execute 'nnoremap a <NOP>' | execute 'nnoremap R <NOP>' | execute 'nunmap i' | execute 'nunmap a' | execute 'nunmap R'
-augroup END
 call s:Noremap(['n','i'], '<F5>',  ":execute exists('#AcpGlobalAutoCommand#InsertEnter') ? 'AcpDisable' : 'AcpEnable'<Bar>echo 'AcpToggle'<CR>")
 
 "--- vim-easy-align
