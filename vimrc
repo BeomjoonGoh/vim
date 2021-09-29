@@ -264,7 +264,6 @@ let g:markdown_fenced_languages = [ 'bash=sh', 'vim', 'python', 'cpp', 'calendar
 let g:markdown_minlines         = 200
 let g:markdown_folding          = 1
 "--- man page
-runtime! ftplugin/man.vim
 let g:ft_man_open_mode      = 'tab'
 let g:ft_man_folding_enable = 1
 
@@ -296,9 +295,12 @@ augroup user_filetype
   \ highlight link markdownTime Type |
   \ highlight link markdownDayDate Identifier |
   \ set foldtext=MyFoldText()
+    
+  autocmd FileType sh 
+  \ runtime! ftplugin/man.vim |
+  \ nnoremap <buffer> K :execute 'Man' expand("<cword>")<CR>
 
   autocmd FileType vim nnoremap <buffer> K :execute 'tab help' expand("<cword>")<CR>
-  autocmd FileType sh,man nnoremap <buffer> K :execute 'Man' expand("<cword>")<CR>
   autocmd FileType gitcommit setlocal spell
 augroup END
 
