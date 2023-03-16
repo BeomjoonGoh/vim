@@ -1,7 +1,7 @@
 " vimrc file
 " Languague:    vim
 " Maintainer:   Beomjoon Goh
-" Last Change:  14 Aug 2021 10:32:09 +0900
+" Last Change:  16 Mar 2023 14:38:00 +0900
 
 " GENERAL {{{
 set nocompatible
@@ -417,94 +417,6 @@ endfunction
 command! -bang -nargs=? -complete=custom,Cheatsheet_complete Cheat     call Cheatsheet_open('view', <q-args>)
 command! -bang -nargs=? -complete=custom,Cheatsheet_complete CheatEdit call Cheatsheet_open('edit', <q-args>)
 
-"--- Plan
-function! s:PlanGoto(time_pattern) abort
-  if fnamemodify(expand("%"),':t') != "planner.md"
-    return
-  endif
-  normal! gg 
-  call search('^'.strftime('## %Y').'$')
-  call search('^'.strftime('### %B').'$')
-  call search('^'.a:time_pattern.'$', 'c')
-  silent! normal! zOzt
-endfunction
-
-function! s:PlanCalBox(n) abort
-  let l:res = []
-  let l:emptyline = repeat('.'.repeat(' ',19), a:n).'.'
-  for l:j in range(5)
-    call add(l:res, l:emptyline)
-  endfor
-  return add(l:res, repeat('. ', 10*a:n).'.')
-endfunction
-
-function! PlanMakeMonth(y, m) abort
-  if fnamemodify(expand("%"),':t') != "planner.md"
-    return
-  endif
-  let l:ym = printf('%4d%02d', a:y, a:m)
-  let [ l:month, l:day, l:week, l:startday ] = split(strftime('%B-%w-%V-%u', strptime('%Y%m%d', l:ym.'01')),'-')
-
-  "Overview
-  let l:days = [ "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" ]
-  let l:line = '.'.join(map([l:days[-1]]+l:days[:-2], 'repeat(" ",8).v:val.repeat(" ",8)'),'.').'.'
-  let l:res = [ "### ".l:month, '', '#### Overview', '', '```calendar', repeat('. ',70).'.', l:line, repeat('. ',70).'.' ]
-
-  let l:last = l:ym[-2:] == 12 ? 31 : strftime('%d', strptime('%Y%m%d',(l:ym+1).'00'))
-  let [ l:line, l:tracker ] = [ repeat('.'.repeat(' ',19), l:day), 'TRACKER      |' ]
-  for l:i in range(1, l:last)
-    let [ l:line, l:tracker ] .= [ printf('.%19d', l:i), printf('%3d', l:i) ]
-    let l:day = (l:day+1)%7
-    if !l:day
-      let l:res += [ l:line.'.' ] + s:PlanCalBox(7)
-      let l:line = ''
-    endif
-  endfor
-  let l:res += [ l:line.'.' ] + s:PlanCalBox(l:day) + [ '', l:tracker, repeat('-',13).'+'.repeat('-',3*l:last), '```', '', 'Goals', '',]
-
-  "Week
-  let l:res += [ '#### Week', '' ]
-  let l:day = 0
-  let l:prevlast = strftime('%d',strptime('%Y%m%d',l:ym.'00'))
-  for l:date in range(l:prevlast-l:startday+2, l:prevlast) + range(1, l:last - ((l:last+l:startday-1)%7))
-    if !l:day
-      let l:res += [ repeat('_',80), printf("Week%3d, %s", l:week, l:month[:2]), '' ]
-      let l:week = l:week > 51 ? 1 : l:week + 1
-    endif
-    let l:res += [ printf('%s%3d', l:days[l:day], l:date), '' ]
-    let l:day = (l:day+1)%7
-  endfor
-
-  call append('.', l:res)
-endfunction
-
-function! PlanReindex() abort
-  if fnamemodify(expand("%"),':t') != "planner.md"
-    return
-  endif
-  normal! gg 
-  call search('^#### Index$')
-  normal! 4j
-  if !empty(getline('.'))
-    normal! d}
-  endif
-  silent! write
-  let l:index = systemlist('grep -n "^#\{2,3\}\s.*$" '.expand("%"))
-  for l:i in range(len(l:index))
-    let [l:n, l:t] = split(l:index[l:i],':')
-    let l:index[l:i] = printf("%5d | %s", str2nr(l:n)+len(l:index), l:t)
-  endfor
-  normal! k
-  call append('.', l:index)
-  normal! ``
-endfunction
-
-command! PlanTrack call <SID>PlanGoto('TRACKER\s*|.\+')
-command! PlanMonth call <SID>PlanGoto(strftime('### %B'))
-command! PlanWeek  call <SID>PlanGoto(strftime('Week %V, %b'))
-command! PlanDay   call <SID>PlanGoto(strftime('%a %e'))
-command! Plan      vsplit ~/.local/share/planner.md
-
 " }}}
 " TEXT OBJECT {{{
 " l : line, / : search, ? : search, i : indent, n : number
@@ -660,7 +572,7 @@ nnoremap <F9> :echo strftime('%d %b %Y %T %z')<CR>
 call s:Noremap(['n','i'], '<F10>', ":let &mouse = (&mouse == '') ? 'a' : ''<Bar>:call <SID>EchoOnOff('mouse', &mouse)<CR>")
 
 " latexthis
-xnoremap <Leader>lt :write !latexthis<CR>
+xnoremap <Leader>lt :write !latexthis --font 22<CR>
 nnoremap <Leader>lt :%write !latexthis<CR>
 
 "--- Moving around
@@ -735,7 +647,7 @@ endfor
 " PLUGIN {{{
 "--- vim-autocomplpop
 let g:acp_enableAtStartup        = 1
-let g:acp_completeOption         = '&complete'
+let g:acp_completeOption         = &complete
 let g:acp_completeoptPreview     = 1
 let g:acp_behaviorSnipmateLength = -1
 let g:acp_behaviorKeywordLength  = 2
