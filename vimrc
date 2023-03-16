@@ -28,7 +28,9 @@ call plug#begin('~/.vim/plugged')
   " Filetype
   Plug 'BeomjoonGoh/vim-cppman',       { 'for' : 'cpp' }
   Plug 'vim-latex/vim-latex',          { 'for' : 'tex' }
-  Plug 'iamcco/markdown-preview.nvim', { 'for': 'markdown', 'do': ':call mkdp#util#install()' }
+  if v:version >= 704
+    Plug 'iamcco/markdown-preview.nvim', { 'for': 'markdown', 'do': ':call mkdp#util#install()' }
+  endif
 
   " Colorscheme & Syntax
   Plug 'BeomjoonGoh/vim-aftersyntax'
