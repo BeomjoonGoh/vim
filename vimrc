@@ -666,7 +666,7 @@ if has('terminal')
   let g:easy_term_rows = '15,18%'
   let g:easy_term_cols = '120,33%'
   let g:easy_term_alias = {}
-  let g:easy_term_alias['matlab'] = 'rlwrap -a matlab -nosplash -nodesktop'
+  let g:easy_term_alias['matlab'] = 'rlwrap --always-readline --histsize -300 --history-filename ~/.local/share/matlab_history.m matlab -nosplash -nodesktop'
   command! -nargs=? -complete=custom,easy_term#Complete Bterm botright Term <args>
   command! -nargs=? -complete=custom,easy_term#Complete Vterm vertical botright Term <args>
   command! -nargs=? -complete=custom,easy_term#Complete Tterm tab Term <args>
