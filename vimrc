@@ -38,6 +38,7 @@ call plug#begin('~/.vim/plugged')
   Plug 'BeomjoonGoh/vim-desertBJ'
   Plug 'shiracamus/vim-syntax-x86-objdump-d'
   Plug 'BeomjoonGoh/txt.vim'
+  Plug 'raingo/vim-matlab'
 call plug#end()
 
 augroup last_cursor                   " Open file at the last cursor position
@@ -279,7 +280,7 @@ augroup user_filetype
   \ setlocal cindent |
   \ if !exists('pathset') |
   \   let pathset = 1 |
-  \   set path+=$HOME/work/lib,$HOME/work/lib/specialfunctions |
+  \   set path+=$HOME/work/include,$HOME/work/include/specialfunctions |
   \ endif |
   \ setlocal formatoptions-=o |
   \ setlocal textwidth=120 |
@@ -574,7 +575,7 @@ nnoremap <F9> :echo strftime('%d %b %Y %T %z')<CR>
 call s:Noremap(['n','i'], '<F10>', ":let &mouse = (&mouse == '') ? 'a' : ''<Bar>:call <SID>EchoOnOff('mouse', &mouse)<CR>")
 
 " latexthis
-xnoremap <Leader>lt :write !latexthis --font 22<CR>
+xnoremap <Leader>lt :write !latexthis --font 28<CR>
 nnoremap <Leader>lt :%write !latexthis<CR>
 
 "--- Moving around
@@ -663,7 +664,9 @@ xmap ga <Plug>(EasyAlign)
 "--- vim-easy-term
 if has('terminal')
   let g:easy_term_rows = '15,18%'
-  let g:easy_term_cols = '100,33%'
+  let g:easy_term_cols = '120,33%'
+  let g:easy_term_alias = {}
+  let g:easy_term_alias['matlab'] = 'rlwrap -a matlab -nosplash -nodesktop'
   command! -nargs=? -complete=custom,easy_term#Complete Bterm botright Term <args>
   command! -nargs=? -complete=custom,easy_term#Complete Vterm vertical botright Term <args>
   command! -nargs=? -complete=custom,easy_term#Complete Tterm tab Term <args>
