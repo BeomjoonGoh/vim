@@ -1,7 +1,7 @@
 " vimrc file
 " Languague:    vim
 " Maintainer:   Beomjoon Goh
-" Last Change:  16 Mar 2023 14:38:00 +0900
+" Last Change:  01 Jan 2024 23:21:31 +0900
 
 " GENERAL {{{
 set nocompatible
@@ -28,6 +28,7 @@ call plug#begin('~/.vim/plugged')
   " Filetype
   Plug 'BeomjoonGoh/vim-cppman',       { 'for' : 'cpp' }
   Plug 'vim-latex/vim-latex',          { 'for' : 'tex' }
+  Plug 'raingo/vim-matlab'
   if v:version >= 704
     Plug 'iamcco/markdown-preview.nvim', { 'for': 'markdown', 'do': ':call mkdp#util#install()' }
   endif
@@ -38,7 +39,6 @@ call plug#begin('~/.vim/plugged')
   Plug 'BeomjoonGoh/vim-desertBJ'
   Plug 'shiracamus/vim-syntax-x86-objdump-d'
   Plug 'BeomjoonGoh/txt.vim'
-  Plug 'raingo/vim-matlab'
 call plug#end()
 
 augroup last_cursor                   " Open file at the last cursor position
@@ -68,12 +68,14 @@ endif
 set mouse=""
 set nowrap
 set diffopt=filler,context:3
-if v:version >= 802
+if v:version >= 802 && !(has('mac') && $VIM == '/usr/share/vim')
   set diffopt+=internal
 endif
 set spellsuggest=best,3
 set splitbelow splitright
 set incsearch hlsearch
+
+let $BASH_ENV = "$HOME/.config/bash_scripts/aliases.bash"
 
 "--- Indent & tab
 set autoindent smartindent
@@ -305,26 +307,32 @@ augroup user_filetype
 
   autocmd FileType vim nnoremap <buffer> K :execute 'tab help' expand("<cword>")<CR>
   autocmd FileType gitcommit setlocal spell
+
+  autocmd FileType matlab
+  \ compiler mlint |
+  \ setlocal shiftwidth=4 softtabstop=4
 augroup END
 
 " }}}
 " COMMAND {{{
 "--- Commands
-command! -bang -nargs=? -complete=file E e<bang> <args>
-command! -bang -nargs=? -complete=file W w<bang> <args>
-command! -bang -nargs=? -complete=file Wq wq<bang> <args>
-command! -bang -nargs=? -complete=file WQ wq<bang> <args>
-command! -bang Wqa wqa<bang>
-command! -bang WQa wqa<bang>
-command! -bang WQA wqa<bang>
-command! -bang Wa wa<bang>
-command! -bang WA wa<bang>
-command! -bang Q q<bang>
-command! -bang Qa qa<bang>
-command! -bang QA qa<bang>
-command! -nargs=? -complete=file Sp sp <args>
-command! -nargs=? -complete=file Vs vs <args>
-command! -nargs=? -complete=file Vsp vsp <args>
+function! s:LUpermute(res,str) abort
+  if empty(a:str)
+    return [a:res]
+  endif
+  return s:LUpermute(a:res.tolower(a:str[0]), a:str[1:]) + s:LUpermute(a:res.toupper(a:str[0]), a:str[1:])
+endfunction
+function! s:CommandLowerUpper(cmds, opts, args) abort
+  for l:cmd in a:cmds
+    for l:perm in <SID>LUpermute(toupper(l:cmd[0]),l:cmd[1:])
+      execute 'command!' a:opts l:perm l:cmd.a:args
+    endfor
+  endfor
+endfunction
+call <SID>CommandLowerUpper(['e','w','wq'], '-bang -nargs=? -complete=file', '<bang> <args>')
+call <SID>CommandLowerUpper(['wqa','wa','qa', 'q'], '-bang', '<bang>')
+call <SID>CommandLowerUpper(['sp','vsp'],'-nargs=? -complete=file', ' <args>')
+
 if v:version >= 704
   command! -nargs=? -complete=file_in_path Vfind vertical sfind <args>
   command! -nargs=? -complete=file_in_path Tfind tab sfind <args>
@@ -575,7 +583,7 @@ nnoremap <F9> :echo strftime('%d %b %Y %T %z')<CR>
 call s:Noremap(['n','i'], '<F10>', ":let &mouse = (&mouse == '') ? 'a' : ''<Bar>:call <SID>EchoOnOff('mouse', &mouse)<CR>")
 
 " latexthis
-xnoremap <Leader>lt :write !latexthis --font 28<CR>
+xnoremap <Leader>lt :write !latexthis --font 20<CR>
 nnoremap <Leader>lt :%write !latexthis<CR>
 
 "--- Moving around
@@ -628,7 +636,7 @@ endfor
 
 "--- Tab page
 nnoremap <Tab>: :tab
-nnoremap <Tab>n :tab split<CR>
+nnoremap <Tab>n <C-w>T
 nnoremap <Tab>e :tabedit<Space>
 nnoremap <Tab>gf <C-w>gf
 
@@ -665,8 +673,6 @@ xmap ga <Plug>(EasyAlign)
 if has('terminal')
   let g:easy_term_rows = '15,18%'
   let g:easy_term_cols = '120,33%'
-  let g:easy_term_alias = {}
-  let g:easy_term_alias['matlab'] = 'rlwrap --always-readline --histsize -300 --history-filename ~/.local/share/matlab_history.m matlab -nosplash -nodesktop'
   command! -nargs=? -complete=custom,easy_term#Complete Bterm botright Term <args>
   command! -nargs=? -complete=custom,easy_term#Complete Vterm vertical botright Term <args>
   command! -nargs=? -complete=custom,easy_term#Complete Tterm tab Term <args>
