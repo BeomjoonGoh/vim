@@ -580,7 +580,7 @@ inoremap <expr> <F9> strftime('%d %b %Y %T %z')
 nnoremap <F9> :echo strftime('%d %b %Y %T %z')<CR>
 
 " Mouse
-call s:Noremap(['n','i'], '<F10>', ":let &mouse = (&mouse == '') ? 'a' : ''<Bar>:call <SID>EchoOnOff('mouse', &mouse)<CR>")
+call s:Noremap(['n','i','t'], '<F10>', ":let &mouse = (&mouse == '') ? 'a' : ''<Bar>:call <SID>EchoOnOff('mouse', &mouse)<CR>")
 
 " latexthis
 xnoremap <Leader>lt :write !latexthis --font 20<CR>
@@ -782,6 +782,7 @@ let g:cpp_member_variable_highlight = 1
 let g:cpp_no_function_highlight     = 1
 
 "--- vim-desertBJ
+let &background = has('mac') && system('defaults read -g AppleInterfaceStyle') !~ 'Dark' ? 'light' : 'dark'
 colorscheme desertBJ
 let g:desertBJ_terminal = 1
 " }}}
