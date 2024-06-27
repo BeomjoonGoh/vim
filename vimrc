@@ -75,7 +75,7 @@ set spellsuggest=best,3
 set splitbelow splitright
 set incsearch hlsearch
 
-let $BASH_ENV = "$HOME/.config/bash_scripts/aliases.bash"
+let $BASH_ENV = "$HOME/.bash_profile"
 
 "--- Indent & tab
 set autoindent smartindent
@@ -701,6 +701,7 @@ let g:snipMate.snippet_version    = 1
 let g:snipMate.description_in_completion = 1
 
 "--- vim-venter
+let g:venter_width = &columns/6
 function! s:VenterCustomToggle() abort
   if exists("t:venter_tabid")
     set showtabline=2
@@ -785,4 +786,10 @@ let g:cpp_no_function_highlight     = 1
 let &background = has('mac') && system('defaults read -g AppleInterfaceStyle') !~ 'Dark' ? 'light' : 'dark'
 colorscheme desertBJ
 let g:desertBJ_terminal = 1
+function! s:LightToggle() abort
+  execute 'set' 'background='.((&background == 'dark') ? 'light' : 'dark')
+  echo 'background =' &background
+endfunction
+command! LightToggle call <SID>LightToggle()
+
 " }}}
