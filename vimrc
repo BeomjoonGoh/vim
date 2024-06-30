@@ -40,8 +40,10 @@ call plug#begin('~/.vim/plugged')
   Plug 'BeomjoonGoh/txt.vim'
 call plug#end()
 
-packadd! matchit
-packadd! comment
+if has('packages')
+  packadd! matchit
+  packadd! comment
+endif
 
 augroup last_cursor                   " Open file at the last cursor position
   autocmd!
@@ -288,6 +290,8 @@ augroup user_filetype
   \ setlocal textwidth=120 |
   \ setlocal foldmethod=syntax |
   \ nnoremap <F2> :execute "Man" substitute(expand("<cword>"), '_', '','g')<CR>
+  autocmd FileType cpp
+  \ setlocal commentstring=//%s
 
   autocmd FileType python
   \ setlocal keywordprg=pydoc3 |
@@ -311,7 +315,8 @@ augroup user_filetype
   autocmd FileType matlab
   \ compiler mlint |
   \ setlocal foldmethod=indent |
-  \ setlocal shiftwidth=4 softtabstop=4
+  \ setlocal shiftwidth=4 softtabstop=4 |
+  \ setlocal commentstring=%%s
 augroup END
 
 " }}}
