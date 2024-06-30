@@ -40,6 +40,9 @@ call plug#begin('~/.vim/plugged')
   Plug 'BeomjoonGoh/txt.vim'
 call plug#end()
 
+packadd! matchit
+packadd! comment
+
 augroup last_cursor                   " Open file at the last cursor position
   autocmd!
   autocmd BufReadPost *
@@ -307,6 +310,7 @@ augroup user_filetype
 
   autocmd FileType matlab
   \ compiler mlint |
+  \ setlocal foldmethod=indent |
   \ setlocal shiftwidth=4 softtabstop=4
 augroup END
 
