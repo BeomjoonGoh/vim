@@ -1,7 +1,7 @@
 " vimrc file
 " Languague:    vim
 " Maintainer:   Beomjoon Goh
-" Last Change:  01 Jan 2024 23:21:31 +0900
+" Last Change:  30 Jun 2024 21:37:53 +0200
 
 " GENERAL {{{
 set nocompatible
@@ -37,7 +37,6 @@ call plug#begin('~/.vim/plugged')
   Plug 'BeomjoonGoh/vim-aftersyntax'
   Plug 'octol/vim-cpp-enhanced-highlight'
   Plug 'BeomjoonGoh/vim-desertBJ'
-  Plug 'shiracamus/vim-syntax-x86-objdump-d'
   Plug 'BeomjoonGoh/txt.vim'
 call plug#end()
 
@@ -197,7 +196,6 @@ set foldenable
 set foldcolumn=0
 set foldmethod=marker
 set foldlevelstart=99
-set foldnestmax=4
 set foldminlines=1
 set foldopen=block,hor,insert,jump,mark,percent,quickfix,search,tag,undo
 set foldtext=MyFoldText()
@@ -220,7 +218,6 @@ if has("gui_running")
 
   if has("gui_macvim")
     set guifont=Monaco:h14
-    highlight Normal guibg=black
     set transparency=20
     set macmeta
     let macvim_skip_cmd_opt_movement = 1
@@ -345,6 +342,8 @@ endif
 command! -nargs=? -complete=help Help tab help <args>
 command! RemoveTrailingSpaces %s/\m\s\+$//e
 command! Source source $HOME/.vim/vimrc
+command! ManEnable runtime! ftplugin/man.vim
+command! LightToggle execute 'set' 'background='.((&background == 'dark') ? 'light' : 'dark')
 
 function! s:CompleteIncludeToggle() abort
   execute 'set' 'complete'.((&complete =~ 'i') ? '-=' : '+=').'i'
@@ -599,17 +598,10 @@ if has('terminal')
   tnoremap <Up> <C-w>k
   tnoremap <Right> <C-w>l
   " For completeness. Use readline's normal mode instead
-  if has('gui_running')
-    tnoremap <A-h> <Left>
-    tnoremap <A-j> <Down>
-    tnoremap <A-k> <Up>
-    tnoremap <A-l> <Right>
-  else " iTerm2 maps <A-hjkl> to <C-hjkl>
-    tnoremap <C-h> <Left>
-    tnoremap <C-j> <Down>
-    tnoremap <C-k> <Up>
-    tnoremap <C-l> <Right>
-  endif
+  tnoremap <A-h> <Left>
+  tnoremap <A-j> <Down>
+  tnoremap <A-k> <Up>
+  tnoremap <A-l> <Right>
 endif
 
 " Go up and down to the next row for wrapped lines
@@ -626,19 +618,13 @@ nnoremap <Leader>g :.cc<CR>
 
 "--- Fold
 call s:Noremap(['n','x'], '<Space>', 'za')
-nnoremap zR zr
-nnoremap zr zR
-nnoremap zM zm
-nnoremap zm zM
 for i in range(10)
   execute 'nnoremap' 'z'.i ':set foldlevel='.i.'<CR>'
 endfor
 
 "--- Tab page
-nnoremap <Tab>: :tab
 nnoremap <Tab>n <C-w>T
-nnoremap <Tab>e :tabedit<Space>
-nnoremap <Tab>gf <C-w>gf
+nnoremap <Tab>f <C-w>gf
 
 " <C-Tab>   : iTerm Sends HEX code for <F11> "[23~"
 " <C-S-Tab> : iTerm Sends HEX code for <F12> "[24~"
@@ -653,7 +639,6 @@ endif
 for i in range(1,6)
   execute 'nnoremap' '<Tab>'.i i.'gt'
 endfor
-
 " }}}
 " PLUGIN {{{
 "--- vim-autocomplpop
@@ -762,7 +747,6 @@ let g:undotree_ShortIndicators          = 1
 let g:undotree_HighlightChangedText     = 0
 let g:undotree_HighlightChangedWithSign = 0
 let g:undotree_HelpLine                 = 0
-let g:undotree_DiffCommand = 'custom_diff(){ diff -U1 "$@" | tail -n+3;}; custom_diff'
 nnoremap <Leader>u :UndotreeToggle<CR>
 
 "--- vim-latex
@@ -784,12 +768,7 @@ let g:cpp_no_function_highlight     = 1
 
 "--- vim-desertBJ
 let &background = has('mac') && system('defaults read -g AppleInterfaceStyle') !~ 'Dark' ? 'light' : 'dark'
-colorscheme desertBJ
 let g:desertBJ_terminal = 1
-function! s:LightToggle() abort
-  execute 'set' 'background='.((&background == 'dark') ? 'light' : 'dark')
-  echo 'background =' &background
-endfunction
-command! LightToggle call <SID>LightToggle()
+silent! colorscheme desertBJ
 
 " }}}

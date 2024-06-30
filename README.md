@@ -85,6 +85,35 @@ typically set nonumber but does not care about relativenumber.  Note also that
 setting relativenumber on may slow down scrolling.
 
 
+## Command
+
+For builtin commands `:e`, `:q`, `:qa`, `:w`, `:wa`, `:wq`, `:wqa`, `:sp`, and
+`:vsp`, possible uppercase typos are defined.
+
+* `:Vfind`(`Sfind`, `Tfind`) works like `:find` but in vertical(horizontal, tab) split.
+* `:Help` opens help page in new tab not in split
+* `:RemoveTrailingSpaces` does what it sounds like.
+* `:Source` sources `vimrc`.
+* `:ManEnable` enables builtin `man` plugin.
+* `:LightToggle` toggles `background` option: 'light', 'dark'.
+* `:CompleteIncludeToggle` toggles `i` flag for `'complete'` option.
+* `:ClearNamedRegisters` does what it sounds like.
+* `:B` calls `GoToBuffer()` that moves cursor to or split opens a buffer in the
+  buffer list with an automatic globbing of given arguments.
+* `:SmallScreen` disables number, statusline, and tabline.
+* `:OpenFinder`<sup>[[1]](#MacOS)</sup> opens a `Finder` window of the current
+  buffer.
+* `:Cheat` vertically split opens a cheatsheet if available.
+* `:CheatEdit` vertically split opens a cheatsheet if available for editing.
+
+When `:ManEnable` is used, or if filetype is `sh`, the builtin `man.vim`
+script is sourced, so that a man page is opened inside vim (on a new buffer)
+by `:Man` command.  For example to open bash's man page,
+```vim
+:Man bash
+```
+
+
 ## Text Object
 
 A few custom text objects are defined (see`:help text-objects`):
@@ -97,36 +126,6 @@ A few custom text objects are defined (see`:help text-objects`):
 |`i/`, `i?`| x o  | Search pattern
 
 
-## Command
-
-For builtin commands `:e`, `:q`, `:qa`, `:w`, `:wa`, `:wq`, `:wqa`, `:sp`, and
-`:vsp`, possible uppercase typos are defined.
-
-* `:Vfind`(`Sfind`) works like `:find` but in vertical(horizontal) split.
-* `:Help` opens help page in new tab not in split
-* `:RemoveTrailingSpaces` does what it sounds like.
-* `:Source` sources `vimrc`.
-* `:CompleteIncludeToggle` toggles `i` flag for `'complete'` option.
-* `:ClearNamedRegisters` does what it sounds like.
-* `:B` calls `GoToBuffer()` that moves cursor to or split opens a buffer in the
-  buffer list with an automatic globbing of given arguments.
-* `:SmallScreen` disables number, statusline, and tabline.
-* `:OpenFinder`<sup>[[1]](#MacOS)</sup> opens a `Finder` window of the current
-  buffer.
-* `:Cheat` vertically split opens a cheatsheet if available.
-* `:CheatEdit` vertically split opens a cheatsheet if available for editing.
-
-Additionally, it sources the builtin `man.vim` script, and related options
-```vim
-runtime! ftplugin/man.vim
-```
-so that a man page is opened inside vim (on a new buffer) by `:Man` command.
-For example to open bash's man page,
-```vim
-:Man bash
-```
-
-
 ## Key Mapping
 
 The backslash key (`\`) is used as The "mapleader" variable. The characters n,
@@ -137,29 +136,30 @@ defined maps.
 <details close>
   <summary>General</summary>
   
-  | Key      | Mode | Description |
-  |:--------:|:----:|:------------|
-  |`gf`, `gF`| n    | Open a file under cursor in vertical split (current window).
-  |`<S-Tab>` | i    | Tab backwards.
-  |`~`       | n x  | The `~` key works for non-alphabets as well.
-  |`<CR>`    | n    | Enter works in normal mode.
-  |`<C-y>`   | x    | Yank to clipboard (register `"\*`).
-  |`<C-p>`   | n    | Paste from clipboard (register `"\*`).
-  |`\r`      | n    | Stop highlighting search result.
-  |`\R`      | n    | Clear search result with some random text.
-  |`*`, `#`  | x    | Search in visual mode.
-  |`\iw`     | n    | In diff mode, toggle ignore white spaces.
-  |`gb`      | n    | Call `:B` command.
-  |`go`<sup>[[1]](#MacOS)</sup>| n x  | Open URL/file under cursor.
-  |`::`      | t    | Switch mode from terminal to cmdline
-  |`K`       | n    | If filetype is `vim`, do `:tab help`, if `sh` or `man`, do `:Man`.
-  |`<F2>`    | n    | Manual page for `LAPACK` library functions.
-  |`<F4>`    | n i  | Toggle `colorcolumn=120`.
-  |`<F6>`    | n i  | Toggle (clipboard) copy & paste safe mode.
-  |`<F7>`    | n i  | Toggle spell checking.
-  |`<F9>`    | n i  | Show(n) or insert(i) the current date and time stamp.
-  |`<F10>`   | n    | Toggle mouse on and off.
-  |`\lt`     | n x  | Feed tex to `latexthis` program.
+  | Key      | Mode  | Description |
+  |:--------:|:-----:|:------------|
+  |`gf`, `gF`| n     | Open a file under cursor in vertical split (current window).
+  |`gb`      | n     | Call `:B` command.
+  |`gl`      | n     | Go to line if under cursor word is a number
+  |`go`<sup>[[1]](#MacOS)</sup>| n x   | Open URL/file under cursor.
+  |`<S-Tab>` | i     | Tab backwards.
+  |`~`       | n x   | The `~` key works for non-alphabets as well.
+  |`<CR>`    | n     | Enter works in normal mode.
+  |`<C-y>`   | x     | Yank to clipboard (register `"\*`).
+  |`<C-p>`   | n     | Paste from clipboard (register `"\*`).
+  |`\r`      | n     | Stop highlighting search result.
+  |`\R`      | n     | Clear search result with some random text.
+  |`*`, `#`  | x     | Search in visual mode.
+  |`\iw`     | n     | In diff mode, toggle ignore white spaces.
+  |`::`      | t     | Switch mode from terminal to cmdline
+  |`K`       | n     | If filetype is `vim`, do `:tab help`, if `sh` or `man`, do `:Man`.
+  |`<F2>`    | n     | If filetype is `c` or `cpp`, open man page for `LAPACK` library functions.
+  |`<F4>`    | n i   | Toggle `colorcolumn=120`.
+  |`<F6>`    | n i   | Toggle (clipboard) copy & paste safe mode.
+  |`<F7>`    | n i   | Toggle spell checking.
+  |`<F9>`    | n i   | Show(n) or insert(i) the current date and time stamp.
+  |`<F10>`   | n i t | Toggle mouse on and off.
+  |`\lt`     | n x   | Feed tex to `latexthis` program.
 </details>
 
 <details close>
@@ -168,21 +168,18 @@ defined maps.
   | Key    | Mode | Description |
   |:------:|:----:|:------------|
   |`Arrows`| n t  | Jump around split windows.
-  |`j`     | n    | Go up to the next row for wrapped lines.
-  |`k`     | n    | Go down to the next row for wrapped lines.
+  |`k`, `j`| n    | Go up (down) to the next row for wrapped lines.
 </details>
 
 <details close>
   <summary>QuickFix</summary>
   
-  | Key | Mode | Description |
-  |:---:|:----:|:------------|
-  |`\ll`| n    | Invoke `:make` command and open QuickFix window.
-  |`\w` | n    | Open QuickFix window.
-  |`\c` | n    | Close QuickFix window.
-  |`\.` | n    | Jump to the next error/warning.
-  |`\,` | n    | Jump to the previous error/warning.
-  |`\g` | n    | From the QuickFix window, go to the code where error occured.
+  | Key     | Mode | Description |
+  |:-------:|:----:|:------------|
+  |`\ll`    | n    | Invoke `:make` command and open QuickFix window.
+  |`\w`,`\c`| n    | Open (Close) QuickFix window.
+  |`\n`,`\N`| n    | Jump to the next (previous) error/warning.
+  |`\g`     | n    | From the QuickFix window, go to the code where error occured.
 </details>
 
 <details close>
@@ -191,25 +188,19 @@ defined maps.
   | Key     | Mode | Description |
   |:-------:|:----:|:------------|
   |`<Space>`| n x  | Open/close folds.
-  |`zR`     | n    | Mapped to `zr'
-  |`zr`     | n    | Mapped to `zR'
-  |`zM`     | n    | Mapped to `zm'
-  |`zm`     | n    | Mapped to `zM'
   |`z[N]`   | n    | Set fold level to `[N]` = 0 ~ 9.
 </details>
 
 <details close>
   <summary>Tab page</summary>
   
-  | Key       | Mode    | Description |
-  |:---------:|:--------|:------------|
-  |`<Tab>:`   | n       | Type `:tab` in command-line.
-  |`<Tab>e`   | n       | Type `:tabedit` in command-line.
-  |`<Tab>n`   | n       | Open the current buffer in a new tab page.
-  |`<Tab>gf`  | n       | Open a file under cursor in a new tab page.
-  |`<C-Tab>`  | n i x t | Go to the next tab page (`iTerm` sends `<F11>`).
-  |`<C-S-Tab>`| n i x t | Go to the previous tab page (`iTerm` sends `<F12>`).
-  |`<Tab>[N]` | n       | Go to `[N]`th tab page, `[N]` = 1 ~ 6.
+  | Key       | Mode  | Description |
+  |:---------:|:------|:------------|
+  |`<Tab>n`   | n     | Open the current buffer in a new tab page.
+  |`<Tab>f`   | n     | Open a file under cursor in a new tab page.
+  |`<Tab>[N]` | n     | Go to `[N]`th tab page, `[N]` = 1 ~ 6.
+  |`<C-Tab>`  | n i t | Go to the next tab page (`iTerm` sends `<F11>`).
+  |`<C-S-Tab>`| n i t | Go to the previous tab page (`iTerm` sends `<F12>`).
 </details>
 
 ## Plugin
@@ -235,7 +226,7 @@ previous suggestion.  The variable `g:acp_completeOption` follows the vim's
   let g:acp_completeOption         = '&complete'
   let g:acp_completeoptPreview     = 1
   let g:acp_behaviorSnipmateLength = -1
-  let g:acp_behaviorKeywordLength  = 3
+  let g:acp_behaviorKeywordLength  = 2
   let g:acp_behaviorKeywordCommand = "\<C-p>"
   ```
   | Key  | Mode | Description |
@@ -274,7 +265,7 @@ for `<Plug>` mappings.
 
   ```vim
   let g:easy_term_rows = '15,18%'
-  let g:easy_term_cols = '100,33%'
+  let g:easy_term_cols = '120,33%'
   ```
   | Key | Mode | Description |
   |:----:|:----:|:------------|
@@ -293,6 +284,20 @@ for `<Plug>` mappings.
 
 Commands `:Vg[it]` is defined for `:vertical belowright G[it]`.  A function
 `FugitiveHead()` is used to get the branch name for the `'statusline'`.
+
+
+#### [vim-peekaboo](https://github.com/junegunn/vim-peekaboo)
+
+> Peekaboo extends `"` and `@` in normal mode and `<CTRL-R>` in insert mode so
+> you can see the contents of the registers.
+
+<details close>
+  <summary>Settings</summary>
+
+  ```vim
+  let g:peekaboo_window = 'vertical botright 20new'
+  ```
+</details>
 
 
 #### [vim-snipmate](https://github.com/garbas/vim-snipmate)
@@ -323,20 +328,6 @@ Note the following default mappings:
 </details>
 
 
-#### [vim-peekaboo](https://github.com/junegunn/vim-peekaboo)
-
-> Peekaboo extends `"` and `@` in normal mode and `<CTRL-R>` in insert mode so
-> you can see the contents of the registers.
-
-<details close>
-  <summary>Settings</summary>
-
-  ```vim
-  let g:peekaboo_window = 'vertical botright 20new'
-  ```
-</details>
-
-
 #### [vim-venter](https://github.com/jmckiern/vim-venter)
 
 > Vim plugin that horizontally centers the current window(s)
@@ -346,6 +337,9 @@ Custom toggle function is defined which does `tab split` first.
 <details close>
   <summary>Settings</summary>
 
+  ```vim
+  let g:venter_width = &columns/6
+  ```
   | Key  | Mode | Description |
   |:-----:|:----:|:------------|
   |`\f`  | n    | Toggle `vim-venter` in a new tab.
@@ -417,7 +411,6 @@ command, which is more git-diff like, is used.
   let g:undotree_HighlightChangedText     = 0
   let g:undotree_HighlightChangedWithSign = 0
   let g:undotree_HelpLine                 = 0
-  let g:undotree_DiffCommand = 'custom_diff(){ diff -U1 "$@" | tail -n+3;}; custom_diff'
   ```
   | Key  | Mode | Description |
   |:----:|:----:|:------------|
@@ -513,15 +506,12 @@ It depends on `vim-cpp-enhanced-highlight` plugin.  Modified syntaxes are: `C`,
   <summary>Settings</summary>
 
   ```vim
-  colorscheme desertBJ
+  let &background = has('mac') && system('defaults read -g AppleInterfaceStyle') !~ 'Dark' ? 'light' : 'dark'
   let g:desertBJ_terminal = 1
+  command! LightToggle execute 'set' 'background='.((&background == 'dark') ? 'light' : 'dark')
+  silent! colorscheme desertBJ
   ```
 </details>
-
-
-#### [vim-syntax-x86-objdump-d](https://github.com/shiracamus/vim-syntax-x86-objdump-d)
-
-> vim syntax for x86/x64 disassemble file created by objdump -d or -D
 
 
 #### [vim-txt](https://github.com/BeomjoonGoh/vim-txt)
