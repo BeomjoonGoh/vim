@@ -1,17 +1,17 @@
 # \begin{}...\end{}
 snippet begin
 	\\begin{${1:env}}
-		${2}
+		${0}
 	\\end{$1}
 # Tabular
 snippet tab
 	\\begin{${1:tabular}}{${2:c}}
-	${3}
+	${0}
 	\\end{$1}
 # Align(ed)
 snippet ali
 	\\begin{align${1:ed}}
-		${2}
+		${0}
 	\\end{align$1}
 # Gather(ed)
 snippet gat
@@ -20,9 +20,9 @@ snippet gat
 	\\end{gather$1}
 # Equation
 snippet eq
-	\\begin{equation}
-		${1}
-	\\end{equation}
+	\\begin{equation${1}}
+		${0}
+	\\end{equation$1}
 ## Unnumbered Equation
 #snippet \
 #	\\[
@@ -116,3 +116,7 @@ snippet page
 # Maths
 snippet sum
 	\\sum_{${1}}${2}
+snippet _
+	_{${1}}${0}
+snippet ^
+	^{${1}}${0}
