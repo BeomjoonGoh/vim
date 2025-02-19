@@ -59,7 +59,7 @@ Last Change: 08 Mar 2020 03:33:12 +0900
 
 [Inline-style with title](https://www.google.com "Google's Homepage")
 
-[Inline-style link to a header](#links)
+[Inline-style link to a header](#lowercase-links-with-dashes)
 
 [Inline-style link to a file](../see/this)
 
@@ -122,9 +122,16 @@ echo "Hello, World!"
 ## Horizontal Rules
 
 Three or more of
+* * *
 ******
 ------
+- - -
 ______
+
+## Footnote
+
+A statement[^source1]
+[^source1]: reference, at the bottom of the page
 
 ## Escapes
 
