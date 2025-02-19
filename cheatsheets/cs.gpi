@@ -10,6 +10,7 @@ set output "out.png"
 set xrange [-10:10]
 set xtics <incr>
 set xtics <start>, <incr> {,<end>}
+set xtics ('0' 0, '1' 1, ...)
 set mxtics 2
 set xlabel "x"
 set logscale x
